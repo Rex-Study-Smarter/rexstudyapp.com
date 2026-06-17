@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Rex — the study app built for every student who was ever doubted. Free to start. Built to help you conquer." />
+  <title>Rex — Study Smarter</title>
+  <style>
+    @font-face {
+      font-family: 'GoudyHeavyface';
+      src: url('./GoudyHeavyface.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Lato';
+      src: url('./Lato-Thin.ttf') format('truetype');
+      font-weight: 100;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Lato';
+      src: url('./Lato-ThinItalic.ttf') format('truetype');
+      font-weight: 100;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Lato';
+      src: url('./Lato-Light.ttf') format('truetype');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Lato';
+      src: url('./Lato-LightItalic.ttf') format('truetype');
+      font-weight: 300;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Lato';
+      src: url('./Lato-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #72A07D;
+      --green-dark: #537560;
+      --green-light: #eaf3ec;
+      --black: #111;
+      --gray: #555;
+      --border: #e4ece5;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 300;
+      background: #fff;
+      color: var(--black);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .display {
+      font-family: 'GoudyHeavyface', Georgia, serif;
+      font-weight: normal;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-logo img {
+      height: 36px;
+      width: 36px;
+      border-radius: 9px;
+      object-fit: contain;
+    }
+    .nav-logo span {
+      font-family: 'GoudyHeavyface', Georgia, serif;
+      font-size: 1.3rem;
+      color: var(--black);
+      letter-spacing: 0.5px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-cta {
+      background: var(--black);
+      color: #fff !important;
+      border-radius: 100px;
+      padding: 9px 22px;
+      font-size: 0.88rem;
+      font-weight: 400;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--green-dark) !important; }
+
+    /* HERO */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .hero-left { width: 100%; }
+    .hero-motto { margin-left: auto; margin-right: auto; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 400;
+      margin-bottom: 28px;
+      letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: clamp(2.8rem, 5vw, 4.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.5px;
+      color: var(--black);
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--green);
+    }
+    .hero-motto {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--gray);
+      margin-bottom: 40px;
+      line-height: 1.75;
+      max-width: 460px;
+    }
+    .hero-motto strong { color: var(--black); font-weight: 400; }
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .btn-primary {
+      background: var(--black);
+      color: #fff;
+      border-radius: 100px;
+      padding: 14px 30px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 400;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--black);
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      padding: 14px 30px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 400;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--green); transform: translateY(-1px); }
+    .free-note {
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: #aaa;
+    }
+    .free-note strong { color: var(--green); font-weight: 400; }
+
+    /* HERO RIGHT — MASCOT */
+    .hero-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .mascot-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mascot-glow {
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(114,160,125,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .mascot-img {
+      width: 340px;
+      max-width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* MANIFESTO */
+    .manifesto {
+      background: var(--black);
+      color: #fff;
+      padding: 100px 24px;
+      text-align: center;
+    }
+    .manifesto-inner { max-width: 680px; margin: 0 auto; }
+    .manifesto h2 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.15;
+      margin-bottom: 32px;
+    }
+    .manifesto h2 em {
+      font-style: normal;
+      color: var(--green);
+    }
+    .manifesto p {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.9;
+      margin-bottom: 20px;
+    }
+    .manifesto p strong { color: #fff; font-weight: 400; }
+    .manifesto-line {
+      display: block;
+      width: 48px;
+      height: 3px;
+      background: var(--green);
+      margin: 40px auto;
+      border-radius: 2px;
+    }
+    .mascot-small {
+      width: 90px;
+      margin-bottom: 32px;
+    }
+
+    /* FEATURES */
+    .features {
+      padding: 100px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-label {
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      color: var(--black);
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--gray);
+      font-size: 1rem;
+      font-weight: 300;
+      max-width: 500px;
+      margin: 0 auto 64px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      border-color: var(--green);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(114,160,125,0.1);
+    }
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--green-light);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+    .feature-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+      color: var(--black);
+    }
+    .feature-card p {
+      font-size: 0.93rem;
+      font-weight: 300;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    /* PRICING */
+    .pricing {
+      padding: 100px 24px;
+      background: #fafafa;
+    }
+    .pricing-inner { max-width: 960px; margin: 0 auto; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 60px;
+    }
+    .plan {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 28px;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .plan:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.06); }
+    .plan.featured {
+      border-color: var(--black);
+      background: var(--black);
+      color: #fff;
+    }
+    .plan-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 100px;
+      padding: 4px 14px;
+      white-space: nowrap;
+    }
+    .plan-name {
+      font-family: 'GoudyHeavyface', Georgia, serif;
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+    .plan.featured .plan-name { color: #fff; }
+    .plan-price {
+      font-family: 'GoudyHeavyface', Georgia, serif;
+      font-size: 2.8rem;
+      line-height: 1;
+      margin-bottom: 4px;
+      color: var(--black);
+    }
+    .plan.featured .plan-price { color: #fff; }
+    .plan-price span {
+      font-family: 'Lato', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--gray);
+    }
+    .plan.featured .plan-price span { color: rgba(255,255,255,0.5); }
+    .plan-desc {
+      font-size: 0.87rem;
+      font-weight: 300;
+      color: var(--gray);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+    .plan.featured .plan-desc { color: rgba(255,255,255,0.6); }
+    .plan-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 24px;
+    }
+    .plan.featured .plan-divider { background: rgba(255,255,255,0.12); }
+    .plan-features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+    .plan-features li {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--gray);
+      padding: 7px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .plan.featured .plan-features li {
+      color: rgba(255,255,255,0.7);
+      border-bottom-color: rgba(255,255,255,0.08);
+    }
+    .plan-features li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .plan.featured .plan-features li::before { color: #72A07D; }
+    .plan-cta {
+      display: block;
+      text-align: center;
+      border-radius: 100px;
+      padding: 13px 24px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 400;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .plan-cta-outline {
+      border: 1.5px solid var(--border);
+      color: var(--black);
+    }
+    .plan-cta-outline:hover { border-color: var(--black); }
+    .plan-cta-solid {
+      background: var(--green);
+      color: #fff;
+      border: none;
+    }
+    .plan-cta-solid:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .plan-cta-white {
+      background: #fff;
+      color: var(--black);
+      border: none;
+    }
+    .plan-cta-white:hover { background: #eee; }
+
+    /* FREE CALLOUT */
+    .free-callout {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 80px 24px 100px;
+      text-align: center;
+    }
+    .free-callout h2 {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      color: var(--black);
+      margin-bottom: 16px;
+    }
+    .free-callout h2 em { font-style: normal; color: var(--green); }
+    .free-callout p {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--gray);
+      max-width: 480px;
+      margin: 0 auto 36px;
+      line-height: 1.8;
+    }
+    .free-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+    .free-tag {
+      background: var(--green-light);
+      border-radius: 100px;
+      padding: 8px 18px;
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--green-dark);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 32px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .footer-logo img { height: 32px; border-radius: 7px; }
+    .footer-logo span {
+      font-family: 'GoudyHeavyface', Georgia, serif;
+      font-size: 1.15rem;
+      color: var(--black);
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: var(--gray);
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--black); }
+    .footer-copy {
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: #bbb;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 60px 24px;
+        gap: 40px;
+      }
+      .hero-motto { margin: 0 auto 40px; }
+      .hero-actions { justify-content: center; }
+      .free-note { text-align: center; }
+      .hero-right { order: -1; }
+      .mascot-img { width: 220px; }
+      .mascot-glow { width: 280px; height: 280px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+      nav { padding: 12px 20px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="./Rex.png" alt="Rex" />
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#download" class="nav-cta">Download Free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">Free to start &nbsp;·&nbsp; No credit card</div>
+    <h1>The tutor built for<br/><em>every</em> student.</h1>
+    <p class="hero-motto">
+      <strong>It's not what's in your pocket.</strong><br/>
+      It's what's in your head — and Rex is here to help you fill it.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#download" id="download">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17V3M6 11l6 6 6-6"/><path d="M2 21h20"/></svg>
+        Download on the App Store
+      </a>
+      <a class="btn-secondary" href="#features">See what's inside</a>
+    </div>
+    <p class="free-note">On iPhone &amp; iPad now &nbsp;·&nbsp; Android coming soon &nbsp;·&nbsp; <strong>Always free to learn.</strong></p>
+  </div>
+
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto">
+  <div class="manifesto-inner">
+    <img class="mascot-small" src="./RexMascot.png" alt="" />
+    <h2>Built for the student<br/>who was <em>counted out.</em></h2>
+    <span class="manifesto-line"></span>
+    <p>
+      Rex wasn't built for the student who already has everything figured out.
+      It was built for the student who got the bad grade. Who was told they weren't smart enough.
+      Who picked the smaller school. Who's betting on themselves anyway.
+    </p>
+    <p>
+      <strong>Knowledge is the one thing nobody can take from you.</strong>
+      You can't buy a crown — you earn it. Rex is here to help you earn yours.
+    </p>
+    <p>
+      And because we believe anyone should have access to great learning tools,
+      <strong>Rex starts free.</strong> No paywalls on the basics.
+      You show up. Rex shows up for you.
+    </p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <p class="section-label">Everything you need</p>
+  <h2 class="section-title">Your whole study life, in one app.</h2>
+  <p class="section-sub">Your tutor, smart boards, voice mode, charts, whiteboards — built to help you actually understand, not just memorize.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#72A07D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <h3>Rex Tutor</h3>
+      <p>Ask anything. Get real explanations, step-by-step walkthroughs, and study help across every subject — math, science, history, coding, and more.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#72A07D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </div>
+      <h3>Smart Study Boards</h3>
+      <p>Organize your notes, charts, and ideas on infinite digital canvases. Everything syncs so your study session is always waiting for you.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#72A07D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </div>
+      <h3>Voice Mode</h3>
+      <p>Study hands-free. Talk to Rex out loud — it listens, responds, and reads answers back with natural on-device speech.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#72A07D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <h3>Interactive Charts</h3>
+      <p>Visual learner? Rex includes subject-specific interactive widgets — math graphs, science diagrams, and more that you actually engage with.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#72A07D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+      <h3>Whiteboard Tools</h3>
+      <p>Draw it out. Free-form whiteboard built for thinking through problems visually — because sometimes you just need to work it out by hand.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#72A07D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <h3>Smart Notes</h3>
+      <p>Type or dictate notes and let Rex help you expand, summarize, or quiz yourself on what you just wrote. Your notebook, but smarter.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="pricing-inner">
+    <p class="section-label">Plans</p>
+    <h2 class="section-title">Start free. Grow when you're ready.</h2>
+    <p class="section-sub">No pressure. Rex starts free — always. Upgrade when you want more.</p>
+
+    <div class="pricing-grid">
+
+      <!-- FREE -->
+      <div class="plan">
+        <p class="plan-name">Free</p>
+        <p class="plan-price">$0<span>/mo</span></p>
+        <p class="plan-desc">Everything you need to get started. No credit card, no catch.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>Rex Tutor access</li>
+          <li>Study boards</li>
+          <li>Whiteboard tools</li>
+          <li>Note-taking</li>
+          <li>Interactive charts</li>
+          <li>Voice mode</li>
+        </ul>
+        <a href="#download" class="plan-cta plan-cta-outline">Get started free</a>
+      </div>
+
+      <!-- STUDENT -->
+      <div class="plan featured">
+        <div class="plan-badge">Most Popular</div>
+        <p class="plan-name">Student</p>
+        <p class="plan-price">$7.99<span>/mo</span></p>
+        <p class="plan-desc">For the student who's serious. More power, more Rex, more you.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>Everything in Free</li>
+          <li>Expanded tutor access</li>
+          <li>Extended voice sessions</li>
+          <li>Priority responses</li>
+          <li>Advanced chart widgets</li>
+          <li>Unlimited board storage</li>
+        </ul>
+        <a href="#download" class="plan-cta plan-cta-solid">Download — Student</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan">
+        <p class="plan-name">Pro</p>
+        <p class="plan-price">$9.99<span>/mo</span></p>
+        <p class="plan-desc">Unlimited everything. For the learner who wants no limits.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>Everything in Student</li>
+          <li>Unlimited messages</li>
+          <li>Unlimited voice mode</li>
+          <li>All current & future features</li>
+          <li>Early access to new tools</li>
+          <li>Top priority support</li>
+        </ul>
+        <a href="#download" class="plan-cta plan-cta-outline">Download — Pro</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FREE CALLOUT -->
+<section class="free-callout">
+  <h2>Knowledge should be <em>free.</em></h2>
+  <p>The basics are always open — for every student, regardless of what's in their pocket. Anyone can start, no excuses, no barriers.</p>
+  <div class="free-tags">
+    <span class="free-tag">Rex Tutor</span>
+    <span class="free-tag">Study Boards</span>
+    <span class="free-tag">Voice Mode</span>
+    <span class="free-tag">Whiteboard</span>
+    <span class="free-tag">Notes</span>
+    <span class="free-tag">No credit card</span>
+  </div>
+  <a class="btn-primary" href="#download">Start free on the App Store</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo">
+      <img src="./Rex.png" alt="Rex" />
+    </div>
+    <div class="footer-links">
+      <a href="./privacy.html">Privacy Policy</a>
+      <a href="./terms.html">Terms of Service</a>
+      <a href="./user-agreement.html">User Agreement</a>
+      <a href="mailto:rexstudyapp@gmail.com">Contact</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <span>&copy; 2026 Rex. All rights reserved.</span>
+    <span>It's not what's in your pocket — it's what's in your head.</span>
+  </div>
+</footer>
+
+</body>
+</html>

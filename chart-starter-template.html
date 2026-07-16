@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chart Starter Template</title>
+  <style>
+    /* Charts use a light background, black text, and a green accent. */
+    :root { --accent: #72A07D; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #ffffff;
+      color: #111111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 24px;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    h1 { font-size: 1.4rem; color: var(--accent); text-align: center; }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(114, 160, 125, 0.10);
+      border: 1px solid rgba(114, 160, 125, 0.35);
+      border-radius: 16px;
+      padding: 22px 20px;
+      text-align: center;
+    }
+    .q { font-size: 1.05rem; font-weight: 600; min-height: 2.6em; }
+    .a { margin-top: 14px; font-size: 1.1rem; font-weight: 700; color: var(--accent); min-height: 1.4em; }
+    .controls { display: flex; gap: 10px; margin-top: 18px; }
+    button {
+      font: inherit; font-weight: 700; cursor: pointer;
+      border: none; border-radius: 10px; padding: 11px 18px;
+      background: var(--accent); color: #fff;
+    }
+    button.ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+    button:active { transform: scale(0.97); }
+    .count { font-size: 0.8rem; color: #666; }
+  </style>
+</head>
+<body>
+  <!--
+    Chart Starter Template
+    ======================
+    A minimal, valid, self-contained chart. Edit the params below and the
+    render code to build your own. Rules:
+      - No external URLs (inline all CSS/JS; embed images as data: URIs).
+      - Light theme only; no dark backgrounds, one consistent color scheme.
+      - No emoji.
+      - Expose editable variables via window.__chartParams so it can be remixed.
+    See the full guide at rexstudyapp.com/docs.html
+  -->
+
+  <h1 id="title">Chart Title</h1>
+  <div class="card">
+    <div class="q" id="question">Question goes here</div>
+    <div class="a" id="answer"></div>
+    <div class="count" id="count"></div>
+    <div class="controls">
+      <button class="ghost" id="reveal" type="button">Reveal</button>
+      <button id="next" type="button">Next</button>
+    </div>
+  </div>
+
+  <script>
+    // 1. Editable variables. Every top-level key becomes a field in the
+    //    params editor. The `questions` array uses the universal { q, a } shape.
+    //    The reserved `__schema` key (keys starting with __ are hidden hints)
+    //    overrides how a field is edited.
+    window.__chartParams = window.__chartParams || {
+      title: "Capital Cities",
+      accentColor: "#72A07D",
+      revealDelay: 0,
+      questions: [
+        { q: "Capital of France?", a: "Paris" },
+        { q: "Capital of Japan?", a: "Tokyo" },
+        { q: "Capital of Brazil?", a: "Brasilia" }
+      ],
+      __schema: {
+        accentColor: { type: "color", label: "Accent color" },
+        revealDelay: { type: "slider", label: "Auto-reveal (s)", min: 0, max: 5, step: 1 }
+      }
+    };
+
+    // 2. Read the params and render. When a chart is remixed, the app
+    //    re-injects the edited object as window.__chartParams before this
+    //    runs, so no changes are needed here.
+    var p = window.__chartParams;
+    var questions = Array.isArray(p.questions) ? p.questions : [];
+    var i = 0;
+
+    document.documentElement.style.setProperty("--accent", p.accentColor || "#72A07D");
+    document.getElementById("title").textContent = p.title || "Chart";
+
+    function show() {
+      var q = questions[i] || { q: "Add questions in the params editor", a: "" };
+      document.getElementById("question").textContent = q.q;
+      document.getElementById("answer").textContent = "";
+      document.getElementById("count").textContent =
+        questions.length ? (i + 1) + " / " + questions.length : "";
+    }
+    function reveal() {
+      var q = questions[i];
+      if (q) document.getElementById("answer").textContent = q.a;
+    }
+    function next() {
+      if (!questions.length) return;
+      i = (i + 1) % questions.length;
+      show();
+    }
+
+    // 3. Wire interaction. Handle both click and touch so it works on device.
+    var revealBtn = document.getElementById("reveal");
+    var nextBtn = document.getElementById("next");
+    revealBtn.addEventListener("click", reveal);
+    revealBtn.addEventListener("touchstart", function (e) { e.preventDefault(); reveal(); }, { passive: false });
+    nextBtn.addEventListener("click", next);
+    nextBtn.addEventListener("touchstart", function (e) { e.preventDefault(); next(); }, { passive: false });
+
+    show();
+  </script>
+</body>
+</html>

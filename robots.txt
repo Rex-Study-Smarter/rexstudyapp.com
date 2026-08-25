@@ -1,0 +1,57 @@
+# Rex — https://www.rexstudyapp.com
+# Everything here is public and we want it found, by search engines and by
+# AI assistants answering questions about study tools.
+
+User-agent: *
+Allow: /
+
+# Assistants and answer engines, named explicitly so there is no ambiguity.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+# Build output and vendored library code are not worth indexing.
+Disallow: /vendor/
+
+Sitemap: https://www.rexstudyapp.com/sitemap.xml

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>3D Scene</title>
+<style>
+  @font-face { font-family:'GoudyHeavyface'; src:url('../GoudyHeavyface.otf') format('opentype'); font-weight:normal; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Lato'; src:url('../Lato-Regular.ttf') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:'Lato'; src:url('../Lato-Light.ttf') format('truetype'); font-weight:300; font-style:normal; font-display:swap; }
+  :root { --accent:#72A07D; --ink:#111; --muted:#6b726d; --line:#e3e7e4; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Lato',-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:#fff;color:var(--ink);display:flex;flex-direction:column;
+    -webkit-user-select:none;user-select:none;overflow:hidden;
+  }
+
+  header{padding:16px 18px 12px;flex-shrink:0;background:#fff;border-bottom:1px solid var(--line)}
+  header h1{font-family:'GoudyHeavyface',Georgia,serif;font-weight:normal;font-size:1.32rem;line-height:1.15;color:var(--ink)}
+  header p{font-size:.8rem;color:var(--muted);margin-top:4px;line-height:1.5}
+
+  #stage{flex:1;position:relative;min-height:0;background:#f4f6f4}
+  body{background:#f4f6f4}
+  canvas{display:block;width:100%!important;height:100%!important;touch-action:none}
+
+  #markers{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .mk{
+    position:absolute;transform:translate(-50%,-50%);
+    width:22px;height:22px;border-radius:50%;padding:0;
+    background:var(--ink);color:#fff;border:0;
+    font:700 .7rem/1 'Lato',system-ui,sans-serif;display:grid;place-items:center;
+    pointer-events:auto;cursor:pointer;
+  }
+
+  .msg{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:26px;font-size:.85rem;color:var(--muted);line-height:1.65;
+  }
+  .msg.hide{display:none}
+  .msg b{display:block;color:var(--ink);font-size:.95rem;margin-bottom:6px}
+  .msg code{
+    display:inline-block;margin-top:8px;background:#eef3ef;border:1px solid #d8e5da;
+    border-radius:6px;padding:5px 9px;font-size:.76rem;color:#2b5e39;
+  }
+
+  /* one bar, one place for everything */
+  .bar{
+    flex-shrink:0;background:#f4f6f4;
+    display:flex;align-items:center;gap:8px;padding:4px 14px 10px;
+  }
+  .btn{
+    font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;
+    background:rgba(255,255,255,.72);border:1px solid rgba(17,17,17,.10);color:var(--ink);
+    border-radius:100px;padding:8px 14px;display:inline-flex;align-items:center;gap:7px;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .btn:hover{border-color:var(--accent)}
+  .btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .hint{margin-left:auto;font-size:.72rem;color:#a3a9a4;white-space:nowrap}
+
+  /* the words sit still, only the numbered dots move */
+  .caption{
+    flex-shrink:0;background:#f4f6f4;padding:2px 16px 12px;
+    font-size:.84rem;color:var(--muted);line-height:1.5;min-height:2.6em;
+    display:flex;align-items:flex-start;gap:9px;
+  }
+  .caption.set{color:var(--ink);font-weight:700}
+  .caption i{
+    flex-shrink:0;width:18px;height:18px;border-radius:50%;background:var(--ink);color:#fff;
+    font:700 .66rem/18px 'Lato',system-ui,sans-serif;text-align:center;font-style:normal;margin-top:1px;
+    display:none;
+  }
+  .caption.set i{display:block}
+  .credit{flex-shrink:0;background:#f4f6f4;padding:0 16px 12px;font-size:.68rem;color:#a3a9a4;line-height:1.5}
+</style>
+</head>
+<body>
+  <header>
+    <h1 id="title">Loading</h1>
+    <p id="sub"></p>
+  </header>
+
+  <div id="stage">
+    <div id="markers"></div>
+    <div class="msg" id="msg"><span><b>Loading the model</b>This takes a moment on first view.</span></div>
+  </div>
+
+  <div class="bar">
+    <button id="resetBtn" class="btn" type="button">Recentre</button>
+    <span class="hint">Drag to rotate</span>
+  </div>
+
+  <div class="caption" id="caption">Tap a number on the model to see what it is.</div>
+  <div class="credit" id="credit"></div>
+
+<script>
+  if (location.protocol === 'file:') {
+    document.getElementById('msg').innerHTML =
+      '<span><b>Needs a local server</b>3D scenes load model files, which browsers block on file:// pages. ' +
+      'Run this in the site folder, then open localhost:8000<code>python3 -m http.server 8000</code></span>';
+    document.getElementById('title').textContent = '3D scene';
+  }
+</script>
+
+<script type="importmap">
+{ "imports": { "three": "../vendor/three.module.min.js" } }
+</script>
+
+<script type="module">
+  import * as THREE from 'three';
+  import { GLTFLoader } from '../vendor/GLTFLoader.js';
+  import { OrbitControls } from '../vendor/OrbitControls.js';
+
+  var qs = new URLSearchParams(location.search);
+  var file   = (qs.get('model') || '').replace(/[^a-zA-Z0-9_\-]/g, '');
+  var title  = qs.get('title')  || '3D scene';
+  var sub    = qs.get('sub')    || '';
+  var credit = qs.get('credit') || '';
+  var labelDefs = [];
+  try { labelDefs = JSON.parse(qs.get('labels') || '[]'); } catch (e) { labelDefs = []; }
+
+  document.getElementById('title').textContent = title;
+  document.getElementById('sub').textContent = sub;
+  document.getElementById('credit').textContent = credit;
+
+  var stage = document.getElementById('stage');
+  var msg = document.getElementById('msg');
+  var markerHost = document.getElementById('markers');
+  var captionEl = document.getElementById('caption');
+  var captionIdle = captionEl.textContent;
+
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(stage.clientWidth || 1, stage.clientHeight || 1, false);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  stage.appendChild(renderer.domElement);
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf4f6f4);
+
+  var camera = new THREE.PerspectiveCamera(42, (stage.clientWidth || 1) / (stage.clientHeight || 1), 0.01, 2000);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xd8e0da, 2.0));
+  var key = new THREE.DirectionalLight(0xffffff, 2.1);
+  key.position.set(3, 6, 5); scene.add(key);
+  var fill = new THREE.DirectionalLight(0xffffff, 0.75);
+  fill.position.set(-5, -1, -4); scene.add(fill);
+
+  var controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.enablePan = false;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.85;
+  renderer.domElement.addEventListener('pointerdown', function () { controls.autoRotate = false; });
+
+  var home = null;
+  function frame(object) {
+    var box = new THREE.Box3().setFromObject(object);
+    var size = box.getSize(new THREE.Vector3());
+    var center = box.getCenter(new THREE.Vector3());
+    object.position.sub(center);
+
+    var maxDim = Math.max(size.x, size.y, size.z) || 1;
+    var dist = ((maxDim / 2) / Math.tan((camera.fov * Math.PI / 180) / 2)) * 1.45;
+
+    camera.position.set(dist * 0.3, dist * 0.22, dist);
+    camera.near = dist / 100; camera.far = dist * 100;
+    camera.updateProjectionMatrix();
+    controls.target.set(0, 0, 0);
+    controls.minDistance = dist * 0.35;
+    controls.maxDistance = dist * 3;
+    controls.update();
+    home = camera.position.clone();
+  }
+
+  /* Exports here often carry vertex colours with no material, or no normals,
+     which renders as a flat white blob. */
+  function repair(root) {
+    root.traverse(function (o) {
+      if (!o.isMesh) return;
+      var g = o.geometry, madeNormals = false;
+      if (g && !g.attributes.normal) { g.computeVertexNormals(); madeNormals = true; }
+      var hasVC = !!(g && g.attributes.color);
+      var mats = Array.isArray(o.material) ? o.material : [o.material];
+      var out = mats.map(function (m) {
+        if (!m) m = new THREE.MeshStandardMaterial({ color: 0xc9d6cc, roughness: .55, metalness: .05 });
+        if (hasVC && 'vertexColors' in m) m.vertexColors = true;
+        if (m.isMeshStandardMaterial) {
+          m.roughness = Math.min(m.roughness == null ? .6 : m.roughness, .85);
+        }
+        if (madeNormals) m.flatShading = false;
+        m.side = THREE.DoubleSide;
+        m.needsUpdate = true;
+        return m;
+      });
+      o.material = out.length === 1 ? out[0] : out;
+    });
+  }
+
+  /* Numbered dots ride on the model; the wording sits still underneath,
+     so nothing jitters around while you drag. */
+  var markers = [];
+  var meshes = [];
+
+  var probe = new THREE.Raycaster();
+
+  /* Pin each label to a real point on the model's surface. A point floating in
+     space near the model looks detached as soon as you start rotating, because
+     the silhouette moves and the point does not. */
+  function surfacePoint(dir, targets, size) {
+    var reach = Math.max(size.x, size.y, size.z) * 2;
+    var from = dir.clone().multiplyScalar(reach);
+    probe.set(from, dir.clone().negate().normalize());
+    var hit = probe.intersectObjects(targets, true)[0];
+    if (!hit) return null;
+    var out = hit.point.clone();
+    if (hit.face) out.add(hit.face.normal.clone().transformDirection(hit.object.matrixWorld).multiplyScalar(reach * 0.012));
+    return out;
+  }
+
+  function buildMarkers(root) {
+    var box = new THREE.Box3().setFromObject(root);
+    var size = box.getSize(new THREE.Vector3());
+    root.traverse(function (o) { if (o.isMesh) meshes.push(o); });
+
+    labelDefs.forEach(function (d, i) {
+      var pos = new THREE.Vector3();
+      var targets = meshes;
+      var dir;
+
+      if (d.mesh != null && meshes[d.mesh]) {
+        targets = [meshes[d.mesh]];
+        var mb = new THREE.Box3().setFromObject(meshes[d.mesh]);
+        mb.getCenter(pos);
+        /* aim from the side that mesh sits on, so left stays on the left lobe */
+        dir = pos.clone();
+        if (dir.lengthSq() < 1e-6) dir.set(0, 1, 0);
+        dir.normalize();
+      } else {
+        dir = new THREE.Vector3(d.x || 0, d.y || 0, d.z || 0);
+        if (dir.lengthSq() < 1e-6) dir.set(0, 1, 0);
+        dir.normalize();
+        pos.set((d.x || 0) * size.x / 2, (d.y || 0) * size.y / 2, (d.z || 0) * size.z / 2);
+      }
+
+      var onSurface = surfacePoint(dir, targets, size);
+      if (onSurface) pos.copy(onSurface);
+
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'mk';
+      dot.textContent = String(i + 1);
+      dot.setAttribute('aria-label', d.text);
+      dot.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        select(i);
+      });
+      markerHost.appendChild(dot);
+      markers.push({ el: dot, pos: pos, text: d.text, n: i + 1 });
+    });
+    if (!labelDefs.length) captionEl.style.display = 'none';
+  }
+
+  var chosen = -1;
+  function select(i) {
+    chosen = i;
+    var m = markers[i];
+    captionEl.classList.add('set');
+    captionEl.innerHTML = '<i></i><span></span>';
+    captionEl.firstChild.textContent = m.n;
+    captionEl.lastChild.textContent = m.text;
+  }
+  function clearSelection() {
+    chosen = -1;
+    captionEl.classList.remove('set');
+    captionEl.textContent = captionIdle;
+  }
+  renderer.domElement.addEventListener('pointerdown', clearSelection);
+
+  var v = new THREE.Vector3();
+  function placeMarkers() {
+    if (!markers.length) return;
+    var w = stage.clientWidth, h = stage.clientHeight;
+    markers.forEach(function (m) {
+      v.copy(m.pos).project(camera);
+      m.el.style.left = ((v.x * 0.5 + 0.5) * w) + 'px';
+      m.el.style.top = ((-v.y * 0.5 + 0.5) * h) + 'px';
+      m.el.style.display = v.z <= 1 ? 'grid' : 'none';
+    });
+  }
+
+  document.getElementById('resetBtn').addEventListener('click', function () {
+    if (home) camera.position.copy(home);
+    controls.target.set(0, 0, 0);
+    controls.autoRotate = true;
+    controls.update();
+  });
+
+  function resize() {
+    var w = stage.clientWidth, h = stage.clientHeight;
+    if (!w || !h) return;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false);
+  }
+  addEventListener('resize', resize);
+  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(stage);
+  resize();
+
+  new GLTFLoader().load(
+    '../assets/' + file + '.glb',
+    function (gltf) {
+      repair(gltf.scene);
+      scene.add(gltf.scene);
+      frame(gltf.scene);
+      buildMarkers(gltf.scene);
+      clearSelection();
+      resize();
+      msg.classList.add('hide');
+    },
+    null,
+    function () {
+      msg.classList.remove('hide');
+      msg.innerHTML = '<span><b>Could not load the model</b>The file is missing or the page is not being served over http.</span>';
+    }
+  );
+
+  (function loop() {
+    requestAnimationFrame(loop);
+    controls.update();
+    renderer.render(scene, camera);
+    placeMarkers();
+  })();
+</script>
+</body>
+</html>

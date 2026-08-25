@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Credits and licences for the third-party 3D assets, textures and data used in Rex." />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="./Rex.png" />
+  <title>Asset Licences</title>
+  <style>
+    @font-face { font-family:'GoudyHeavyface'; src:url('./GoudyHeavyface.otf') format('opentype'); font-weight:normal; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Lato'; src:url('./Lato-Light.ttf') format('truetype'); font-weight:300; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Lato'; src:url('./Lato-Regular.ttf') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+    :root {
+      --green:#72A07D; --ink:#111; --gray:#4B4B4B; --gray-light:#767676;
+      --border:#E6E4E0; --border-dark:#BFBCB6; --page:#FBFAF8;
+    }
+    html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+    body {
+      font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      font-weight:400; background:var(--page); color:var(--ink); line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+    }
+    h1,h2,h3 { font-family:'GoudyHeavyface',Georgia,serif; font-weight:normal; letter-spacing:-.01em; }
+    a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
+    a:hover { color:var(--green); }
+    img { display:block; max-width:100%; }
+
+    .nav { position:sticky; top:0; z-index:200; background:var(--page); border-bottom:1px solid var(--border); }
+    .nav-inner {
+      max-width:1000px; margin:0 auto; padding:14px 28px;
+      display:flex; align-items:center; justify-content:space-between; gap:20px;
+    }
+    .nav-logo img { height:28px; width:auto; }
+    .nav-links { display:flex; align-items:center; gap:4px; }
+    .nav-links a { font-size:.9rem; color:var(--gray); text-decoration:none; padding:8px 14px; }
+    .nav-links a:hover { color:var(--green); }
+
+    .head { max-width:1000px; margin:0 auto; padding:60px 28px 34px; }
+    .eyebrow {
+      display:inline-block; background:#fff; border:1px solid var(--border); border-radius:100px;
+      padding:6px 15px; font-size:.76rem; letter-spacing:1.6px; text-transform:uppercase;
+      color:var(--gray); margin-bottom:18px;
+    }
+    .head h1 { font-size:clamp(2.1rem,4.4vw,3rem); line-height:1.08; margin-bottom:14px; }
+    .head p { color:var(--gray); max-width:66ch; }
+
+    .wrap { max-width:1000px; margin:0 auto; padding:0 28px 80px; }
+
+    .note {
+      background:#fff; border:1px solid var(--border); border-left:3px solid var(--green);
+      border-radius:10px; padding:18px 20px; margin:24px 0 34px; font-size:.95rem; color:var(--gray);
+    }
+    .note b { color:var(--ink); font-weight:400; }
+
+    h2 { font-size:1.55rem; margin:44px 0 6px; }
+    .sec-sub { color:var(--gray-light); font-size:.9rem; margin-bottom:18px; }
+
+    .asset {
+      background:#fff; border:1px solid var(--border); border-radius:12px;
+      padding:20px 22px; margin-bottom:12px;
+    }
+    .asset h3 { font-size:1.08rem; margin-bottom:2px; }
+    .asset .by { font-size:.9rem; color:var(--gray); margin-bottom:10px; }
+    .asset dl { display:grid; grid-template-columns:104px minmax(0,1fr); gap:4px 14px; font-size:.89rem; }
+    .asset dt { color:var(--gray-light); }
+    .asset dd { color:var(--gray); word-break:break-word; }
+    .lic {
+      display:inline-block; font-size:.72rem; letter-spacing:1px; text-transform:uppercase;
+      background:#F2F0EC; border-radius:100px; padding:3px 11px; color:var(--ink);
+    }
+
+    .credit-line {
+      background:#111; color:#fff; border-radius:12px; padding:24px 26px; margin:20px 0 10px;
+      font-size:.92rem; line-height:1.9;
+    }
+    .credit-line b { display:block; font-family:'GoudyHeavyface',Georgia,serif; font-weight:normal; font-size:1.15rem; margin-bottom:10px; }
+    .credit-line span { color:rgba(255,255,255,.72); display:block; }
+
+    footer { border-top:1px solid var(--border); background:#fff; }
+    .foot {
+      max-width:1000px; margin:0 auto; padding:30px 28px;
+      display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px;
+      font-size:.83rem; color:var(--gray-light);
+    }
+    .foot nav { display:flex; gap:18px; flex-wrap:wrap; }
+    .foot a { color:var(--gray); }
+
+    @media (max-width:640px) {
+      .nav-links a:not(:last-child) { display:none; }
+      .head { padding:40px 22px 26px; }
+      .wrap { padding:0 22px 60px; }
+      .asset dl { grid-template-columns:1fr; gap:2px; }
+      .asset dt { margin-top:8px; }
+    }
+  </style>
+  <link rel="canonical" href="https://www.rexstudyapp.com/licenses.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Rex" />
+  <meta property="og:url" content="https://www.rexstudyapp.com/licenses.html" />
+  <meta property="og:title" content="Asset Licences" />
+  <meta property="og:description" content="Credits and licences for the third-party 3D assets, textures and data used in Rex." />
+  <meta property="og:image" content="https://www.rexstudyapp.com/Rex.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Asset Licences" />
+  <meta name="twitter:description" content="Credits and licences for the third-party 3D assets, textures and data used in Rex." />
+  <meta name="twitter:image" content="https://www.rexstudyapp.com/Rex.png" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="./index.html"><img src="./Rex.png" alt="Rex" /></a>
+    <div class="nav-links">
+      <a href="./index.html">Home</a>
+      <a href="./index.html#playground">Charts</a>
+      <a href="./attributions.html">Full record</a>
+      <a href="./docs.html">Docs</a>
+    </div>
+  </div>
+</nav>
+
+<header class="head">
+  <span class="eyebrow">Credits</span>
+  <h1>Asset licences and attribution.</h1>
+  <p>
+    Rex uses 3D models, textures and scientific data created by other people. Several of those
+    licences require a visible credit wherever Rex is distributed, including this website. This page is that credit.
+  </p>
+</header>
+
+<div class="wrap">
+
+  <div class="note">
+    <b>Maintaining this page.</b> The authoritative list lives with the app, in
+    <code>ASSET_ATTRIBUTION.txt</code> and the asset catalog. When that file is updated, this page
+    should be updated to match. Anything credited here is used under the licence stated, and modifications
+    are noted where they were made.
+  </div>
+
+  <div class="note" style="border-left-color:#111">
+    <b>Looking for the full list?</b> Every credited asset in the Rex library, 398 of them with author and
+    licence, is on the <a href="./attributions.html">full asset record</a>. This page is the summary.
+  </div>
+
+  <h2>Used on this website</h2>
+  <p class="sec-sub">The 3D scenes in the playground on the home page.</p>
+
+  <div class="asset">
+    <h3>Human oxyhaemoglobin</h3>
+    <p class="by">RCSB Protein Data Bank, entry 1GZX</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">Public domain</span> PDB structural data carries no copyright.</dd>
+      <dt>Source</dt><dd><a href="https://www.rcsb.org/structure/1GZX" rel="noopener">rcsb.org/structure/1GZX</a></dd>
+      <dt>Modified</dt><dd>Converted locally to a solvent-excluded molecular surface.</dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>Cortical brain</h3>
+    <p class="by">Derived from open CT and segmentation datasets</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">Public domain</span> Open medical imaging data.</dd>
+      <dt>Modified</dt><dd>Segmented, decimated and re-exported for real-time rendering.</dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>three.js</h3>
+    <p class="by">three.js authors</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">MIT</span> Renders the 3D scenes on this site.</dd>
+      <dt>Source</dt><dd><a href="https://threejs.org" rel="noopener">threejs.org</a></dd>
+    </dl>
+  </div>
+
+  <h2>Used in the Rex app</h2>
+  <p class="sec-sub">Assets whose licences require attribution.</p>
+
+  <div class="asset">
+    <h3>Anatomy of the Skin</h3>
+    <p class="by">Sketchfab, model uid bf864eec8ba4422c83817b12613a6e64</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">CC BY 4.0</span> Attribution required.</dd>
+      <dt>Modified</dt><dd>Materials normalised, decimated from 627k to 186k triangles.</dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>Animal Cell</h3>
+    <p class="by">Lauri Purhonen, Sketchfab</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">CC BY 4.0</span> Attribution required.</dd>
+      <dt>Modified</dt><dd>Materials normalised, geometry unchanged.</dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>Plant Cell | Biology</h3>
+    <p class="by">Oliver, Sketchfab</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">CC BY 4.0</span> Attribution required.</dd>
+      <dt>Modified</dt><dd>Removed a loose cytoskeleton strand mesh, materials normalised.</dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>Whole-body system meshes</h3>
+    <p class="by">Derived from the Z-Anatomy open-source atlas</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">CC BY-SA 4.0</span> Attribution and share-alike.</dd>
+      <dt>Modified</dt><dd>Decimated and re-exported.</dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>Planet textures</h3>
+    <p class="by">Solar System Scope</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">CC BY 4.0</span> Attribution required.</dd>
+      <dt>Source</dt><dd><a href="https://www.solarsystemscope.com/textures" rel="noopener">solarsystemscope.com/textures</a></dd>
+      <dt>Modified</dt><dd>Applied to real-relative-scale spheres built in Blender.</dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>Classic Soccer Ball</h3>
+    <p class="by">PixelMotion4096 / ModelVault3d.PL</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">Free commercial, credit required</span></dd>
+      <dt>Modified</dt><dd>Leather PBR material built and baked in Blender. Geometry untouched.</dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>Heatsink fin stock</h3>
+    <p class="by">Jolin Eurorack 3D Components Library</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">CC BY 4.0</span> Credit: Jolin, <a href="https://jolin.tech" rel="noopener">jolin.tech</a></dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>Hardware models</h3>
+    <p class="by">Poly by Google, Quaternius, Kenney and individual authors, via poly.pizza</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">CC BY 3.0 and CC0</span> Per-model sources recorded in the app asset manifest.</dd>
+      <dt>Source</dt><dd><a href="https://poly.pizza" rel="noopener">poly.pizza</a></dd>
+    </dl>
+  </div>
+
+  <h2>No attribution required</h2>
+  <p class="sec-sub">Recorded for traceability rather than obligation.</p>
+
+  <div class="asset">
+    <h3>Molecular structures</h3>
+    <p class="by">RCSB Protein Data Bank: haemoglobin 1GZX, actin 1ATN, myosin 1B7T</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">Public domain</span></dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>Human body mesh and skin</h3>
+    <p class="by">MakeHuman basemesh via MPFB2, MakeHuman system asset pack</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">CC0 1.0</span> Released to CC0 in 2020 by Data Collection AB, Joel Palmius and Jonas Hauquier.</dd>
+      <dt>Note</dt><dd>No attribution required. Credited because it is good practice.</dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>CT-derived organs</h3>
+    <p class="by">Heart, lungs, liver, kidneys, spine, ribcage, skull, brain and others</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">Public domain</span> Open medical datasets.</dd>
+    </dl>
+  </div>
+
+  <div class="asset">
+    <h3>Circuit boards</h3>
+    <p class="by">Blueshift motherboard by Redshift Robotics; STM32L0 ESP32 breakout by Mohamed Yanis</p>
+    <dl>
+      <dt>Licence</dt><dd><span class="lic">MIT and BSD-3-Clause</span> Permissive, no credit legally required.</dd>
+    </dl>
+  </div>
+
+  <div class="credit-line">
+    <b>Short credit line</b>
+    <span>3D anatomy assets.</span>
+    <span>"Anatomy of the Skin" by its Sketchfab author, CC BY 4.0.</span>
+    <span>Whole-body system meshes derived from Z-Anatomy, CC BY-SA 4.0.</span>
+    <span>Molecular structures from the RCSB Protein Data Bank (public domain).</span>
+    <span>Human body mesh and skin from MakeHuman / MPFB2 (CC0).</span>
+    <span>Planet textures by Solar System Scope (solarsystemscope.com), CC BY 4.0.</span>
+    <span>Soccer ball by PixelMotion4096 / ModelVault3d.PL.</span>
+  </div>
+
+</div>
+
+<footer>
+  <div class="foot">
+    <span>&copy; 2026 Rex. All rights reserved.</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="docs.html">Chart Docs</a>
+      <a href="community-guidelines.html">Community Guidelines</a>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>

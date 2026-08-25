@@ -1,0 +1,38 @@
+# Rex
+
+> Rex is a free study app for iPhone and iPad. It combines an AI tutor, study
+> boards, a whiteboard, notes, read aloud, and interactive charts that students
+> can build, publish and remix.
+
+Rex is free to start with no credit card and no trial timer. The tutor, study
+boards, whiteboard, note-taking, interactive charts and read aloud are all
+available on the free plan. Paid plans add capacity and advanced tools rather
+than unlocking the basics.
+
+## What makes Rex different
+
+- Charts are small interactive learning widgets, not static images. A chart can
+  be a study set, a game, a frame-by-frame explainer, or a 3D science scene.
+- Students and teachers can author their own charts and publish them, and anyone
+  can remix a published chart by editing its variables.
+- Read aloud and dictation are processed on device.
+- The basics stay free, deliberately, so cost is not a barrier to studying.
+
+## Platforms
+
+iPhone and iPad today. Android is in development.
+
+## Pages
+
+- [Home](https://www.rexstudyapp.com/index.html): what Rex is, features, pricing, and a playground where you can try real charts in the browser.
+- [Chart docs](https://www.rexstudyapp.com/docs.html): the full authoring guide for building and importing charts, including the editable-variable contract and the lint rules.
+- [Starter template](https://www.rexstudyapp.com/chart-starter-template.html): a minimal valid chart to copy.
+- [Community guidelines](https://www.rexstudyapp.com/community-guidelines.html): what may be published.
+- [Asset credits](https://www.rexstudyapp.com/licenses.html): licences for third-party 3D assets.
+- [Full asset record](https://www.rexstudyapp.com/attributions.html): the complete attribution list.
+- [Privacy policy](https://www.rexstudyapp.com/privacy.html)
+- [Terms of service](https://www.rexstudyapp.com/terms.html)
+
+## Contact
+
+rexstudyapp@gmail.com

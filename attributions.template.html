@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The complete attribution and licence record for the 3D assets used in Rex." />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="./Rex.png" />
+  <title>Full Asset Record</title>
+  <style>
+    @font-face { font-family:'GoudyHeavyface'; src:url('./GoudyHeavyface.otf') format('opentype'); font-weight:normal; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Lato'; src:url('./Lato-Regular.ttf') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --green:#72A07D; --ink:#111; --gray:#4B4B4B; --gray-light:#767676;
+      --border:#E6E4E0; --page:#FBFAF8; --warn:#8A6100; --warn-bg:#FAF6EE;
+    }
+    body {
+      font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:var(--page); color:var(--ink); line-height:1.65; -webkit-font-smoothing:antialiased;
+    }
+    h1,h2,h3 { font-family:'GoudyHeavyface',Georgia,serif; font-weight:normal; letter-spacing:-.01em; }
+    a { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
+    a:hover { color:var(--green); }
+    img { display:block; max-width:100%; }
+
+    .nav { position:sticky; top:0; z-index:200; background:var(--page); border-bottom:1px solid var(--border); }
+    .nav-inner { max-width:1000px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .nav-logo img { height:28px; width:auto; }
+    .nav-links { display:flex; gap:4px; }
+    .nav-links a { font-size:.9rem; color:var(--gray); text-decoration:none; padding:8px 12px; }
+    .nav-links a:hover { color:var(--green); }
+
+    .wrap { max-width:1000px; margin:0 auto; padding:0 28px; }
+    header.head { padding:56px 0 26px; }
+    .eyebrow { display:inline-block; background:#fff; border:1px solid var(--border); border-radius:100px; padding:6px 15px; font-size:.75rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--gray); margin-bottom:18px; }
+    .head h1 { font-size:clamp(2rem,4.2vw,2.9rem); line-height:1.08; margin-bottom:14px; }
+    .head p { color:var(--gray); max-width:68ch; }
+
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--border); border-radius:14px; overflow:hidden; background:#fff; margin:26px 0 8px; }
+    .stats div { padding:20px 22px; }
+    .stats div + div { border-left:1px solid var(--border); }
+    .stats b { display:block; font-family:'GoudyHeavyface',Georgia,serif; font-size:1.9rem; line-height:1; margin-bottom:6px; }
+    .stats span { font-size:.86rem; color:var(--gray); }
+
+    .flag { background:var(--warn-bg); border:1px solid #EADFC9; border-left:3px solid var(--warn); border-radius:10px; padding:20px 22px; margin:26px 0; }
+    .flag h2 { font-size:1.2rem; margin-bottom:8px; color:#5C4520; }
+    .flag p { font-size:.93rem; color:#5C4520; margin-bottom:12px; }
+    .flag ul { list-style:none; display:grid; gap:6px; }
+    .flag li { font-size:.87rem; color:#5C4520; display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+    .flag li b { font-weight:400; color:#3d2e15; }
+
+    h2.sec { font-size:1.5rem; margin:44px 0 6px; }
+    .sec-sub { color:var(--gray-light); font-size:.9rem; margin-bottom:16px; }
+
+    .controls { position:sticky; top:57px; background:var(--page); padding:12px 0; z-index:100; border-bottom:1px solid var(--border); }
+    #q { width:100%; font-family:inherit; font-size:.95rem; padding:11px 14px; border:1px solid var(--border); border-radius:10px; background:#fff; color:var(--ink); }
+    .chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+    .chip { font-family:inherit; font-size:.78rem; cursor:pointer; background:#fff; border:1.5px solid var(--border); color:var(--ink); border-radius:100px; padding:6px 13px; display:inline-flex; align-items:center; gap:7px; }
+    .chip i { font-style:normal; color:var(--gray-light); font-size:.72rem; }
+    .chip:hover { border-color:var(--green); }
+    .chip.on { background:var(--ink); border-color:var(--ink); color:#fff; }
+    .chip.on i { color:rgba(255,255,255,.6); }
+
+    .list { margin-top:14px; }
+    .row { background:#fff; border:1px solid var(--border); border-radius:10px; padding:13px 16px; margin-bottom:7px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .row.hide { display:none; }
+    .row h3 { font-family:'Lato',sans-serif; font-size:.93rem; font-weight:400; line-height:1.35; }
+    .row p { font-size:.82rem; color:var(--gray-light); }
+    .tags { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+    .tags a { font-size:.8rem; color:var(--gray); }
+    .lic { font-size:.7rem; letter-spacing:.6px; text-transform:uppercase; border-radius:100px; padding:3px 10px; background:#F2F0EC; color:var(--ink); white-space:nowrap; }
+    .lic.review { background:#F6ECD8; color:var(--warn); }
+    .lic.sharealike { background:#E9EFE9; color:#3F6B4F; }
+    #empty { padding:26px; text-align:center; color:var(--gray-light); font-size:.9rem; display:none; }
+
+    details { background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 16px; margin-bottom:7px; }
+    summary { cursor:pointer; font-size:.92rem; display:flex; justify-content:space-between; gap:12px; }
+    summary i { font-style:normal; color:var(--gray-light); font-size:.8rem; }
+    details ul { list-style:none; margin-top:10px; display:grid; gap:3px; }
+    details li { font-size:.79rem; color:var(--gray); font-family:"SF Mono",ui-monospace,Menlo,monospace; word-break:break-all; }
+
+    footer { border-top:1px solid var(--border); background:#fff; margin-top:60px; }
+    .foot { max-width:1000px; margin:0 auto; padding:30px 28px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px; font-size:.83rem; color:var(--gray-light); }
+    .foot nav { display:flex; gap:18px; flex-wrap:wrap; }
+    .foot a { color:var(--gray); }
+
+    @media (max-width:640px) {
+      .nav-links a:not(:last-child) { display:none; }
+      .wrap { padding:0 20px; }
+      .stats { grid-template-columns:1fr; }
+      .stats div + div { border-left:none; border-top:1px solid var(--border); }
+      .row { flex-direction:column; align-items:flex-start; gap:8px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="./index.html"><img src="./Rex.png" alt="Rex" /></a>
+    <div class="nav-links">
+      <a href="./index.html">Home</a>
+      <a href="./licenses.html">Credits</a>
+      <a href="./docs.html">Docs</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="head">
+    <span class="eyebrow">Complete record</span>
+    <h1>Full asset attribution record.</h1>
+    <p>
+      Every third-party 3D asset, texture and dataset in the Rex asset library, with its author and licence.
+      Many of these carry Creative Commons Attribution terms, which require this credit wherever Rex is
+      distributed. Compiled {{GENERATED}}.
+    </p>
+
+    <div class="stats">
+      <div><b>{{TOTAL}}</b><span>Credited assets</span></div>
+      <div><b>{{FILECOUNT}}</b><span>Licence files on the asset volume</span></div>
+      <div><b>{{REVIEW_COUNT}}</b><span>Needing a licensing decision</span></div>
+    </div>
+  </header>
+
+  <div class="flag">
+    <h2>Needs a licensing decision</h2>
+    <p>
+      These carry NonCommercial or NoDerivatives terms. Rex is a paid product, and models are modified
+      (decimated and re-exported) before shipping, so these terms are likely incompatible with using them in
+      the app. Worth confirming with someone who knows licensing, and replacing or removing the ones that
+      do not clear.
+    </p>
+    <ul>
+{{REVIEW}}
+    </ul>
+  </div>
+
+  <h2 class="sec">All credits</h2>
+  <p class="sec-sub">Search by title, author or licence.</p>
+
+  <div class="controls">
+    <input id="q" type="search" placeholder="Search {{TOTAL}} assets" autocomplete="off" />
+    <div class="chips">
+      <button class="chip on" type="button" data-f="">All <i>{{TOTAL}}</i></button>
+{{FILTERS}}
+    </div>
+  </div>
+
+  <div class="list" id="list">
+{{CARDS}}
+  </div>
+  <p id="empty">No assets match that search.</p>
+
+  <h2 class="sec">Licence files on the asset volume</h2>
+  <p class="sec-sub">Source records kept alongside the assets themselves, grouped by library.</p>
+{{FOLDERS}}
+
+</div>
+
+<footer>
+  <div class="foot">
+    <span>&copy; 2026 Rex. All rights reserved.</span>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="licenses.html">Credits</a>
+      <a href="docs.html">Chart Docs</a>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var q = document.getElementById('q');
+  var rows = [].slice.call(document.querySelectorAll('.row'));
+  var chips = [].slice.call(document.querySelectorAll('.chip'));
+  var empty = document.getElementById('empty');
+  var filter = '';
+
+  function apply() {
+    var term = q.value.trim().toLowerCase();
+    var shown = 0;
+    rows.forEach(function (r) {
+      var okText = !term || r.dataset.q.indexOf(term) > -1;
+      var okLic = !filter || r.dataset.lic === filter;
+      var show = okText && okLic;
+      r.classList.toggle('hide', !show);
+      if (show) shown++;
+    });
+    empty.style.display = shown ? 'none' : 'block';
+  }
+
+  q.addEventListener('input', apply);
+  chips.forEach(function (c) {
+    c.addEventListener('click', function () {
+      chips.forEach(function (x) { x.classList.remove('on'); });
+      c.classList.add('on');
+      filter = c.dataset.f;
+      apply();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

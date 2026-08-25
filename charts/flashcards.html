@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Flashcards</title>
+<style>
+  :root { --accent:#72A07D; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:#fff;color:#111;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:14px;padding:20px;-webkit-user-select:none;user-select:none;
+  }
+  h1{font-size:1.15rem;color:var(--accent);text-align:center}
+  .card{
+    width:100%;max-width:420px;background:rgba(114,160,125,.10);
+    border:1px solid rgba(114,160,125,.35);border-radius:16px;padding:22px 20px;text-align:center;
+  }
+  .q{font-size:1.02rem;font-weight:600;min-height:3.2em;display:flex;align-items:center;justify-content:center}
+  .a{margin-top:10px;font-size:1.05rem;font-weight:700;color:var(--accent);min-height:1.5em}
+  .count{font-size:.78rem;color:#666;margin-top:10px}
+  .controls{display:flex;gap:10px;margin-top:16px;justify-content:center}
+  button{font:inherit;font-weight:700;cursor:pointer;border:none;border-radius:10px;padding:10px 18px;background:var(--accent);color:#fff}
+  button.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+  button:active{transform:scale(.97)}
+</style>
+</head>
+<body>
+  <h1 id="title">Flashcards</h1>
+  <div class="card">
+    <div class="q" id="question"></div>
+    <div class="a" id="answer"></div>
+    <div class="count" id="count"></div>
+    <div class="controls">
+      <button class="ghost" id="reveal" type="button">Reveal</button>
+      <button id="next" type="button">Next</button>
+    </div>
+  </div>
+<script>
+  window.__chartParams = window.__chartParams || {
+    title: "Cell Biology",
+    accentColor: "#72A07D",
+    shuffle: false,
+    questions: [
+      { q: "Which organelle produces most of the cell's ATP?", a: "The mitochondrion" },
+      { q: "What molecule carries genetic instructions?", a: "DNA" },
+      { q: "Which structure controls what enters and leaves the cell?", a: "The cell membrane" },
+      { q: "Where does protein synthesis take place?", a: "The ribosome" },
+      { q: "What is the jelly-like fluid filling the cell?", a: "Cytoplasm" }
+    ],
+    __schema: {
+      accentColor: { type: "color", label: "Accent color" },
+      shuffle: { type: "toggle", label: "Shuffle order" }
+    }
+  };
+
+  var p = window.__chartParams;
+  var qs = Array.isArray(p.questions) ? p.questions.slice() : [];
+  if (p.shuffle) { qs.sort(function () { return Math.random() - 0.5; }); }
+  var i = 0;
+
+  document.documentElement.style.setProperty("--accent", p.accentColor || "#72A07D");
+  document.getElementById("title").textContent = p.title || "Flashcards";
+
+  function show() {
+    var q = qs[i] || { q: "Add questions in the params editor", a: "" };
+    document.getElementById("question").textContent = q.q;
+    document.getElementById("answer").textContent = "";
+    document.getElementById("count").textContent = qs.length ? (i + 1) + " of " + qs.length : "";
+  }
+  function reveal() { if (qs[i]) document.getElementById("answer").textContent = qs[i].a; }
+  function next() { if (qs.length) { i = (i + 1) % qs.length; show(); } }
+
+  var r = document.getElementById("reveal"), n = document.getElementById("next");
+  r.addEventListener("click", reveal);
+  r.addEventListener("touchstart", function (e) { e.preventDefault(); reveal(); }, { passive: false });
+  n.addEventListener("click", next);
+  n.addEventListener("touchstart", function (e) { e.preventDefault(); next(); }, { passive: false });
+  show();
+</script>
+</body>
+</html>

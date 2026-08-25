@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quick Fire</title>
+<style>
+  :root { --accent:#72A07D; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:#fff;color:#111;display:flex;flex-direction:column;
+    justify-content:center;gap:12px;padding:18px;-webkit-user-select:none;user-select:none;
+  }
+  .hud{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;font-weight:700;color:#555}
+  .hud b{color:var(--accent)}
+  .bar{height:5px;background:rgba(114,160,125,.2);border-radius:3px;overflow:hidden}
+  .bar i{display:block;height:100%;width:100%;background:var(--accent);transition:width .1s linear}
+  h1{font-size:1.05rem;color:var(--accent);text-align:center}
+  .q{
+    background:rgba(114,160,125,.10);border:1px solid rgba(114,160,125,.35);border-radius:16px;
+    padding:18px 16px;text-align:center;font-size:1rem;font-weight:600;min-height:5.2em;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .opts{display:grid;gap:8px}
+  .opt{
+    font:inherit;font-weight:600;font-size:.9rem;text-align:left;cursor:pointer;
+    background:#fff;border:1.5px solid rgba(114,160,125,.45);color:#111;
+    border-radius:12px;padding:12px 14px;transition:background .15s,border-color .15s,color .15s;
+  }
+  .opt:active{transform:scale(.99)}
+  .opt.right{background:var(--accent);border-color:var(--accent);color:#fff}
+  .opt.wrong{background:#fdf0f0;border-color:#e0bcbc;color:#a33b3b}
+  .over{text-align:center}
+  .over .score{font-size:2rem;font-weight:800;color:var(--accent)}
+  .over p{font-size:.85rem;color:#555;margin:6px 0 14px}
+  button.again{
+    font:inherit;font-weight:700;cursor:pointer;border:none;border-radius:12px;
+    padding:12px 22px;background:var(--accent);color:#fff;
+  }
+  .hide{display:none}
+</style>
+</head>
+<body>
+  <h1 id="title">Quick Fire</h1>
+
+  <div id="play">
+    <div class="hud">
+      <span>Question <b id="idx">1</b></span>
+      <span>Score <b id="score">0</b></span>
+      <span>Streak <b id="streak">0</b></span>
+    </div>
+    <div class="bar" style="margin:8px 0 12px"><i id="timerBar"></i></div>
+    <div class="q" id="question"></div>
+    <div class="opts" id="opts" style="margin-top:12px"></div>
+  </div>
+
+  <div id="over" class="over hide">
+    <div class="score" id="finalScore"></div>
+    <p id="finalMsg"></p>
+    <button class="again" id="again" type="button">Play again</button>
+  </div>
+
+<script>
+  /* A game chart. It reads the SAME questions array a flashcard chart uses,
+     which is the point of the universal variable: one study set, many chart types. */
+  window.__chartParams = window.__chartParams || {
+    title: "Quick Fire",
+    accentColor: "#72A07D",
+    secondsPerQuestion: 8,
+    questions: [
+      { q: "Which planet is closest to the Sun?", a: "Mercury" },
+      { q: "What force keeps planets in orbit?", a: "Gravity" },
+      { q: "What is the closest star to Earth?", a: "The Sun" },
+      { q: "What galaxy is Earth in?", a: "The Milky Way" },
+      { q: "What is a light year a measure of?", a: "Distance" }
+    ],
+    __schema: {
+      accentColor: { type: "color", label: "Accent color" },
+      secondsPerQuestion: { type: "slider", label: "Seconds per question", min: 3, max: 20, step: 1 }
+    }
+  };
+
+  var p = window.__chartParams;
+  var qs = Array.isArray(p.questions) ? p.questions.filter(function (x) { return x && x.q; }) : [];
+  var limit = Math.max(3, +p.secondsPerQuestion || 8);
+
+  document.documentElement.style.setProperty("--accent", p.accentColor || "#72A07D");
+  document.getElementById("title").textContent = p.title || "Quick Fire";
+
+  var i = 0, score = 0, streak = 0, timer = null, left = 0, locked = false;
+  var qEl = document.getElementById("question");
+  var optsEl = document.getElementById("opts");
+  var barEl = document.getElementById("timerBar");
+
+  function distractors(correct) {
+    var pool = qs.map(function (x) { return x.a; }).filter(function (a) { return a && a !== correct; });
+    var picked = [];
+    while (picked.length < 3 && pool.length) {
+      picked.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+    }
+    return picked;
+  }
+
+  function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+
+  function next() {
+    stopTimer();
+    locked = false;
+    if (i >= qs.length) return finish();
+
+    var item = qs[i];
+    document.getElementById("idx").textContent = (i + 1) + " of " + qs.length;
+    qEl.textContent = item.q;
+
+    var choices = distractors(item.a).concat([item.a]);
+    choices.sort(function () { return Math.random() - 0.5; });
+
+    optsEl.innerHTML = "";
+    choices.forEach(function (c) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "opt";
+      b.textContent = c;
+      var pick = function (e) {
+        if (e) e.preventDefault();
+        answer(b, c === item.a, item.a);
+      };
+      b.addEventListener("click", pick);
+      b.addEventListener("touchstart", pick, { passive: false });
+      optsEl.appendChild(b);
+    });
+
+    left = limit;
+    barEl.style.width = "100%";
+    timer = setInterval(function () {
+      left -= 0.1;
+      barEl.style.width = Math.max(0, (left / limit) * 100) + "%";
+      if (left <= 0) { answer(null, false, item.a); }
+    }, 100);
+  }
+
+  function answer(btn, correct, right) {
+    if (locked) return;
+    locked = true;
+    stopTimer();
+    if (correct) {
+      score += 10 + Math.round(left);
+      streak++;
+      if (btn) btn.classList.add("right");
+    } else {
+      streak = 0;
+      if (btn) btn.classList.add("wrong");
+      Array.prototype.forEach.call(optsEl.children, function (b) {
+        if (b.textContent === right) b.classList.add("right");
+      });
+    }
+    document.getElementById("score").textContent = score;
+    document.getElementById("streak").textContent = streak;
+    setTimeout(function () { i++; next(); }, 900);
+  }
+
+  function finish() {
+    document.getElementById("play").classList.add("hide");
+    document.getElementById("over").classList.remove("hide");
+    document.getElementById("finalScore").textContent = score + " points";
+    document.getElementById("finalMsg").textContent =
+      "You answered " + qs.length + " questions. Tap play again to beat it.";
+  }
+
+  var againBtn = document.getElementById("again");
+  var restart = function (e) {
+    if (e) e.preventDefault();
+    i = 0; score = 0; streak = 0;
+    document.getElementById("score").textContent = "0";
+    document.getElementById("streak").textContent = "0";
+    document.getElementById("over").classList.add("hide");
+    document.getElementById("play").classList.remove("hide");
+    next();
+  };
+  againBtn.addEventListener("click", restart);
+  againBtn.addEventListener("touchstart", restart, { passive: false });
+
+  if (qs.length) next(); else qEl.textContent = "Add questions in the params editor";
+</script>
+</body>
+</html>

@@ -52,6 +52,8 @@ User-agent: meta-externalagent
 Allow: /
 
 # Build output and vendored library code are not worth indexing.
+Disallow: /join/
 Disallow: /vendor/
+Disallow: /assets/orig/
 
 Sitemap: https://www.rexstudyapp.com/sitemap.xml

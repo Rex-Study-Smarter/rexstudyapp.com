@@ -6,7 +6,19 @@
   <meta name="description" content="The complete attribution and licence record for the 3D assets used in Rex." />
   <meta name="theme-color" content="#000000" />
   <link rel="icon" href="./Rex.png" />
+  <link rel="canonical" href="https://www.rexstudyapp.com/attributions.html" />
   <title>Full Asset Record</title>
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Rex" />
+  <meta property="og:url" content="https://www.rexstudyapp.com/attributions.html" />
+  <meta property="og:title" content="Full Asset Record" />
+  <meta property="og:description" content="The complete attribution and licence record for every third-party 3D asset in the Rex library." />
+  <meta property="og:image" content="https://www.rexstudyapp.com/Rex.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Full Asset Record" />
+  <meta name="twitter:description" content="The complete attribution and licence record for every third-party 3D asset in the Rex library." />
+  <meta name="twitter:image" content="https://www.rexstudyapp.com/Rex.png" />
   <style>
     @font-face { font-family:'GoudyHeavyface'; src:url('./GoudyHeavyface.otf') format('opentype'); font-weight:normal; font-style:normal; font-display:swap; }
     @font-face { font-family:'Lato'; src:url('./Lato-Regular.ttf') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
@@ -93,17 +105,6 @@
       .row { flex-direction:column; align-items:flex-start; gap:8px; }
     }
   </style>
-  <link rel="canonical" href="https://www.rexstudyapp.com/attributions.html" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Rex" />
-  <meta property="og:url" content="https://www.rexstudyapp.com/attributions.html" />
-  <meta property="og:title" content="Full Asset Record" />
-  <meta property="og:description" content="The complete attribution and licence record for every third-party 3D asset in the Rex library." />
-  <meta property="og:image" content="https://www.rexstudyapp.com/Rex.png" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Full Asset Record" />
-  <meta name="twitter:description" content="The complete attribution and licence record for every third-party 3D asset in the Rex library." />
-  <meta name="twitter:image" content="https://www.rexstudyapp.com/Rex.png" />
 </head>
 <body>
 
@@ -125,53 +126,36 @@
     <p>
       Every third-party 3D asset, texture and dataset in the Rex asset library, with its author and licence.
       Many of these carry Creative Commons Attribution terms, which require this credit wherever Rex is
-      distributed. Compiled 2026-08-24.
+      distributed. Compiled 2026-08-29.
     </p>
 
     <div class="stats">
-      <div><b>398</b><span>Credited assets</span></div>
-      <div><b>419</b><span>Licence files on the asset volume</span></div>
-      <div><b>13</b><span>Needing a licensing decision</span></div>
+      <div><b>385</b><span>Credited assets</span></div>
+      <div><b>435</b><span>Licence files on the asset volume</span></div>
+      <div><b>0</b><span>With NonCommercial or NoDerivatives terms</span></div>
     </div>
   </header>
 
   <div class="flag">
-    <h2>Needs a licensing decision</h2>
+    <h2>Why there is nothing to review here</h2>
     <p>
-      These carry NonCommercial or NoDerivatives terms. Rex is a paid product, and models are modified
-      (decimated and re-exported) before shipping, so these terms are likely incompatible with using them in
-      the app. Worth confirming with someone who knows licensing, and replacing or removing the ones that
-      do not clear.
+      Rex is a paid product, and every 3D asset it ships is modified &mdash; decimated, re-textured and
+      re-exported &mdash; before it reaches a chart. That is incompatible with a <b>NonCommercial</b> or a
+      <b>NoDerivatives</b> licence, so assets carrying those terms are not used, not shipped, and not listed
+      on this page. The build script drops them and prints what it dropped. Everything below is CC BY or
+      CC BY-SA, which permit commercial use and modification with credit.
     </p>
-    <ul>
-      <li><b>Aldi supermarket [full interior]</b> by Katydid <span class="lic review">CC BY-NC</span></li>
-      <li><b>Cinema Movie Projector AP5 - 1961</b> by NANO <span class="lic review">CC BY-NC</span></li>
-      <li><b>CPs - Model 2: Sutures and craniometric points.</b> by SBCVL_UCSF <span class="lic review">CC BY-NC</span></li>
-      <li><b>Dwarf Crocodile (NHMW-ZOO-HS-1974)</b> by Natural History Museum Vienna <span class="lic review">CC BY-NC</span></li>
-      <li><b>FTOZ- Model 5</b> by SBCVL_UCSF <span class="lic review">CC BY-NC</span></li>
-      <li><b>Golb</b> by Framed51 <span class="lic review">CC BY-NC-SA</span></li>
-      <li><b>Hangar / Storage Room Asset Pack</b> by Alex Sanches <span class="lic review">CC BY-NC</span></li>
-      <li><b>Mcdonald restaurant</b> by Katydid <span class="lic review">CC BY-NC</span></li>
-      <li><b>Model 8</b> by SBCVL_UCSF <span class="lic review">CC BY-NC</span></li>
-      <li><b>Saturn V - NASA</b> by Stanley Creative <span class="lic review">CC BY-ND</span></li>
-      <li><b>The Hospital (3 of 4)</b> by Veterock <span class="lic review">CC BY-NC</span></li>
-      <li><b>Vascular Components of the Petrous Face</b> by SBCVL_UCSF <span class="lic review">CC BY-NC</span></li>
-      <li><b>Venous Anatomy of the Cerebellum &amp; Brainstem</b> by SBCVL_UCSF <span class="lic review">CC BY-NC</span></li>
-    </ul>
   </div>
 
   <h2 class="sec">All credits</h2>
   <p class="sec-sub">Search by title, author or licence.</p>
 
   <div class="controls">
-    <input id="q" type="search" placeholder="Search 398 assets" autocomplete="off" />
+    <input id="q" type="search" placeholder="Search 385 assets" autocomplete="off" />
     <div class="chips">
-      <button class="chip on" type="button" data-f="">All <i>398</i></button>
+      <button class="chip on" type="button" data-f="">All <i>385</i></button>
       <button class="chip" type="button" data-f="CC BY">CC BY <i>380</i></button>
-      <button class="chip" type="button" data-f="CC BY-NC">CC BY-NC <i>11</i></button>
       <button class="chip" type="button" data-f="CC BY-SA">CC BY-SA <i>5</i></button>
-      <button class="chip" type="button" data-f="CC BY-NC-SA">CC BY-NC-SA <i>1</i></button>
-      <button class="chip" type="button" data-f="CC BY-ND">CC BY-ND <i>1</i></button>
     </div>
   </div>
 
@@ -334,16 +318,6 @@
     <div class="tags">
       <span class="lic ok">CC BY</span>
       <a href="https://skfb.ly/6AARv" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
-  <article class="row" data-lic="CC BY-NC" data-kind="review" data-q="aldi supermarket [full interior] katydid cc by-nc">
-    <div class="meta">
-      <h3>Aldi supermarket [full interior]</h3>
-      <p>by Katydid</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC</span>
-      <a href="https://skfb.ly/pE7U9" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
   <article class="row" data-lic="CC BY" data-kind="ok" data-q="alexander flemming describes penicillin [audio] thomas flynn cc by">
@@ -996,16 +970,6 @@
       <a href="https://skfb.ly/pwQBM" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
-  <article class="row" data-lic="CC BY-NC" data-kind="review" data-q="cinema movie projector ap5 - 1961 nano cc by-nc">
-    <div class="meta">
-      <h3>Cinema Movie Projector AP5 - 1961</h3>
-      <p>by NANO</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC</span>
-      <a href="https://skfb.ly/6yFBu" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
   <article class="row" data-lic="CC BY" data-kind="ok" data-q="civil war cannon zack_hawley cc by">
     <div class="meta">
       <h3>Civil War Cannon</h3>
@@ -1104,16 +1068,6 @@
     <div class="tags">
       <span class="lic ok">CC BY</span>
       <a href="https://skfb.ly/6T8GM" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
-  <article class="row" data-lic="CC BY-NC" data-kind="review" data-q="cps - model 2: sutures and craniometric points. sbcvl_ucsf cc by-nc">
-    <div class="meta">
-      <h3>CPs - Model 2: Sutures and craniometric points.</h3>
-      <p>by SBCVL_UCSF</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC</span>
-      <a href="https://skfb.ly/6T8Mp" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
   <article class="row" data-lic="CC BY" data-kind="ok" data-q="cup oleksii rozumnyi cc by">
@@ -1244,16 +1198,6 @@
     <div class="tags">
       <span class="lic ok">CC BY</span>
       <a href="https://skfb.ly/oOtz7" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
-  <article class="row" data-lic="CC BY-NC" data-kind="review" data-q="dwarf crocodile (nhmw-zoo-hs-1974) natural history museum vienna cc by-nc">
-    <div class="meta">
-      <h3>Dwarf Crocodile (NHMW-ZOO-HS-1974)</h3>
-      <p>by Natural History Museum Vienna</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC</span>
-      <a href="https://skfb.ly/o7yzt" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
   <article class="row" data-lic="CC BY" data-kind="ok" data-q="e_ coli cell bedonio cc by">
@@ -1496,16 +1440,6 @@
       <a href="https://skfb.ly/o7zXO" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
-  <article class="row" data-lic="CC BY-NC" data-kind="review" data-q="ftoz- model 5 sbcvl_ucsf cc by-nc">
-    <div class="meta">
-      <h3>FTOZ- Model 5</h3>
-      <p>by SBCVL_UCSF</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC</span>
-      <a href="https://skfb.ly/6SGVS" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
   <article class="row" data-lic="CC BY" data-kind="ok" data-q="galactic incident loïc norgeot cc by">
     <div class="meta">
       <h3>Galactic Incident</h3>
@@ -1556,16 +1490,6 @@
       <a href="https://skfb.ly/6oIVP" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
-  <article class="row" data-lic="CC BY-NC-SA" data-kind="review" data-q="golb framed51 cc by-nc-sa">
-    <div class="meta">
-      <h3>Golb</h3>
-      <p>by Framed51</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC-SA</span>
-      <a href="https://skfb.ly/ouJxF" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
   <article class="row" data-lic="CC BY" data-kind="ok" data-q="golb marouane cc by">
     <div class="meta">
       <h3>GOLB</h3>
@@ -1594,16 +1518,6 @@
     <div class="tags">
       <span class="lic ok">CC BY</span>
       <a href="https://skfb.ly/OE67" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
-  <article class="row" data-lic="CC BY-NC" data-kind="review" data-q="hangar / storage room asset pack alex sanches cc by-nc">
-    <div class="meta">
-      <h3>Hangar / Storage Room Asset Pack</h3>
-      <p>by Alex Sanches</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC</span>
-      <a href="https://skfb.ly/6UoMn" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
   <article class="row" data-lic="CC BY" data-kind="ok" data-q="hepatitis b olofunot cc by">
@@ -2146,16 +2060,6 @@
       <a href="https://skfb.ly/BnvH" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
-  <article class="row" data-lic="CC BY-NC" data-kind="review" data-q="mcdonald restaurant katydid cc by-nc">
-    <div class="meta">
-      <h3>Mcdonald restaurant</h3>
-      <p>by Katydid</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC</span>
-      <a href="https://skfb.ly/pEsQX" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
   <article class="row" data-lic="CC BY" data-kind="ok" data-q="mcdonald&#x27;s cup quentin.cdt cc by">
     <div class="meta">
       <h3>McDonald&#x27;s Cup</h3>
@@ -2414,16 +2318,6 @@
     <div class="tags">
       <span class="lic ok">CC BY</span>
       <a href="https://skfb.ly/oLZTI" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
-  <article class="row" data-lic="CC BY-NC" data-kind="review" data-q="model 8 sbcvl_ucsf cc by-nc">
-    <div class="meta">
-      <h3>Model 8</h3>
-      <p>by SBCVL_UCSF</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC</span>
-      <a href="https://skfb.ly/6RRxS" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
   <article class="row" data-lic="CC BY" data-kind="ok" data-q="model of zinc fingers in the zfp568:dna complex steven.jo cc by">
@@ -3116,16 +3010,6 @@
       <a href="https://skfb.ly/6yw9I" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
-  <article class="row" data-lic="CC BY-ND" data-kind="review" data-q="saturn v - nasa stanley creative cc by-nd">
-    <div class="meta">
-      <h3>Saturn V - NASA</h3>
-      <p>by Stanley Creative</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-ND</span>
-      <a href="https://skfb.ly/6WMUR" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
   <article class="row" data-lic="CC BY" data-kind="ok" data-q="saumur 2022 - m7 priest dday amac35 cc by">
     <div class="meta">
       <h3>SAUMUR 2022 - M7 Priest DDay</h3>
@@ -3506,16 +3390,6 @@
       <a href="https://skfb.ly/6AKCU" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
-  <article class="row" data-lic="CC BY-NC" data-kind="review" data-q="the hospital (3 of 4) veterock cc by-nc">
-    <div class="meta">
-      <h3>The Hospital (3 of 4)</h3>
-      <p>by Veterock</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC</span>
-      <a href="https://skfb.ly/pC9J7" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
   <article class="row" data-lic="CC BY" data-kind="ok" data-q="the human spinal column 3d cc by">
     <div class="meta">
       <h3>The human spinal column</h3>
@@ -3846,26 +3720,6 @@
       <a href="https://skfb.ly/pBKrn" rel="noopener nofollow" target="_blank">Source</a>
     </div>
   </article>
-  <article class="row" data-lic="CC BY-NC" data-kind="review" data-q="vascular components of the petrous face sbcvl_ucsf cc by-nc">
-    <div class="meta">
-      <h3>Vascular Components of the Petrous Face</h3>
-      <p>by SBCVL_UCSF</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC</span>
-      <a href="https://skfb.ly/6WKxt" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
-  <article class="row" data-lic="CC BY-NC" data-kind="review" data-q="venous anatomy of the cerebellum &amp; brainstem sbcvl_ucsf cc by-nc">
-    <div class="meta">
-      <h3>Venous Anatomy of the Cerebellum &amp; Brainstem</h3>
-      <p>by SBCVL_UCSF</p>
-    </div>
-    <div class="tags">
-      <span class="lic review">CC BY-NC</span>
-      <a href="https://skfb.ly/6VBQM" rel="noopener nofollow" target="_blank">Source</a>
-    </div>
-  </article>
   <article class="row" data-lic="CC BY-SA" data-kind="sharealike" data-q="venus kongle cc by-sa">
     <div class="meta">
       <h3>Venus</h3>
@@ -4170,6 +4024,7 @@
     <details><summary>Environments <i>212 files</i></summary><ul><li>./Environments/3D_Assets/EducationalChemistry/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/EducationalScienceObjects/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/art_architecture_glb/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/biology_glb/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/chemistry_glb/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/computers-electronics/kenney/extracted/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-blaster-kit/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-blocky-characters/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-car-kit/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-city-kit-commercial/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-city-kit-industrial/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-cube-pets/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-fantasy-town-kit/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-graveyard-kit/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-mini-dungeon/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-mini-forest/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-modular-cave-kit/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-modular-dungeon-kit/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-modular-space-kit/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-pirate-kit/License.txt</li><li>./Environments/3D_Assets/computers-electronics/kenney/kit-platformer-kit/License.txt</li><li>./Environments/3D_Assets/engineering_glb/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/geography_glb/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/language_scenes_glb/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_hdri/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_realistic_glb/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_asphalt_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_beach_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_beach_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_beach_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_grass_rock/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_ground_rock/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_mud_1/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_rocks_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_rocks_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_rocks_04/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_sand/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/aerial_wood_snips/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/american_walnut_veneer/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/angli_veneer/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/anti_skid_tiles/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/anti_slip_concrete/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asbestos_sheet/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asbestos_sheet_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/ash_veneer/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asphalt_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asphalt_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asphalt_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asphalt_04/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asphalt_05/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asphalt_06/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asphalt_07/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asphalt_floor/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asphalt_pit_lane/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asphalt_snow/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/asphalt_track/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bamboo_veneer/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bamboo_wall/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bamboo_wall_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bamboo_wall_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bark_bluegum/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bark_brown_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bark_brown_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bark_platanus/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bark_willow/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bark_willow_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/baseball_playground/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/beam_wall_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/beige_wall_001/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/beige_wall_002/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bi_stretch/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bicolour_gravel/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/bitumen/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/black_oak_veneer/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/black_painted_planks/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/black_walnut_veneer_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/black_walnut_veneer_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/black_walnut_veneer_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/blue_floor_tiles_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/blue_metal_plate/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/blue_painted_planks/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/blue_plaster_wall/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/blue_plaster_weathered/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/book_pattern/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/box_profile_metal_sheet/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_4/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_crosswalk/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_floor/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_floor_003/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_floor_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_gravel/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_moss_001/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_pavement/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_pavement_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_pavement_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_villa_floor/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_001/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_003/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_005/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_006/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_04/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_07/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_08/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_09/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_10/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_11/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_12/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brick_wall_13/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/broken_brick_wall/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/broken_wall/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_brick_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_floor_tiles/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_leather/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_mud/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_mud_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_mud_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_mud_dry/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_mud_leaves_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_mud_rocks_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_planks_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_planks_04/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_planks_05/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_planks_07/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_planks_08/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brown_planks_09/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brushed_concrete/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brushed_concrete_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brushed_concrete_04/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/brushed_concrete_2/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/burned_ground_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/caban/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/castle_brick_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/castle_brick_02_red/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/castle_brick_02_white/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/castle_brick_07/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/castle_brick_broken_06/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/castle_wall_slates/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/castle_wall_varriation/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/ceiling_interior/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/ceramic_roof_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/checkered_pavement_tiles/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cherry_veneer/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/chinese_cedar_bark/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/chinese_hackberry_bark/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/chipped_concrete/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/church_bricks_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/church_bricks_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/clay_block_wall/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/clay_floor_001/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/clay_plaster/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/clay_roof_tiles/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/clay_roof_tiles_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/clay_roof_tiles_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/clean_asphalt/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/clean_pebbles/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cliff_side/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/climbing_wall/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/climbing_wall_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/climbing_wall_base/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/coast_land_rocks_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/coast_sand_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/coast_sand_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/coast_sand_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/coast_sand_04/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/coast_sand_05/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/coast_sand_rocks_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/coated_pine/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/coated_pine_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_04/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_05/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_color/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_embedded_asphalt/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_floor_001/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_floor_01/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_floor_02/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_floor_03/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_floor_04/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_floor_05/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_floor_06/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_floor_07/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_floor_08/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_floor_09/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/polyhaven_textures/cobblestone_floor_13/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/sports_food_glb/LICENSE_METADATA.json</li><li>./Environments/3D_Assets/stem_glb/LICENSE_METADATA.json</li><li>./Environments/3d_asset_library/actuarial-financial-math/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/astrobiology/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/biomedical-brain-neural/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/biomimicry-engineering/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/biostatistics-quantitative-genetics/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/cc0-eclair-packs/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/cc0-eclair-packs/extracted/License_Kenney.txt</li><li>./Environments/3d_asset_library/cc0-eclair-packs/extracted/kenney_car_kit_glb_cc0_v1/License.txt</li><li>./Environments/3d_asset_library/cc0-eclair-packs/extracted/kenney_city_roads_glb_cc0_v1/License.txt</li><li>./Environments/3d_asset_library/cc0-eclair-packs/extracted/kenney_nature_kit_glb_cc0_v1/License_Kenney.txt</li><li>./Environments/3d_asset_library/cc0-eclair-packs/source-archives/food-kit-glb-pack-200-unzipped/License_Kenney.txt</li><li>./Environments/3d_asset_library/cc0-eclair-packs/source-archives/furniture-kit-glb-pack-140-unzipped/License_Kenney.txt</li><li>./Environments/3d_asset_library/computational-linguistics/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/cryptographic-mathematics/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/ethnobotany/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/forensic-entomology/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/haptics-hci/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/marine-systems-engineering/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/packaging-engineering/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/pyrotechnic-engineering/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/quantum-information-science/LICENSE-SOURCE.txt</li><li>./Environments/3d_asset_library/volcanology-petrology/LICENSE-SOURCE.txt</li><li>./Environments/Educational_3D_Assets/LICENSE_AND_SOURCES.txt</li></ul></details>
     <details><summary>Free3D <i>18 files</i></summary><ul><li>./Free3D/KayKit/KayKit-Character-Pack-Adventures-1.0/kaykit_character_pack_adventures/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Character-Pack-Skeletons-1.0/kaykit_character_pack_skeletons/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-City-Builder-Bits-1.0/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-City-Builder-Bits-1.0/kaykit_city_builder_bits/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Dungeon-Remastered-1.0/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Dungeon-Remastered-1.0/kaykit_dungeon_remastered/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Furniture-Bits-1.0/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Furniture-Bits-1.0/kaykit_furniture_bits/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Halloween-Bits-1.0/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Halloween-Bits-1.0/kaykit_halloween_bits/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Medieval-Hexagon-Pack-1.0/kaykit_medieval_hexagon_pack/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Prototype-Bits-1.0/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Prototype-Bits-1.0/kaykit_prototype_bits/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Restaurant-Bits-1.0/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Restaurant-Bits-1.0/kaykit_restaurant_bits/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Space-Base-Bits-1.0/LICENSE.txt</li><li>./Free3D/KayKit/KayKit-Space-Base-Bits-1.0/kaykit_space_base_bits/LICENSE.txt</li><li>./Free3D/Khronos_glTF-Samples/license_map.json</li></ul></details>
     <details><summary>Physics <i>2 files</i></summary><ul><li>./Physics/quantum_mechanics/DOWNLOAD_SOURCES.md</li><li>./Physics/quantum_mechanics/models/sources_index.json</li></ul></details>
+    <details><summary>EducationalAssets (Deep Harvest 2026-08-25) <i>16 files</i></summary><ul><li>./EducationalAssets/BabylonJS_Assets/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/NASA_Science_Printables/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/PolyPizza_Fresh_2026/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/OpenGameArt_3D/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/Commons_TopicSTL_2026/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/ModelViewer_SharedAssets/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/NIH3D_Molecules_2026/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/NIH3D_CellsOrganelles_2026/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/NIH3D_Prosthetics_2026/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/NIH3D_LabDevices_2026/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/Zenodo_GLB_2026/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/Figshare_3D_2026/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/ToxSam_PolygonalMind_Full/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/Chemistry_PDB_Ligands/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/Chemistry_PubChem3D/ATTRIBUTION_LICENSES_2026-08-25.md</li><li>./EducationalAssets/Chemistry_AlphaFold/ATTRIBUTION_LICENSES_2026-08-25.md</li></ul></details>
 
 </div>
 
@@ -4182,6 +4037,7 @@
       <a href="docs.html">Chart Docs</a>
       <a href="terms.html">Terms</a>
       <a href="privacy.html">Privacy</a>
+      <a href="support.html">Support</a>
     </nav>
   </div>
 </footer>

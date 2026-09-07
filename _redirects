@@ -1,1 +1,6 @@
+# Board invite links. Universal Links hand these straight to the app when it is
+# installed; this page is what everyone else sees, instead of a 404.
+/join/*  /join.html  200
+
+# Everything else that does not exist.
 /*  /404.html  404

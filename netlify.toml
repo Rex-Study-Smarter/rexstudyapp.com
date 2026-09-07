@@ -1,7 +1,21 @@
 [build]
   publish = "."
 
+# Redirect rules in this file are evaluated before _redirects, so the invite
+# rule has to live here too or the catch-all below swallows /join/<token>.
+[[redirects]]
+  from = "/join/*"
+  to = "/join.html"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/404.html"
   status = 404
+
+# Universal Links only work if Apple gets this file back as JSON.
+[[headers]]
+  for = "/.well-known/apple-app-site-association"
+  [headers.values]
+    Content-Type = "application/json"
+    Cache-Control = "public, max-age=3600"

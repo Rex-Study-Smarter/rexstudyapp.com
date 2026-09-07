@@ -20,3 +20,10 @@
 
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
+
+# Apple requires the AASA file to be served as JSON, uncached enough that a
+# change to it is picked up. Without the content type, Universal Links silently
+# do not work and board invites fall back to opening the website.
+/.well-known/apple-app-site-association
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600

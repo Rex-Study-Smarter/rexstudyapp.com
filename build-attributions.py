@@ -52,8 +52,19 @@ def classify(lic):
 for r in rows:
     r["short"], r["kind"] = classify(r["lic"])
 
+# NonCommercial and NoDerivatives assets are EXCLUDED, not flagged.
+#
+# Rex is a paid product and every shipped model is modified (decimated,
+# re-textured, re-exported), so both term families are incompatible with how
+# the assets are actually used. This used to render them into a "needs a
+# licensing decision" panel, which published the risk instead of resolving it
+# and quietly re-added the entries on every rebuild. Dropping them here is the
+# only place the exclusion survives a regeneration.
+excluded = [r for r in rows if r["kind"] == "review"]
+rows = [r for r in rows if r["kind"] != "review"]
+
 counts = collections.Counter(r["short"] for r in rows)
-review = [r for r in rows if r["kind"] == "review"]
+review = []
 
 # on-volume licence file index, grouped by top-level folder
 folders = collections.OrderedDict()
@@ -113,5 +124,11 @@ out = (tpl.replace("{{CARDS}}", cards)
           .replace("{{FILECOUNT}}", str(sum(len(v) for v in folders.values())))
           .replace("{{GENERATED}}", generated))
 io.open(OUT, "w", encoding="utf-8").write(out)
-print("wrote %s: %d credits, %d needing review, %d on-volume licence files"
-      % (OUT, len(rows), len(review), sum(len(v) for v in folders.values())))
+print("wrote %s: %d credits, %d on-volume licence files"
+      % (OUT, len(rows), sum(len(v) for v in folders.values())))
+if excluded:
+    print("\nEXCLUDED %d asset(s) for NonCommercial / NoDerivatives terms:" % len(excluded))
+    for r in excluded:
+        print("  %-12s %s by %s" % (r["short"], r["title"], r["author"]))
+    print("\nThese are not credited on the page because they must not ship.")
+    print("Delete the source files from the asset volume so they cannot be picked up later.")

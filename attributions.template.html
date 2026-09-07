@@ -6,7 +6,19 @@
   <meta name="description" content="The complete attribution and licence record for the 3D assets used in Rex." />
   <meta name="theme-color" content="#000000" />
   <link rel="icon" href="./Rex.png" />
+  <link rel="canonical" href="https://www.rexstudyapp.com/attributions.html" />
   <title>Full Asset Record</title>
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Rex" />
+  <meta property="og:url" content="https://www.rexstudyapp.com/attributions.html" />
+  <meta property="og:title" content="Full Asset Record" />
+  <meta property="og:description" content="The complete attribution and licence record for every third-party 3D asset in the Rex library." />
+  <meta property="og:image" content="https://www.rexstudyapp.com/Rex.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Full Asset Record" />
+  <meta name="twitter:description" content="The complete attribution and licence record for every third-party 3D asset in the Rex library." />
+  <meta name="twitter:image" content="https://www.rexstudyapp.com/Rex.png" />
   <style>
     @font-face { font-family:'GoudyHeavyface'; src:url('./GoudyHeavyface.otf') format('opentype'); font-weight:normal; font-style:normal; font-display:swap; }
     @font-face { font-family:'Lato'; src:url('./Lato-Regular.ttf') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
@@ -120,21 +132,19 @@
     <div class="stats">
       <div><b>{{TOTAL}}</b><span>Credited assets</span></div>
       <div><b>{{FILECOUNT}}</b><span>Licence files on the asset volume</span></div>
-      <div><b>{{REVIEW_COUNT}}</b><span>Needing a licensing decision</span></div>
+      <div><b>{{REVIEW_COUNT}}</b><span>With NonCommercial or NoDerivatives terms</span></div>
     </div>
   </header>
 
   <div class="flag">
-    <h2>Needs a licensing decision</h2>
+    <h2>Why there is nothing to review here</h2>
     <p>
-      These carry NonCommercial or NoDerivatives terms. Rex is a paid product, and models are modified
-      (decimated and re-exported) before shipping, so these terms are likely incompatible with using them in
-      the app. Worth confirming with someone who knows licensing, and replacing or removing the ones that
-      do not clear.
+      Rex is a paid product, and every 3D asset it ships is modified &mdash; decimated, re-textured and
+      re-exported &mdash; before it reaches a chart. That is incompatible with a <b>NonCommercial</b> or a
+      <b>NoDerivatives</b> licence, so assets carrying those terms are not used, not shipped, and not listed
+      on this page. The build script drops them and prints what it dropped. Everything below is CC BY or
+      CC BY-SA, which permit commercial use and modification with credit.
     </p>
-    <ul>
-{{REVIEW}}
-    </ul>
   </div>
 
   <h2 class="sec">All credits</h2>
@@ -168,6 +178,7 @@
       <a href="docs.html">Chart Docs</a>
       <a href="terms.html">Terms</a>
       <a href="privacy.html">Privacy</a>
+      <a href="support.html">Support</a>
     </nav>
   </div>
 </footer>

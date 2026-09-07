@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <meta name="description" content="Open a Rex board invite." />
+  <link rel="icon" href="/Rex.png" />
+  <title>Join a board on Rex</title>
+  <style>
+    @font-face { font-family:'GoudyHeavyface'; src:url('/GoudyHeavyface.otf') format('opentype'); font-weight:normal; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Lato'; src:url('/Lato-Regular.ttf') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:#FBFAF8; color:#111; min-height:100vh;
+      display:flex; align-items:center; justify-content:center; padding:32px;
+      text-align:center; -webkit-font-smoothing:antialiased;
+    }
+    .box { max-width:460px; }
+    img { width:96px; margin:0 auto 26px; }
+    h1 { font-family:'GoudyHeavyface',Georgia,serif; font-weight:normal; font-size:clamp(1.9rem,5vw,2.6rem); line-height:1.1; margin-bottom:14px; }
+    p { color:#4B4B4B; line-height:1.75; margin-bottom:28px; }
+    .actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+    a {
+      display:inline-flex; align-items:center; justify-content:center;
+      border:1.5px solid #111; border-radius:10px; padding:13px 24px;
+      font-size:.94rem; text-decoration:none; color:#111; transition:background .15s,color .15s;
+    }
+    a.solid { background:#111; color:#fff; }
+    a:hover { background:#111; color:#fff; }
+    a.solid:hover { background:#2A2A2A; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <img src="/RexMascot.png" alt="" />
+    <h1>You have been invited to a board.</h1>
+    <p id="msg">
+      Open this link on an iPhone or iPad with Rex installed and the board opens straight
+      in the app. If nothing happened, install Rex first, then tap the invite link again.
+    </p>
+    <div class="actions">
+      <a class="solid" href="https://apps.apple.com/app/rex-study-smarter/id6775703977">Get Rex on the App Store</a>
+      <a href="/index.html">What is Rex?</a>
+    </div>
+    <p style="margin-top:26px;font-size:.82rem;color:#767676;">
+      Invite links are single-use keys to one board. Do not post one anywhere public.
+    </p>
+  </div>
+  <script>
+    // Not-iOS visitors cannot redeem an invite at all, so say so rather than
+    // sending them to the App Store for an app their device will not run.
+    if (!/iPad|iPhone|iPod/.test(navigator.platform || navigator.userAgent)) {
+      document.getElementById('msg').textContent =
+        'Board invites open in the Rex app on iPhone or iPad. Open this same link on your device, and the board will be waiting.';
+    }
+  </script>
+</body>
+</html>

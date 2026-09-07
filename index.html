@@ -3,10 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Rex is the study app built for every student. Tutor, study boards, charts and whiteboards. Free to start." />
+  <meta name="description" content="Rex is the study app built for every student. An AI tutor you can talk to, study boards, read aloud, charts and whiteboards. Free to start." />
   <meta name="theme-color" content="#000000" />
   <link rel="icon" href="./Rex.png" />
-  <title>Rex</title>
+  <link rel="canonical" href="https://www.rexstudyapp.com/" />
+  <title>Rex — the study app built for every student</title>
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Rex" />
+  <meta property="og:title" content="Rex — the study app built for every student" />
+  <meta property="og:description" content="An AI tutor you can talk to, study boards, a whiteboard, notes, read aloud and interactive charts. Free to start, on the App Store now." />
+  <meta property="og:url" content="https://www.rexstudyapp.com/" />
+  <meta property="og:image" content="https://www.rexstudyapp.com/RexMascot.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Rex — the study app built for every student" />
+  <meta name="twitter:description" content="An AI tutor you can talk to, study boards, a whiteboard, notes, read aloud and interactive charts. Free to start, on the App Store now." />
+  <meta name="twitter:image" content="https://www.rexstudyapp.com/RexMascot.png" />
+  <meta name="apple-itunes-app" content="app-id=6775703977" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Rex",
+        "alternateName": "Rex: Study Smarter",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "iOS 18.6 or later",
+        "url": "https://www.rexstudyapp.com/",
+        "downloadUrl": "https://apps.apple.com/app/rex-study-smarter/id6775703977",
+        "installUrl": "https://apps.apple.com/app/rex-study-smarter/id6775703977",
+        "image": "https://www.rexstudyapp.com/RexMascot.png",
+        "description": "Rex is a study app that combines an AI tutor you can talk to hands free, study boards, a whiteboard, notes, a recorder, read aloud and interactive charts students can build, publish and remix.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "Free to start. Paid plans add capacity and advanced tools."
+        },
+        "publisher": { "@id": "https://www.rexstudyapp.com/#org" }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://www.rexstudyapp.com/#org",
+        "name": "Rex",
+        "url": "https://www.rexstudyapp.com/",
+        "logo": "https://www.rexstudyapp.com/Rex.png",
+        "email": "rexstudyapp@gmail.com"
+      },
+      {
+        "@type": "WebSite",
+        "name": "Rex",
+        "url": "https://www.rexstudyapp.com/",
+        "publisher": { "@id": "https://www.rexstudyapp.com/#org" }
+      }
+    ]
+  }
+  </script>
   <style>
     @font-face { font-family:'GoudyHeavyface'; src:url('./GoudyHeavyface.otf') format('opentype'); font-weight:normal; font-style:normal; font-display:swap; }
     @font-face { font-family:'Lato'; src:url('./Lato-Light.ttf') format('truetype'); font-weight:300; font-style:normal; font-display:swap; }
@@ -237,6 +291,44 @@
     .step h3 { font-size:1.18rem; margin-bottom:8px; }
     .step p { font-size:.93rem; color:var(--gray); line-height:1.75; }
 
+    /* REXER */
+    .rexer { background:var(--black); }
+    .rexer .section-label { color:var(--green); }
+    .rexer .section-title { color:#fff; }
+    .rexer .section-sub { color:rgba(255,255,255,.62); }
+    .rexer-tag {
+      display:inline-block; font-size:.7rem; letter-spacing:1.8px; text-transform:uppercase;
+      color:rgba(255,255,255,.62); border:1px solid rgba(255,255,255,.24);
+      border-radius:100px; padding:5px 13px; margin-bottom:20px;
+    }
+    .rexer-stops {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+      background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.15);
+      border-radius:14px; overflow:hidden; margin-top:46px;
+    }
+    .rexer-stop { background:var(--black); padding:32px 26px; }
+    .rexer-stop b {
+      display:block; font-family:'GoudyHeavyface',Georgia,serif; font-size:1.5rem;
+      color:var(--green); margin-bottom:14px; line-height:1;
+    }
+    .rexer-stop h3 { color:#fff; font-size:1.1rem; margin-bottom:9px; }
+    .rexer-stop p { font-size:.9rem; color:rgba(255,255,255,.6); line-height:1.72; }
+    .rexer-more {
+      margin-top:70px; display:grid;
+      grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); gap:52px; align-items:start;
+    }
+    .rexer-more h3 { color:#fff; font-size:1.7rem; line-height:1.2; margin-bottom:16px; }
+    .rexer-lede { color:rgba(255,255,255,.62); font-size:1rem; line-height:1.85; }
+    .rexer-lede + .rexer-lede { margin-top:16px; }
+    .rexer-tip { border-top:1px solid rgba(255,255,255,.15); padding:19px 0; }
+    .rexer-tip:last-child { border-bottom:1px solid rgba(255,255,255,.15); }
+    .rexer-tip strong { display:block; color:#fff; font-weight:400; font-size:1.02rem; margin-bottom:5px; }
+    .rexer-tip span { display:block; color:rgba(255,255,255,.58); font-size:.91rem; line-height:1.72; }
+    .rexer-note {
+      margin-top:46px; max-width:760px; font-size:.86rem;
+      color:rgba(255,255,255,.45); line-height:1.85;
+    }
+
     /* PRICING */
     #pricing { background:#fff; }
     .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--border); border-radius:14px; overflow:hidden; background:#fff; }
@@ -261,6 +353,8 @@
     .plan-cta:hover { background:var(--black); color:#fff; }
     .plan-cta-solid { background:var(--black); color:#fff; }
     .plan-cta-solid:hover { background:#2A2A2A; }
+    .plan-note { font-size:.78rem; color:var(--gray-light); line-height:1.6; margin-top:14px; }
+    .plan-note strong { color:var(--gray); font-weight:400; }
     .pricing-note { text-align:center; font-size:.85rem; color:var(--gray-light); margin-top:28px; }
 
     /* FAQ */
@@ -312,6 +406,8 @@
       .card:nth-last-child(-n+2) { border-bottom:1px solid var(--border); }
       .card:last-child { border-bottom:none; }
       .steps, .pricing-grid { grid-template-columns:1fr; }
+      .rexer-stops { grid-template-columns:repeat(2,1fr); }
+      .rexer-more { grid-template-columns:1fr; gap:34px; }
       .step + .step, .plan + .plan { border-left:none; border-top:1px solid var(--border); }
       .footer-grid { grid-template-columns:1fr 1fr; gap:32px; }
     }
@@ -329,6 +425,7 @@
       .wrap { padding:0 20px; }
       .stats-grid { grid-template-columns:1fr; }
       .stat + .stat { border-left:none; border-top:1px solid var(--border); }
+      .rexer-stops { grid-template-columns:1fr; }
       .footer-grid { grid-template-columns:1fr; }
     }
     @media (prefers-reduced-motion:reduce) {
@@ -336,17 +433,6 @@
       html { scroll-behavior:auto; }
     }
   </style>
-  <link rel="canonical" href="https://www.rexstudyapp.com/index.html" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Rex" />
-  <meta property="og:url" content="https://www.rexstudyapp.com/index.html" />
-  <meta property="og:title" content="Rex" />
-  <meta property="og:description" content="Rex is the free study app built for every student. AI tutor, study boards, whiteboards and interactive charts you can try in your browser." />
-  <meta property="og:image" content="https://www.rexstudyapp.com/Rex.png" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Rex" />
-  <meta name="twitter:description" content="Rex is the free study app built for every student. AI tutor, study boards, whiteboards and interactive charts you can try in your browser." />
-  <meta name="twitter:image" content="https://www.rexstudyapp.com/Rex.png" />
 </head>
 <body>
 
@@ -359,10 +445,11 @@
     </button>
     <div class="nav-links" id="navLinks">
       <a href="#features">Features</a>
+      <a href="#rexer">Rexer</a>
       <a href="#playground">Charts</a>
       <a href="#pricing">Pricing</a>
       <a href="./docs.html">Docs</a>
-      <a href="#download" class="nav-cta">Download Free</a>
+      <a href="https://apps.apple.com/app/rex-study-smarter/id6775703977" target="_blank" rel="noopener" class="nav-cta">Download Free</a>
     </div>
   </div>
 </nav>
@@ -378,7 +465,7 @@
         It's what's in your head, and Rex is here to help you fill it.
       </p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#download" id="download">Download on the App Store</a>
+        <a class="btn btn-primary" href="https://apps.apple.com/app/rex-study-smarter/id6775703977" id="download" target="_blank" rel="noopener">Download on the App Store</a>
         <a class="btn btn-secondary" href="#playground">Try it</a>
       </div>
       <p class="free-note">iPhone and iPad now. Android coming soon.</p>
@@ -470,7 +557,124 @@
         <h3>Whiteboard</h3>
         <p>Draw it out. A free-form whiteboard for thinking through problems visually, because sometimes you need to work it out by hand.</p>
       </article>
+
+      <article class="card">
+        <div class="feature-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        </div>
+        <h3>Recorder</h3>
+        <p>Record the lecture and get the transcript. Transcription runs on your device wherever the language allows it, so the recording is yours.</p>
+      </article>
+
+      <article class="card">
+        <div class="feature-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3>The web, on your board</h3>
+        <p>A browser that lives beside your work, with SafeSearch locked on and ads and trackers blocked. Look it up without losing your place.</p>
+      </article>
+
+      <article class="card">
+        <div class="feature-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M5.5 8.5a9 9 0 0 0 0 7"/><path d="M18.5 8.5a9 9 0 0 1 0 7"/><path d="M2.5 5.5a14 14 0 0 0 0 13"/><path d="M21.5 5.5a14 14 0 0 1 0 13"/></svg>
+        </div>
+        <h3>Voice Mode</h3>
+        <p>Talk to Rex and he talks back, hands free. He works on your board while he explains, then shrinks to a corner so the board has the screen. You decide whether he's allowed to touch it.</p>
+      </article>
+
+      <article class="card">
+        <div class="feature-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>
+        </div>
+        <h3>Read aloud</h3>
+        <p>Rex reads it out in his own voice and highlights the sentence he's on: a web page, a PDF, your notes, even a photo of a worksheet. The voice runs on your device.</p>
+      </article>
+
+      <article class="card">
+        <div class="feature-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/><line x1="8" y1="10" x2="14" y2="10"/><line x1="8" y1="13" x2="12" y2="13"/></svg>
+        </div>
+        <h3>Real sources</h3>
+        <p>Search actual published papers from your board and keep the ones that matter beside your notes, so a claim in an essay can point at something real.</p>
+      </article>
+
+      <article class="card">
+        <div class="feature-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+        </div>
+        <h3>Bring it all in</h3>
+        <p>Drop in a PDF, a file, or a photo of the worksheet and scan it straight onto the board. Whatever you're studying from can sit next to the work instead of in another app.</p>
+      </article>
     </div>
+  </div>
+</section>
+
+<!-- REXER -->
+<section class="section rexer" id="rexer">
+  <div class="wrap">
+    <p class="section-label">The Rexer</p>
+    <span class="rexer-tag">Coming in the next update</span>
+    <h2 class="section-title">Your board, played back as a lecture.</h2>
+    <p class="section-sub">Everything you put on a board is material. The Rexer turns that pile into a taught lesson, out loud, one thing at a time, on the board you already built.</p>
+
+    <div class="rexer-stops">
+      <div class="rexer-stop">
+        <b>01</b>
+        <h3>Tap Rexer</h3>
+        <p>It sits on the same button you add widgets with. Nothing to set up, nothing to export, no render to wait through.</p>
+      </div>
+      <div class="rexer-stop">
+        <b>02</b>
+        <h3>Rex reads the board</h3>
+        <p>Your notes, PDFs, scans, drawings, charts, the pages you kept and the lecture you recorded. Each one is read in full rather than skimmed, so a big board gets taught, not summarised.</p>
+      </div>
+      <div class="rexer-stop">
+        <b>03</b>
+        <h3>The board becomes a stage</h3>
+        <p>Everything goes dark and Rex lights up one item at a time, talking over it in his own voice, with captions, a running order you can jump around in, and a way to stop and ask him about the thing on screen.</p>
+      </div>
+      <div class="rexer-stop">
+        <b>04</b>
+        <h3>Keep the lecture</h3>
+        <p>The end card shows what it was built from: how many stops came from your own work, how many from your recording, and how many Rex added where your notes stopped. Save it as a video or send it to someone.</p>
+      </div>
+    </div>
+
+    <div class="rexer-more">
+      <div>
+        <h3>The board you give it is the lecture you get.</h3>
+        <p class="rexer-lede">The Rexer never invents your lesson. It teaches what is on the board, in the order the board suggests, weighted by what you actually spent the session on. So the way to get a better lecture is not a better prompt. It's a better board.</p>
+        <p class="rexer-lede">Six things that change the result.</p>
+      </div>
+      <div>
+        <div class="rexer-tip">
+          <strong>Put something real on it</strong>
+          <span>A near empty board has nothing to teach from. Notes in your own words are the strongest material Rex has, because they are the only part that is actually yours.</span>
+        </div>
+        <div class="rexer-tip">
+          <strong>Record the lesson on the board</strong>
+          <span>When there's a recording, it becomes the spine. The lecture then follows the order the class was taught in, instead of the order things happened to land on the canvas.</span>
+        </div>
+        <div class="rexer-tip">
+          <strong>One board per lesson</strong>
+          <span>The board's name becomes the title of the lecture. A board that's three subjects deep gets taught as three subjects.</span>
+        </div>
+        <div class="rexer-tip">
+          <strong>Lay it out in reading order</strong>
+          <span>Rex walks the board the way you would read it, top to bottom, page by page. Moving a tile up moves it earlier in the lecture.</span>
+        </div>
+        <div class="rexer-tip">
+          <strong>Actually work in it</strong>
+          <span>What you opened and sat with gets more of the lecture's time, so the two pages you were stuck on get taught properly instead of getting a line each. That record of your session stays on your device.</span>
+        </div>
+        <div class="rexer-tip">
+          <strong>Add the thing you couldn't explain</strong>
+          <span>Drop in the PDF, the scanned worksheet, the page you found. Anything Rex has to cover for you is labelled as his, so you can see exactly where your own understanding ran out.</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="rexer-note">Every stop is labelled with where it came from: your notepad, your recording, or Rex filling a gap. And if you're offline, out of your daily allowance, or on a board Rex can't make sense of, you still get something: he reads the board back to you in its own words, marked as a read through, so a read through is never passed off as a lecture.</p>
   </div>
 </section>
 
@@ -556,57 +760,58 @@
   <div class="wrap">
     <p class="section-label">Plans</p>
     <h2 class="section-title">Start free. Grow when you're ready.</h2>
-    <p class="section-sub">No pressure. Rex starts free, always. Upgrade only when you want more.</p>
+    <p class="section-sub">Every plan has every tool. Nothing is locked away behind a tier. What changes is how much you can ask the tutor each day.</p>
 
     <div class="pricing-grid">
       <div class="plan">
         <p class="plan-label"></p>
         <p class="plan-name">Free</p>
         <p class="plan-price">$0<span>/mo</span></p>
-        <p class="plan-desc">Everything you need to get started. No credit card, no catch.</p>
+        <p class="plan-desc">Every tool, a real daily allowance. No credit card, no trial timer.</p>
         <ul class="plan-features">
-          <li>Rex Tutor access</li>
-          <li>Study boards</li>
-          <li>Whiteboard tools</li>
-          <li>Note-taking</li>
-          <li>Interactive charts</li>
-          <li>Read aloud</li>
+          <li>Every tool included</li>
+          <li>50,000 AI tokens a day</li>
+          <li>Boards, notes and recordings</li>
+          <li>The full chart store</li>
         </ul>
-        <a href="#download" class="plan-cta">Get started free</a>
+        <a href="https://apps.apple.com/app/rex-study-smarter/id6775703977" target="_blank" rel="noopener" class="plan-cta">Get started free</a>
       </div>
 
       <div class="plan">
         <p class="plan-label">Most popular</p>
-        <p class="plan-name">Student</p>
-        <p class="plan-price">$7.99<span>/mo</span></p>
-        <p class="plan-desc">For the student who's serious. More power, more Rex, more you.</p>
+        <p class="plan-name">Pro</p>
+        <p class="plan-price">$12.99<span>/mo</span></p>
+        <p class="plan-desc">The largest daily allowance, and open to anyone. No school email needed.</p>
         <ul class="plan-features">
           <li>Everything in Free</li>
-          <li>Expanded tutor access</li>
-          <li>Priority responses</li>
-          <li>Advanced chart widgets</li>
-          <li>Unlimited board storage</li>
+          <li>300,000 AI tokens a day</li>
+          <li>Class memory that persists</li>
+          <li>Premium voice and study videos</li>
+          <li>Real-time board sharing</li>
+          <li>Early access to new tools</li>
         </ul>
-        <a href="#download" class="plan-cta plan-cta-solid">Download Student</a>
+        <a href="https://apps.apple.com/app/rex-study-smarter/id6775703977" target="_blank" rel="noopener" class="plan-cta plan-cta-solid">Download Pro</a>
       </div>
 
       <div class="plan">
-        <p class="plan-label"></p>
-        <p class="plan-name">Pro</p>
-        <p class="plan-price">$12.99<span>/mo</span></p>
-        <p class="plan-desc">Unlimited everything. For the learner who wants no limits.</p>
+        <p class="plan-label">Best value</p>
+        <p class="plan-name">Pro Annual</p>
+        <p class="plan-price">$99.99<span>/yr</span></p>
+        <p class="plan-desc">The same Pro plan, billed once a year instead of every month.</p>
         <ul class="plan-features">
-          <li>Everything in Student</li>
-          <li>Unlimited messages</li>
-          <li>All current and future features</li>
-          <li>Publish and remix charts</li>
+          <li>Everything in Pro</li>
+          <li>300,000 AI tokens a day</li>
+          <li>One payment a year</li>
           <li>Early access to new tools</li>
         </ul>
-        <a href="#download" class="plan-cta">Download Pro</a>
+        <a href="https://apps.apple.com/app/rex-study-smarter/id6775703977" target="_blank" rel="noopener" class="plan-cta">Download Pro Annual</a>
       </div>
     </div>
 
-    <p class="pricing-note">Cancel anytime in the App Store. Downgrading never deletes your boards or notes.</p>
+    <p class="pricing-note">
+      Prices are US dollars and renew monthly or annually through the App Store. Cancel anytime in your Apple ID settings.
+      Running out of tokens pauses the tutor until the next day; it never touches your boards, notes or recordings.
+    </p>
   </div>
 </section>
 
@@ -628,15 +833,43 @@
       </details>
       <details>
         <summary>Is my voice recorded or sent anywhere?</summary>
-        <p>Read aloud and dictation are processed on your device. Details on what is stored and why are in our <a href="./privacy.html">privacy policy</a>.</p>
+        <p>Read aloud and dictation both run on your device, and dictation audio is discarded the moment it becomes text. A recording you deliberately save is different: it is a file you are keeping, so the transcript syncs to your account and the audio stays on your device unless you choose to upload it. The full detail is in our <a href="./privacy.html">privacy policy</a>.</p>
       </details>
       <details>
         <summary>Can I make my own charts?</summary>
         <p>You can. Build one in the app with quiz modes or Frame Studio, or import your own self-contained HTML file. The full guide and starter template are in the <a href="./docs.html">chart docs</a>.</p>
       </details>
       <details>
+        <summary>What is the Rexer?</summary>
+        <p>It plays your board back to you as a spoken lecture. Rex reads everything on the board, your notes, PDFs, scans, drawings, charts and any lecture you recorded there, then darkens the board and lights up one item at a time while he teaches it. You can jump around the running order, stop and ask him about whatever is on screen, and save the whole thing as a video at the end. Every stop says where it came from, so you can always tell your own work from the parts Rex filled in. It arrives in the next update.</p>
+      </details>
+      <details>
+        <summary>How do I get a better lecture out of the Rexer?</summary>
+        <p>Give it a better board. It teaches what is actually there, in the order the board suggests, and it gives more time to the things you spent the session in. So: keep one board per lesson, lay it out in reading order, write your notes in your own words, and record the class on the board when you can. A recording becomes the spine of the lecture, so it follows the order the class was taught in rather than the order tiles landed on the canvas.</p>
+      </details>
+      <details>
+        <summary>What is Voice Mode?</summary>
+        <p>A hands free conversation with Rex. You talk, he answers out loud, and he can work on your board while he explains, pulling up a chart or writing something down as he talks. When he touches the board he steps aside so you can see it, and shrinks to a chip in the corner. Whether he is allowed to change the board is a switch you control, and you can end the session at any time.</p>
+      </details>
+      <details>
+        <summary>Can Rex read a PDF or a photo out loud?</summary>
+        <p>Yes. Read aloud handles web pages, PDFs, your own notes, and images, including a photo of a worksheet or a scanned page, by reading the text out of the picture first. Rex highlights the sentence he is on as he goes, and the voice is generated on your device.</p>
+      </details>
+      <details>
+        <summary>What is the difference between monthly and annual Pro?</summary>
+        <p>Nothing except how you pay. Pro is $12.99 a month, or $99.99 for a full year billed once. Both plans include every tool and the same 300,000 daily tutor tokens.</p>
+      </details>
+      <details>
+        <summary>What is an AI token, and will I run out?</summary>
+        <p>Tokens are how the tutor's usage is measured: roughly speaking, a token is about three quarters of a word, counting both your question and Rex's answer. Free gets 50,000 a day, Pro 300,000, and the count resets every day. Most study sessions do not come close. If you do run out, the tutor pauses until tomorrow and everything else in Rex keeps working.</p>
+      </details>
+      <details>
+        <summary>Can I use my own AI provider?</summary>
+        <p>Yes. You can connect your own OpenRouter account, and the tutor will answer through a model you choose and pay for instead of Rex's, without passing through our servers. Free models are available there, so it is a way to keep going past the daily allowance without a Rex subscription.</p>
+      </details>
+      <details>
         <summary>What happens to my work if I cancel?</summary>
-        <p>Your boards and notes stay put. You drop back to the free plan's limits, but nothing is deleted for cancelling.</p>
+        <p>Your boards, notes and recordings stay exactly where they are. You drop back to the free plan's daily allowance, but nothing is deleted for cancelling.</p>
       </details>
     </div>
   </div>
@@ -648,7 +881,7 @@
     <img class="cta-mascot" src="./RexMascot.png" alt="" />
     <h2>Knowledge should be free.</h2>
     <p>The basics are always open, for every student, no matter what's in their pocket. Anyone can start.</p>
-    <a class="btn btn-light" href="#download">Start free on the App Store</a>
+    <a class="btn btn-light" href="https://apps.apple.com/app/rex-study-smarter/id6775703977" target="_blank" rel="noopener">Start free on the App Store</a>
   </div>
 </section>
 
@@ -663,9 +896,10 @@
       <div class="footer-col">
         <h4>Product</h4>
         <a href="#features">Features</a>
+        <a href="#rexer">Rexer</a>
         <a href="#playground">Charts</a>
         <a href="#pricing">Pricing</a>
-        <a href="#download">Download</a>
+        <a href="https://apps.apple.com/app/rex-study-smarter/id6775703977" target="_blank" rel="noopener">Download</a>
       </div>
       <div class="footer-col">
         <h4>Build</h4>
@@ -681,6 +915,7 @@
         <a href="./terms.html">Terms of Service</a>
         <a href="./user-agreement.html">User Agreement</a>
         <a href="./dmca.html">Copyright and DMCA</a>
+        <a href="./support.html">Support</a>
         <a href="mailto:rexstudyapp@gmail.com">Contact</a>
       </div>
     </div>
@@ -692,6 +927,58 @@
 </footer>
 
 <!-- CHART SOURCES: generated by build-charts.py, do not edit by hand -->
+<script type="application/json" id="scene-defs">[
+  {
+    "id": "hemoglobin",
+    "model": "hemoglobin_1gzx",
+    "title": "Haemoglobin",
+    "sub": "The protein that carries oxygen in your blood.",
+    "credit": "Structure 1GZX, RCSB Protein Data Bank (public domain).",
+    "labels": [
+      {
+        "y": 0.88,
+        "text": "Four protein chains"
+      },
+      {
+        "x": -0.92,
+        "y": -0.1,
+        "text": "Haem groups bind oxygen"
+      },
+      {
+        "y": -0.9,
+        "text": "About 270 million per red blood cell"
+      }
+    ],
+    "narration": "Haemoglobin. This is the protein that carries oxygen in your blood. It is built from four protein chains, folded around each other. Each chain holds a haem group, and that is where an oxygen molecule attaches. A single red blood cell carries about two hundred and seventy million of these.",
+    "name": "Hemoglobin",
+    "audio": "narration/hemoglobin.mp3"
+  },
+  {
+    "id": "brain",
+    "model": "real_cortical_brain",
+    "title": "The cortical brain",
+    "sub": "Reconstructed from real medical imaging.",
+    "credit": "Derived from open CT and segmentation datasets (public domain).",
+    "labels": [
+      {
+        "mesh": 0,
+        "text": "Left hemisphere"
+      },
+      {
+        "mesh": 1,
+        "text": "Right hemisphere"
+      },
+      {
+        "y": 0.95,
+        "text": "Folds increase surface area"
+      }
+    ],
+    "narration": "The cortical brain, reconstructed from real medical imaging. It is split into two halves, the left hemisphere and the right hemisphere. The surface is folded rather than smooth, and those folds let far more cortex fit inside the skull.",
+    "name": "The brain",
+    "audio": "narration/brain.mp3"
+  }
+]
+</script>
 <div id="chart-sources" hidden>
   <script type="text/plain" data-chart="Flashcards" data-file="./charts/flashcards.html"><!DOCTYPE html>
 <html lang="en">
@@ -819,27 +1106,22 @@
            '&title=' + encodeURIComponent(o.title) +
            '&sub=' + encodeURIComponent(o.sub) +
            '&credit=' + encodeURIComponent(o.credit) +
-           '&labels=' + encodeURIComponent(JSON.stringify(o.labels || []));
+           '&labels=' + encodeURIComponent(JSON.stringify(o.labels || [])) +
+           (o.audio ? '&audio=' + encodeURIComponent(o.audio) : '');
   }
 
-  var CHARTS = [
-    { name: 'Hemoglobin', kind: 'scene', url: sceneURL({
-        model: 'hemoglobin_1gzx',
-        title: 'Haemoglobin',
-        sub: 'The protein that carries oxygen in your blood.',
-        credit: 'Structure 1GZX, RCSB Protein Data Bank (public domain).',
-        labels: [{"y":0.88,"text":"Four protein chains"},{"x":-0.92,"y":-0.1,"text":"Haem groups bind oxygen"},{"y":-0.9,"text":"About 270 million per red blood cell"}]
-      }) },
-    { name: 'The brain', kind: 'scene', url: sceneURL({
-        model: 'real_cortical_brain',
-        title: 'The cortical brain',
-        sub: 'Reconstructed from real medical imaging.',
-        credit: 'Derived from open CT and segmentation datasets (public domain).',
-        labels: [{"mesh":0,"text":"Left hemisphere"},{"mesh":1,"text":"Right hemisphere"},{"y":0.95,"text":"Folds increase surface area"}]
-      }) },
+  /* Scene definitions come from scenes/scenes.json, inlined at build time,
+     so the page, the labels and the narration audio all share one source. */
+  var SCENE_DEFS = [];
+  try { SCENE_DEFS = JSON.parse(document.getElementById('scene-defs').textContent); }
+  catch (e) { SCENE_DEFS = []; }
+
+  var CHARTS = SCENE_DEFS.map(function (s) {
+    return { name: s.name || s.title, kind: 'scene', url: sceneURL(s) };
+  }).concat([
     { name: 'Russian cases', kind: 'chart', src: 'Russian Cases' },
     { name: 'Flashcards',    kind: 'chart', src: 'Flashcards' }
-  ];
+  ]);
 
   var stage    = document.getElementById('stage');
   var picker   = document.getElementById('picker');
@@ -1012,13 +1294,22 @@
   /* The same rules the docs describe, run on a loaded file. */
   function lint(html) {
     var errors = [], warnings = [];
-    var ext = html.match(/(?:src|href)\s*=\s*["']https?:\/\/[^"']+/gi) || [];
-    ext = ext.filter(function (u) { return u.indexOf('www.w3.org/2000/svg') < 0; });
-    if (ext.length) errors.push('External URL found. Charts must be fully self-contained.');
+    var ext = (html.match(/(?:src|href)\s*=\s*["']https?:\/\/[^"']+/gi) || [])
+      .filter(function (u) { return !/www\.w3\.org\/(2000\/svg|1999\/xlink|1999\/xhtml)/.test(u); })
+      .map(function (u) { return (u.match(/https?:\/\/[^"']+/) || [u])[0]; });
+    if (ext.length) {
+      errors.push('External URL found, so the chart is not self-contained: ' +
+        ext.slice(0, 3).join(', ') + (ext.length > 3 ? ' and ' + (ext.length - 3) + ' more' : ''));
+    }
     if (/prefers-color-scheme\s*:\s*dark/i.test(html)) errors.push('Dark theme branch found. Charts are light theme only.');
-    if (/[\u203C-\u3299\uD83C-\uDBFF\uDC00-\uDFFF\u2600-\u27BF\uFE0F]/.test(html)) errors.push('Emoji found. Use inline SVG or text instead.');
+    /* Real emoji only. An earlier version used a broad codepoint range, which
+       wrongly flagged arrows, check marks, superscripts and CJK text. */
+    var emoji = null;
+    try { emoji = new RegExp('\\p{Emoji_Presentation}|\\p{Extended_Pictographic}\\uFE0F', 'u'); }
+    catch (e) { emoji = /[\uD83C-\uDBFF][\uDC00-\uDFFF]|\uFE0F/; }
+    if (emoji.test(html)) errors.push('Emoji found. Use inline SVG or text instead.');
     if (!/name\s*=\s*["']viewport/i.test(html)) warnings.push('No viewport meta tag.');
-    if (html.indexOf('window.__chartParams') < 0) warnings.push('No window.__chartParams, so the chart cannot be remixed.');
+    if (html.indexOf('window.__chartParams') < 0) warnings.push('No window.__chartParams. The chart will still publish, but nobody can remix or edit it.');
     if (html.length > 300 * 1024) warnings.push('File is larger than 300 KB.');
 
     var out = '';

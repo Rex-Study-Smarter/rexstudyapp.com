@@ -1,8 +1,11 @@
 # Rex
 
-> Rex is a free study app for iPhone and iPad. It combines an AI tutor, study
-> boards, a whiteboard, notes, read aloud, and interactive charts that students
-> can build, publish and remix.
+> Rex is a free study app for iPhone and iPad, available now on the App Store:
+> https://apps.apple.com/app/rex-study-smarter/id6775703977
+> It combines an AI tutor you can type to or talk to hands free, study boards, a
+> whiteboard, notes, a recorder, a filtered in-app browser, read aloud, scholarly
+> source search, and interactive charts that students can build, publish and
+> remix.
 
 Rex is free to start with no credit card and no trial timer. The tutor, study
 boards, whiteboard, note-taking, interactive charts and read aloud are all
@@ -15,12 +18,39 @@ than unlocking the basics.
   be a study set, a game, a frame-by-frame explainer, or a 3D science scene.
 - Students and teachers can author their own charts and publish them, and anyone
   can remix a published chart by editing its variables.
-- Read aloud and dictation are processed on device.
+- Read aloud and dictation are processed on device. Read aloud works on web pages,
+  PDFs, notes and images, including photos of worksheets and scanned pages, and
+  highlights the sentence being spoken.
+- Voice mode is a hands-free spoken conversation with the tutor. Rex can act on
+  the board while he explains, and steps aside so the student can see the board.
+  Whether he may change the board is a switch the student controls.
+- Research search queries open scholarly sources from the board, so students can
+  keep real papers beside their notes.
+- The browser is built into the board, with SafeSearch forced on and a blocklist,
+  so research happens beside the work instead of in another app.
+- The recorder captures a lecture and transcribes it, on device wherever the
+  language allows it.
+- You can bring your own model: connect an OpenRouter account and the tutor
+  answers through a provider you choose and pay for, without passing through
+  Rex's servers.
+- The Rexer (arriving in the next update) plays a study board back as a spoken
+  lecture: it reads the notes, PDFs, scans, drawings, charts and any recording on
+  the board, then darkens the board and lights one item at a time while narrating
+  it. Each stop is labelled with its provenance (the student's own notes, their
+  recording, or material Rex added), the lecture can be saved as a video, and with
+  no connection it falls back to reading the board back in its own words.
+- The quality of a Rexer lecture depends on the board: one board per lesson, laid
+  out in reading order, with a recording of the class on it, produces the best
+  result.
 - The basics stay free, deliberately, so cost is not a barrier to studying.
 
 ## Platforms
 
-iPhone and iPad today. Android is in development.
+iPhone and iPad, live on the App Store today. Android is in development.
+
+## Download
+
+https://apps.apple.com/app/rex-study-smarter/id6775703977
 
 ## Pages
 
@@ -30,8 +60,11 @@ iPhone and iPad today. Android is in development.
 - [Community guidelines](https://www.rexstudyapp.com/community-guidelines.html): what may be published.
 - [Asset credits](https://www.rexstudyapp.com/licenses.html): licences for third-party 3D assets.
 - [Full asset record](https://www.rexstudyapp.com/attributions.html): the complete attribution list.
-- [Privacy policy](https://www.rexstudyapp.com/privacy.html)
+- [Privacy policy](https://www.rexstudyapp.com/privacy.html): what is collected, what stays on device, and which third parties process what.
 - [Terms of service](https://www.rexstudyapp.com/terms.html)
+- [User agreement](https://www.rexstudyapp.com/user-agreement.html): the conduct rules in plainer language.
+- [Copyright / DMCA](https://www.rexstudyapp.com/dmca.html)
+- [Support](https://www.rexstudyapp.com/support.html): how to get help, cancel or restore a subscription, delete an account, make a privacy request, or report content.
 
 ## Contact
 

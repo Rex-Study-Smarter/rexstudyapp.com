@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Voice picker</title>
+  <style>
+    @font-face { font-family:'GoudyHeavyface'; src:url('./GoudyHeavyface.otf') format('opentype'); font-weight:normal; font-display:swap; }
+    @font-face { font-family:'Lato'; src:url('./Lato-Regular.ttf') format('truetype'); font-weight:400; font-display:swap; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Lato',-apple-system,BlinkMacSystemFont,sans-serif;background:#FBFAF8;color:#111;
+      line-height:1.65;padding:44px 24px 80px;-webkit-font-smoothing:antialiased;
+    }
+    .wrap{max-width:660px;margin:0 auto}
+    h1{font-family:'GoudyHeavyface',Georgia,serif;font-weight:normal;font-size:2.2rem;line-height:1.1;margin-bottom:10px}
+    .lede{color:#4B4B4B;margin-bottom:8px}
+    .script{
+      background:#fff;border:1px solid #E6E4E0;border-left:3px solid #72A07D;border-radius:10px;
+      padding:16px 18px;margin:22px 0 28px;font-size:.94rem;color:#4B4B4B;
+    }
+    .row{
+      background:#fff;border:1px solid #E6E4E0;border-radius:12px;padding:16px 18px;margin-bottom:10px;
+      display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    }
+    .meta{min-width:150px}
+    .meta b{display:block;font-size:1rem;font-weight:400}
+    .meta span{font-size:.8rem;color:#767676}
+    audio{flex:1;min-width:240px;height:36px}
+    .note{margin-top:26px;font-size:.87rem;color:#767676;line-height:1.7}
+    code{background:#F2F0EC;border-radius:5px;padding:2px 7px;font-size:.85em}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Pick a narration voice.</h1>
+  <p class="lede">Same line, eight Kokoro voices. Whichever you pick becomes the voice for every scene.</p>
+
+  <div class="script">
+    "Haemoglobin. This is the protein that carries oxygen in your blood.
+    It is built from four protein chains, folded around each other."
+  </div>
+
+  <div class="row"><div class="meta"><b>af_heart</b><span>American, warm</span></div><audio controls preload="none" src="narration/samples/af_heart.mp3"></audio></div>
+  <div class="row"><div class="meta"><b>af_bella</b><span>American, bright</span></div><audio controls preload="none" src="narration/samples/af_bella.mp3"></audio></div>
+  <div class="row"><div class="meta"><b>af_nicole</b><span>American, soft</span></div><audio controls preload="none" src="narration/samples/af_nicole.mp3"></audio></div>
+  <div class="row"><div class="meta"><b>af_sarah</b><span>American, even</span></div><audio controls preload="none" src="narration/samples/af_sarah.mp3"></audio></div>
+  <div class="row"><div class="meta"><b>am_michael</b><span>American, male</span></div><audio controls preload="none" src="narration/samples/am_michael.mp3"></audio></div>
+  <div class="row"><div class="meta"><b>am_fenrir</b><span>American, male, deeper</span></div><audio controls preload="none" src="narration/samples/am_fenrir.mp3"></audio></div>
+  <div class="row"><div class="meta"><b>bf_emma</b><span>British, female</span></div><audio controls preload="none" src="narration/samples/bf_emma.mp3"></audio></div>
+  <div class="row"><div class="meta"><b>bm_george</b><span>British, male</span></div><audio controls preload="none" src="narration/samples/bm_george.mp3"></audio></div>
+
+  <p class="note">
+    Tell me the one you want and I generate every scene with it. This page is temporary,
+    marked noindex, and gets deleted once you have chosen. To regenerate later:
+    <code>build-narration.py af_heart</code>
+  </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>What a 3x3 matrix does to space</title>
+  <style>
+    :root { --accent:#72A07D; --ink:#0C0D0C; --ink-2:#1E211E; --gray:#6E736E;
+            --line:rgba(12,13,12,.12); --surface:#FAFAF9; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html, body { height:100%; }
+    body {
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+      background:#ffffff; color:var(--ink); -webkit-user-select:none; user-select:none;
+      overflow:hidden;
+    }
+    .wrap { height:100%; display:grid; grid-template-columns:1fr 350px; }
+    /* left: 3D */
+    .view { position:relative; background:#FCFCFB; }
+    canvas { width:100%; height:100%; display:block; touch-action:none; cursor:grab; }
+    canvas:active { cursor:grabbing; }
+    .hint { position:absolute; left:14px; bottom:12px; font:400 .68rem/1 var(--mono);
+            letter-spacing:.4px; color:var(--gray); }
+    .readout { position:absolute; right:14px; top:14px; font:500 .72rem/1.7 var(--mono);
+            color:var(--ink); background:#fff; border:1px solid var(--line);
+            border-radius:6px; padding:9px 12px; white-space:pre; text-align:right; }
+    /* right: steps */
+    .panel { border-left:1px solid var(--line); background:var(--surface); display:flex;
+             flex-direction:column; padding:22px 20px 16px; overflow:hidden; }
+    .eyebrow { font:500 .64rem/1 var(--mono); letter-spacing:1.7px; text-transform:uppercase;
+               color:var(--gray); align-self:flex-start; }
+    h1 { font-size:1.16rem; font-weight:700; margin:11px 0 5px; line-height:1.25; letter-spacing:-.01em; }
+    .sub { font:400 .78rem/1.65 var(--mono); color:var(--gray); }
+    .steps { margin-top:18px; flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+    .step { border-left:2px solid transparent; padding:9px 0 9px 14px; margin-bottom:2px; color:var(--gray); }
+    .step h2 { font-size:.82rem; font-weight:700; margin-bottom:4px; color:inherit; }
+    .step h2 span { font:500 .74rem var(--mono); color:var(--gray); margin-right:7px; }
+    .step p { font-size:.8rem; line-height:1.65; }
+    .step.done { color:#9A9E9A; }
+    .step.on { color:var(--ink-2); border-left-color:var(--accent); }
+    .step.on h2 { color:var(--ink); }
+    .math { margin-top:8px; font:500 .8rem/1.8 var(--mono); color:var(--ink);
+            background:#fff; border:1px solid var(--line); border-radius:6px;
+            padding:9px 11px; white-space:pre-wrap; word-break:break-word; }
+    .bar { display:flex; align-items:center; gap:8px; padding-top:14px;
+           border-top:1px solid var(--line); margin-top:12px; }
+    button { font:inherit; font-size:.8rem; font-weight:700; cursor:pointer; border:1px solid var(--ink);
+             border-radius:8px; padding:9px 16px; background:var(--ink); color:#fff; }
+    button.ghost { background:transparent; color:var(--ink); border-color:var(--line); }
+    button:disabled { opacity:.3; cursor:default; }
+    button:active { transform:scale(.97); }
+    .count { margin-left:auto; font:500 .72rem var(--mono); color:var(--gray); }
+    @media (max-width:760px) {
+      .wrap { grid-template-columns:1fr; grid-template-rows:46% 54%; }
+      .panel { border-left:none; border-top:1px solid var(--line); padding:16px 16px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="view">
+      <canvas id="stage"></canvas>
+      <div class="readout" id="readout"></div>
+      <div class="hint">Drag to orbit</div>
+    </div>
+    <div class="panel">
+      <span class="eyebrow" id="eyebrow">Exercise</span>
+      <h1 id="title"></h1>
+      <p class="sub" id="sub"></p>
+      <div class="steps" id="steps"></div>
+      <div class="bar">
+        <button class="ghost" id="prev" type="button">Back</button>
+        <button id="next" type="button">Next</button>
+        <span class="count" id="count"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  var FONT = '-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
+  /* ---- tiny 3D engine: canvas 2D, painter's algorithm, no dependencies ---- */
+  var C = document.getElementById("stage"), X = C.getContext("2d");
+  var cam = { yaw: -0.72, pitch: 0.48, dist: 9.5, f: 560 };
+  var W = 1, H = 1, DPR = 1, Q = [];
+
+  function resize() {
+    var r = C.getBoundingClientRect();
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    W = Math.max(1, r.width); H = Math.max(1, r.height);
+    C.width = Math.round(W * DPR); C.height = Math.round(H * DPR);
+    X.setTransform(DPR, 0, 0, DPR, 0, 0);
+    cam.f = Math.max(210, Math.min(W, H) * 1.3);
+  }
+  function proj(p) {
+    var cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
+    var cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+    var x = p[0] * cy + p[2] * sy;
+    var z = -p[0] * sy + p[2] * cy;
+    var y = p[1] * cp - z * sp;
+    var d3 = p[1] * sp + z * cp;
+    var d = cam.dist - d3; if (d < 0.25) d = 0.25;
+    var s = cam.f / d;
+    return { x: W / 2 + x * s, y: H * 0.60 - y * s, z: d3, s: s };
+  }
+  function push(z, fn) { Q.push({ z: z, fn: fn }); }
+  function flush() {
+    Q.sort(function (a, b) { return a.z - b.z; });
+    for (var i = 0; i < Q.length; i++) Q[i].fn();
+    Q.length = 0;
+  }
+  function line3(a, b, color, width, dash) {
+    var A = proj(a), B = proj(b);
+    push((A.z + B.z) / 2, function () {
+      X.save(); X.strokeStyle = color; X.lineWidth = width || 1.5;
+      X.lineCap = "round"; if (dash) X.setLineDash(dash);
+      X.beginPath(); X.moveTo(A.x, A.y); X.lineTo(B.x, B.y); X.stroke(); X.restore();
+    });
+  }
+  function arrow3(a, b, color, width, label) {
+    var A = proj(a), B = proj(b);
+    var dx = B.x - A.x, dy = B.y - A.y, L = Math.sqrt(dx * dx + dy * dy) || 1;
+    var ux = dx / L, uy = dy / L, hl = Math.min(16, L * 0.32), hw = hl * 0.46;
+    push((A.z + B.z) / 2 + 0.001, function () {
+      X.save(); X.strokeStyle = color; X.fillStyle = color;
+      X.lineWidth = width || 3; X.lineCap = "round";
+      X.beginPath(); X.moveTo(A.x, A.y); X.lineTo(B.x - ux * hl * 0.9, B.y - uy * hl * 0.9); X.stroke();
+      X.beginPath(); X.moveTo(B.x, B.y);
+      X.lineTo(B.x - ux * hl + -uy * hw, B.y - uy * hl + ux * hw);
+      X.lineTo(B.x - ux * hl - -uy * hw, B.y - uy * hl - ux * hw);
+      X.closePath(); X.fill();
+      if (label) {
+        X.font = "600 13px " + FONT; X.fillStyle = color;
+        X.textAlign = "center"; X.textBaseline = "middle";
+        X.fillText(label, B.x + ux * 16, B.y + uy * 16 - 8);
+      }
+      X.restore();
+    });
+  }
+  function poly3(pts, fill, stroke, lw) {
+    var P = [], z = 0, i;
+    for (i = 0; i < pts.length; i++) { P.push(proj(pts[i])); z += P[i].z; }
+    z /= pts.length || 1;
+    push(z, function () {
+      X.save(); X.beginPath(); X.moveTo(P[0].x, P[0].y);
+      for (var j = 1; j < P.length; j++) X.lineTo(P[j].x, P[j].y);
+      X.closePath();
+      if (fill) { X.fillStyle = fill; X.fill(); }
+      if (stroke) { X.strokeStyle = stroke; X.lineWidth = lw || 1.2; X.stroke(); }
+      X.restore();
+    });
+  }
+  function text3(p, str, color, size, dx, dy) {
+    var A = proj(p);
+    push(A.z + 0.002, function () {
+      X.save(); X.font = "600 " + (size || 12) + "px " + FONT; X.fillStyle = color;
+      X.textAlign = "center"; X.textBaseline = "middle";
+      X.fillText(str, A.x + (dx || 0), A.y + (dy || 0)); X.restore();
+    });
+  }
+  function grid(n, step, color) {
+    for (var i = -n; i <= n; i++) {
+      var a = i === 0 ? color : "rgba(12,13,12,.06)";
+      line3([i * step, 0, -n * step], [i * step, 0, n * step], a, 1);
+      line3([-n * step, 0, i * step], [n * step, 0, i * step], a, 1);
+    }
+  }
+  /* orbit */
+  (function () {
+    var down = false, lx = 0, ly = 0;
+    function pos(e) { var t = e.touches ? e.touches[0] : e; return [t.clientX, t.clientY]; }
+    function start(e) { down = true; var p = pos(e); lx = p[0]; ly = p[1]; }
+    function move(e) {
+      if (!down) return;
+      var p = pos(e);
+      cam.yaw += (p[0] - lx) * 0.008;
+      cam.pitch = Math.max(-0.35, Math.min(1.25, cam.pitch + (p[1] - ly) * 0.006));
+      lx = p[0]; ly = p[1];
+      if (e.cancelable) e.preventDefault();
+    }
+    function end() { down = false; }
+    C.addEventListener("mousedown", start); window.addEventListener("mousemove", move);
+    window.addEventListener("mouseup", end);
+    C.addEventListener("touchstart", start, { passive: true });
+    C.addEventListener("touchmove", move, { passive: false });
+    C.addEventListener("touchend", end);
+  })();
+
+  /* ---------- params ---------- */
+  window.__chartParams = window.__chartParams || {
+    title: "What a 3x3 matrix does to space",
+    matrix: [[2, 1, 0], [0, 1.6, 0.5], [0.4, 0, 1.4]],
+    accentColor: "#72A07D",
+    __schema: { accentColor: { type: "color", label: "Accent color" } }
+  };
+  var P = window.__chartParams;
+  var M = P.matrix || [[2, 1, 0], [0, 1.6, 0.5], [0.4, 0, 1.4]];
+  document.documentElement.style.setProperty("--accent", P.accentColor || "#72A07D");
+
+  var INK = "#0C0D0C", GRAY = "#8A8F8A", ACC = "#4E8560", FAINT = "rgba(12,13,12,.28)";
+  var ID = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+  function col(m, j) { return [m[0][j], m[1][j], m[2][j]]; }
+  function apply(m, v) {
+    return [m[0][0] * v[0] + m[0][1] * v[1] + m[0][2] * v[2],
+            m[1][0] * v[0] + m[1][1] * v[1] + m[1][2] * v[2],
+            m[2][0] * v[0] + m[2][1] * v[1] + m[2][2] * v[2]];
+  }
+  function lerpM(a, b, t) {
+    var o = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+    for (var r = 0; r < 3; r++) for (var c = 0; c < 3; c++) o[r][c] = a[r][c] + (b[r][c] - a[r][c]) * t;
+    return o;
+  }
+  function det(m) {
+    return m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1])
+         - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0])
+         + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+  }
+  var D = det(M);
+  function n(v) { var r = Math.round(v * 1000) / 1000; return r.toString(); }
+  function vec(v) { return "(" + n(v[0]) + ", " + n(v[1]) + ", " + n(v[2]) + ")"; }
+  function rowsText(m) {
+    var out = "", r, c;
+    for (r = 0; r < 3; r++) {
+      out += "[ ";
+      for (c = 0; c < 3; c++) { var s = n(m[r][c]); out += (s.length < 4 ? "  " + s : " " + s) + " "; }
+      out += "]" + (r < 2 ? "\n" : "");
+    }
+    return out;
+  }
+  /* singular version: third column becomes col1 + col2, so the cube flattens */
+  var SING = [[M[0][0], M[0][1], M[0][0] + M[0][1]],
+              [M[1][0], M[1][1], M[1][0] + M[1][1]],
+              [M[2][0], M[2][1], M[2][0] + M[2][1]]];
+
+  /* math (x,y,z) with z up -> engine (x, up, z) */
+  function V(v) { return [v[0], v[2], v[1]]; }
+
+  document.getElementById("eyebrow").textContent = "Linear algebra";
+  document.getElementById("title").textContent = P.title;
+  document.getElementById("sub").textContent = "det M = " + n(D) + "   Drag the left panel to orbit.";
+  document.getElementById("readout").textContent =
+    "M\n" + rowsText(M) + "\n\ndet M   " + n(D) + "\nvolume  " + n(Math.abs(D));
+
+  var STEPS = [
+    { h: "Start with the unit cube",
+      p: "One corner at the origin, three edges along the axes. Its volume is exactly 1, so whatever happens to it is a direct readout of what the matrix does.",
+      m: "e1 = (1,0,0)\ne2 = (0,1,0)\ne3 = (0,0,1)\nvolume = 1" },
+    { h: "A matrix is defined by where the basis goes",
+      p: "Column 1 of M is the vector that e1 lands on. Nothing else about the matrix matters - the columns are the whole story.",
+      m: "M e1 = column 1 = " + vec(col(M, 0)) },
+    { h: "Column 2 is where e2 lands",
+      p: "Same rule, second axis. Watch it tilt away from the direction it started in - that tilt is the shear inside M.",
+      m: "M e2 = column 2 = " + vec(col(M, 1)) },
+    { h: "Column 3 is where e3 lands",
+      p: "The vertical edge is now leaning. Three columns, three landing points, and the transform is completely specified.",
+      m: "M e3 = column 3 = " + vec(col(M, 2)) },
+    { h: "Linearity carries every other point",
+      p: "Any point in the cube is a mix of the three edges. Because M is linear, its image is the same mix of the three new edges - so the cube follows without any extra work.",
+      m: "M(x e1 + y e2 + z e3)\n  = x Me1 + y Me2 + z Me3" },
+    { h: "The image is a parallelepiped",
+      p: "Straight lines stay straight, parallel edges stay parallel. The cube cannot bend or curve; it can only be stretched, sheared and rotated into a slanted box.",
+      m: "corners: all sums of\n0, Me1, Me2, Me3" },
+    { h: "Expand the determinant",
+      p: "Cofactor expansion along the top row: each entry times the 2x2 determinant of what is left when you cover its row and column, with alternating signs.",
+      m: "det M = " + n(M[0][0]) + "*(" + n(M[1][1]) + "*" + n(M[2][2]) + " - " + n(M[1][2]) + "*" + n(M[2][1]) + ")\n"
+         + "      - " + n(M[0][1]) + "*(" + n(M[1][0]) + "*" + n(M[2][2]) + " - " + n(M[1][2]) + "*" + n(M[2][0]) + ")\n"
+         + "      + " + n(M[0][2]) + "*(" + n(M[1][0]) + "*" + n(M[2][1]) + " - " + n(M[1][1]) + "*" + n(M[2][0]) + ")\n"
+         + "      = " + n(D) },
+    { h: "That number is the volume",
+      p: "The determinant is not a bookkeeping trick: it is the factor every volume gets multiplied by. Start at 1, end at " + n(Math.abs(D)) + ". A sign would mean the transform also mirrored space.",
+      m: "volume(M cube) = |det M| * 1\n               = " + n(Math.abs(D)) },
+    { h: "Zero determinant means collapse",
+      p: "Make the third column equal to the sum of the first two and the columns become coplanar. The box flattens to a sheet, volume goes to zero, and the transform is no longer invertible - information is gone for good.",
+      m: "c3 := c1 + c2\ndet = 0  ->  not invertible" }
+  ];
+
+  var CUBE = [[0,0,0],[1,0,0],[1,1,0],[0,1,0],[0,0,1],[1,0,1],[1,1,1],[0,1,1]];
+  var FACES = [[0,1,2,3],[4,5,6,7],[0,1,5,4],[2,3,7,6],[1,2,6,5],[0,3,7,4]];
+
+  function floor() {
+    grid(4, 1, "rgba(12,13,12,.20)");
+    line3([0,0,0],[4.2,0,0], FAINT, 1.3);
+    line3([0,0,0],[0,0,4.2], FAINT, 1.3);
+    line3([0,0,0],[0,3.6,0], FAINT, 1.3);
+    text3([4.5,0,0],"x","rgba(12,13,12,.45)",12);
+    text3([0,0,4.5],"y","rgba(12,13,12,.45)",12);
+    text3([0,3.9,0],"z","rgba(12,13,12,.45)",12);
+  }
+
+  function drawBox(m, fill, edge, lw) {
+    var pts = [], i;
+    for (i = 0; i < 8; i++) pts.push(V(apply(m, CUBE[i])));
+    for (i = 0; i < FACES.length; i++) {
+      var f = FACES[i];
+      poly3([pts[f[0]], pts[f[1]], pts[f[2]], pts[f[3]]], fill, edge, lw || 1.3);
+    }
+  }
+
+  function draw(i, t, time) {
+    floor();
+    /* how far along the morph we are */
+    var stage = 0, mm;
+    if (i <= 0) mm = ID;
+    else if (i < 4) {
+      /* bring columns over one at a time */
+      mm = [[1,0,0],[0,1,0],[0,0,1]];
+      for (var c = 0; c < 3; c++) {
+        var w = i - 1 > c ? 1 : (i - 1 === c ? t : 0);
+        for (var r = 0; r < 3; r++) mm[r][c] = ID[r][c] + (M[r][c] - ID[r][c]) * w;
+      }
+    }
+    else if (i === 4) mm = lerpM(ID, M, t);
+    else if (i === 8) mm = lerpM(M, SING, t);
+    else mm = M;
+
+    /* ghost of the original cube for comparison */
+    if (i >= 4) drawBox(ID, "rgba(12,13,12,.03)", "rgba(12,13,12,.16)", 1);
+
+    var flat = i === 8 ? t : 0;
+    drawBox(mm, "rgba(12,13,12," + (0.055 + 0.05 * (1 - flat)) + ")",
+            i === 8 && t > 0.9 ? ACC : "rgba(12,13,12,.62)", 1.4);
+
+    var cols = [INK, GRAY, ACC], names = ["Me1", "Me2", "Me3"];
+    for (var j = 0; j < 3; j++) {
+      var show = i === 0 ? 1 : (i >= 1 && i <= 3 ? (j <= i - 1 ? 1 : 0.25) : 1);
+      var v = col(mm, j);
+      var lab = (i >= 1 && i <= 3 && j === i - 1) ? names[j] : (i === 0 ? "e" + (j + 1) : "");
+      arrow3([0,0,0], V(v), show < 1 ? "rgba(12,13,12,.25)" : cols[j],
+              j === (i - 1) ? 3.4 : 2.4, lab);
+    }
+
+    if (i === 7) {
+      var pulse = 0.05 + 0.045 * Math.sin(time * 2.2);
+      drawBox(M, "rgba(78,133,96," + pulse + ")", null, 0);
+      text3(V(apply(M, [0.5, 0.5, 0.5])), "volume " + n(Math.abs(D)), ACC, 13);
+    }
+    if (i === 8 && t > 0.85) text3(V(apply(SING, [0.5, 0.5, 0.5])), "volume 0", ACC, 13, 0, -10);
+  }
+  cam.dist = 7.4;
+
+
+  /* ---- step machine ---- */
+  var stepsEl = document.getElementById("steps");
+  var idx = 0, t0 = 0, anim = 0;
+  function renderSteps() {
+    var html = "";
+    for (var i = 0; i < STEPS.length; i++) {
+      var s = STEPS[i];
+      var cls = i === idx ? "step on" : (i < idx ? "step done" : "step");
+      html += '<div class="' + cls + '" data-i="' + i + '"><h2><span>' + (i < 9 ? "0" : "") + (i + 1) + '</span>' + s.h + "</h2><p>" + s.p + "</p>" +
+              (s.m ? '<div class="math">' + s.m + "</div>" : "") + "</div>";
+    }
+    stepsEl.innerHTML = html;
+    var on = stepsEl.querySelector(".step.on");
+    if (on && on.scrollIntoView) on.scrollIntoView({ block: "nearest" });
+    document.getElementById("count").textContent = (idx + 1) + " / " + STEPS.length;
+    document.getElementById("prev").disabled = idx === 0;
+    document.getElementById("next").textContent = idx === STEPS.length - 1 ? "Restart" : "Next";
+  }
+  function go(i) {
+    idx = Math.max(0, Math.min(STEPS.length - 1, i));
+    t0 = performance.now(); anim = 0; renderSteps();
+  }
+  stepsEl.addEventListener("click", function (e) {
+    var d = e.target.closest ? e.target.closest(".step") : null;
+    if (d) go(+d.getAttribute("data-i"));
+  });
+  function nextStep() { go(idx === STEPS.length - 1 ? 0 : idx + 1); }
+  function prevStep() { go(idx - 1); }
+  var nb = document.getElementById("next"), pb = document.getElementById("prev");
+  nb.addEventListener("click", nextStep);
+  nb.addEventListener("touchstart", function (e) { e.preventDefault(); nextStep(); }, { passive: false });
+  pb.addEventListener("click", prevStep);
+  pb.addEventListener("touchstart", function (e) { e.preventDefault(); prevStep(); }, { passive: false });
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") nextStep(); else if (e.key === "ArrowLeft") prevStep();
+  });
+
+  function ease(x) { return x < 0 ? 0 : x > 1 ? 1 : 1 - Math.pow(1 - x, 3); }
+  function frame(now) {
+    if (!t0) t0 = now;
+    anim = ease((now - t0) / 700);
+    resize();
+    X.clearRect(0, 0, W, H);
+    draw(idx, anim, now / 1000);
+    flush();
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener("resize", resize);
+  renderSteps();
+  requestAnimationFrame(frame);
+
+  </script>
+</body>
+</html>

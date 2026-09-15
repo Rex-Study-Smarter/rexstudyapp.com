@@ -88,6 +88,7 @@
   </div>
 
   <div class="bar">
+    <button id="audioBtn" class="btn" type="button" hidden>Listen</button>
     <button id="resetBtn" class="btn" type="button">Recentre</button>
     <span class="hint">Drag to rotate</span>
   </div>
@@ -112,12 +113,14 @@
   import * as THREE from 'three';
   import { GLTFLoader } from '../vendor/GLTFLoader.js';
   import { OrbitControls } from '../vendor/OrbitControls.js';
+  import { DRACOLoader } from '../vendor/DRACOLoader.js';
 
   var qs = new URLSearchParams(location.search);
   var file   = (qs.get('model') || '').replace(/[^a-zA-Z0-9_\-]/g, '');
   var title  = qs.get('title')  || '3D scene';
   var sub    = qs.get('sub')    || '';
   var credit = qs.get('credit') || '';
+  var audioSrc = qs.get('audio') || '';
   var labelDefs = [];
   try { labelDefs = JSON.parse(qs.get('labels') || '[]'); } catch (e) { labelDefs = []; }
 
@@ -300,6 +303,29 @@
     controls.update();
   });
 
+  /* Narration is a small pre-rendered file, so there is no speech engine
+     running here and nothing to download beyond the audio itself. */
+  var audioBtn = document.getElementById('audioBtn');
+  if (audioSrc) {
+    var player = new Audio('../' + audioSrc);
+    player.preload = 'none';
+    /* only offer it once we know the file is actually there */
+    fetch('../' + audioSrc, { method: 'HEAD' })
+      .then(function (res) { if (res.ok) audioBtn.hidden = false; })
+      .catch(function () {});
+    var setLabel = function () { audioBtn.textContent = player.paused ? 'Listen' : 'Stop'; audioBtn.classList.toggle('on', !player.paused); };
+    audioBtn.addEventListener('click', function () {
+      if (player.paused) { player.play().catch(function () {}); }
+      else { player.pause(); player.currentTime = 0; }
+      setLabel();
+    });
+    player.addEventListener('ended', setLabel);
+    player.addEventListener('play', setLabel);
+    player.addEventListener('pause', setLabel);
+    player.addEventListener('error', function () { audioBtn.hidden = true; });
+    addEventListener('pagehide', function () { player.pause(); });
+  }
+
   function resize() {
     var w = stage.clientWidth, h = stage.clientHeight;
     if (!w || !h) return;
@@ -311,7 +337,13 @@
   if ('ResizeObserver' in window) new ResizeObserver(resize).observe(stage);
   resize();
 
-  new GLTFLoader().load(
+  /* models are Draco compressed, roughly 8x smaller over the wire */
+  var draco = new DRACOLoader();
+  draco.setDecoderPath('../vendor/draco/');
+  var loader = new GLTFLoader();
+  loader.setDRACOLoader(draco);
+
+  loader.load(
     '../assets/' + file + '.glb',
     function (gltf) {
       repair(gltf.scene);

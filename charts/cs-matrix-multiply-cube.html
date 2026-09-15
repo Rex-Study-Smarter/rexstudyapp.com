@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Matrix multiply is a cube of work</title>
+  <style>
+    :root { --accent:#72A07D; --ink:#0C0D0C; --ink-2:#1E211E; --gray:#6E736E;
+            --line:rgba(12,13,12,.12); --surface:#FAFAF9; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html, body { height:100%; }
+    body {
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+      background:#ffffff; color:var(--ink); -webkit-user-select:none; user-select:none;
+      overflow:hidden;
+    }
+    .wrap { height:100%; display:grid; grid-template-columns:1fr 350px; }
+    /* left: 3D */
+    .view { position:relative; background:#FCFCFB; }
+    canvas { width:100%; height:100%; display:block; touch-action:none; cursor:grab; }
+    canvas:active { cursor:grabbing; }
+    .hint { position:absolute; left:14px; bottom:12px; font:400 .68rem/1 var(--mono);
+            letter-spacing:.4px; color:var(--gray); }
+    .readout { position:absolute; right:14px; top:14px; font:500 .72rem/1.7 var(--mono);
+            color:var(--ink); background:#fff; border:1px solid var(--line);
+            border-radius:6px; padding:9px 12px; white-space:pre; text-align:right; }
+    /* right: steps */
+    .panel { border-left:1px solid var(--line); background:var(--surface); display:flex;
+             flex-direction:column; padding:22px 20px 16px; overflow:hidden; }
+    .eyebrow { font:500 .64rem/1 var(--mono); letter-spacing:1.7px; text-transform:uppercase;
+               color:var(--gray); align-self:flex-start; }
+    h1 { font-size:1.16rem; font-weight:700; margin:11px 0 5px; line-height:1.25; letter-spacing:-.01em; }
+    .sub { font:400 .78rem/1.65 var(--mono); color:var(--gray); }
+    .steps { margin-top:18px; flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+    .step { border-left:2px solid transparent; padding:9px 0 9px 14px; margin-bottom:2px; color:var(--gray); }
+    .step h2 { font-size:.82rem; font-weight:700; margin-bottom:4px; color:inherit; }
+    .step h2 span { font:500 .74rem var(--mono); color:var(--gray); margin-right:7px; }
+    .step p { font-size:.8rem; line-height:1.65; }
+    .step.done { color:#9A9E9A; }
+    .step.on { color:var(--ink-2); border-left-color:var(--accent); }
+    .step.on h2 { color:var(--ink); }
+    .math { margin-top:8px; font:500 .8rem/1.8 var(--mono); color:var(--ink);
+            background:#fff; border:1px solid var(--line); border-radius:6px;
+            padding:9px 11px; white-space:pre-wrap; word-break:break-word; }
+    .bar { display:flex; align-items:center; gap:8px; padding-top:14px;
+           border-top:1px solid var(--line); margin-top:12px; }
+    button { font:inherit; font-size:.8rem; font-weight:700; cursor:pointer; border:1px solid var(--ink);
+             border-radius:8px; padding:9px 16px; background:var(--ink); color:#fff; }
+    button.ghost { background:transparent; color:var(--ink); border-color:var(--line); }
+    button:disabled { opacity:.3; cursor:default; }
+    button:active { transform:scale(.97); }
+    .count { margin-left:auto; font:500 .72rem var(--mono); color:var(--gray); }
+    @media (max-width:760px) {
+      .wrap { grid-template-columns:1fr; grid-template-rows:46% 54%; }
+      .panel { border-left:none; border-top:1px solid var(--line); padding:16px 16px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="view">
+      <canvas id="stage"></canvas>
+      <div class="readout" id="readout"></div>
+      <div class="hint">Drag to orbit</div>
+    </div>
+    <div class="panel">
+      <span class="eyebrow" id="eyebrow">Exercise</span>
+      <h1 id="title"></h1>
+      <p class="sub" id="sub"></p>
+      <div class="steps" id="steps"></div>
+      <div class="bar">
+        <button class="ghost" id="prev" type="button">Back</button>
+        <button id="next" type="button">Next</button>
+        <span class="count" id="count"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  var FONT = '-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
+  /* ---- tiny 3D engine: canvas 2D, painter's algorithm, no dependencies ---- */
+  var C = document.getElementById("stage"), X = C.getContext("2d");
+  var cam = { yaw: -0.72, pitch: 0.48, dist: 9.5, f: 560 };
+  var W = 1, H = 1, DPR = 1, Q = [];
+
+  function resize() {
+    var r = C.getBoundingClientRect();
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    W = Math.max(1, r.width); H = Math.max(1, r.height);
+    C.width = Math.round(W * DPR); C.height = Math.round(H * DPR);
+    X.setTransform(DPR, 0, 0, DPR, 0, 0);
+    cam.f = Math.max(210, Math.min(W, H) * 1.3);
+  }
+  function proj(p) {
+    var cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
+    var cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+    var x = p[0] * cy + p[2] * sy;
+    var z = -p[0] * sy + p[2] * cy;
+    var y = p[1] * cp - z * sp;
+    var d3 = p[1] * sp + z * cp;
+    var d = cam.dist - d3; if (d < 0.25) d = 0.25;
+    var s = cam.f / d;
+    return { x: W / 2 + x * s, y: H * 0.60 - y * s, z: d3, s: s };
+  }
+  function push(z, fn) { Q.push({ z: z, fn: fn }); }
+  function flush() {
+    Q.sort(function (a, b) { return a.z - b.z; });
+    for (var i = 0; i < Q.length; i++) Q[i].fn();
+    Q.length = 0;
+  }
+  function line3(a, b, color, width, dash) {
+    var A = proj(a), B = proj(b);
+    push((A.z + B.z) / 2, function () {
+      X.save(); X.strokeStyle = color; X.lineWidth = width || 1.5;
+      X.lineCap = "round"; if (dash) X.setLineDash(dash);
+      X.beginPath(); X.moveTo(A.x, A.y); X.lineTo(B.x, B.y); X.stroke(); X.restore();
+    });
+  }
+  function arrow3(a, b, color, width, label) {
+    var A = proj(a), B = proj(b);
+    var dx = B.x - A.x, dy = B.y - A.y, L = Math.sqrt(dx * dx + dy * dy) || 1;
+    var ux = dx / L, uy = dy / L, hl = Math.min(16, L * 0.32), hw = hl * 0.46;
+    push((A.z + B.z) / 2 + 0.001, function () {
+      X.save(); X.strokeStyle = color; X.fillStyle = color;
+      X.lineWidth = width || 3; X.lineCap = "round";
+      X.beginPath(); X.moveTo(A.x, A.y); X.lineTo(B.x - ux * hl * 0.9, B.y - uy * hl * 0.9); X.stroke();
+      X.beginPath(); X.moveTo(B.x, B.y);
+      X.lineTo(B.x - ux * hl + -uy * hw, B.y - uy * hl + ux * hw);
+      X.lineTo(B.x - ux * hl - -uy * hw, B.y - uy * hl - ux * hw);
+      X.closePath(); X.fill();
+      if (label) {
+        X.font = "600 13px " + FONT; X.fillStyle = color;
+        X.textAlign = "center"; X.textBaseline = "middle";
+        X.fillText(label, B.x + ux * 16, B.y + uy * 16 - 8);
+      }
+      X.restore();
+    });
+  }
+  function poly3(pts, fill, stroke, lw) {
+    var P = [], z = 0, i;
+    for (i = 0; i < pts.length; i++) { P.push(proj(pts[i])); z += P[i].z; }
+    z /= pts.length || 1;
+    push(z, function () {
+      X.save(); X.beginPath(); X.moveTo(P[0].x, P[0].y);
+      for (var j = 1; j < P.length; j++) X.lineTo(P[j].x, P[j].y);
+      X.closePath();
+      if (fill) { X.fillStyle = fill; X.fill(); }
+      if (stroke) { X.strokeStyle = stroke; X.lineWidth = lw || 1.2; X.stroke(); }
+      X.restore();
+    });
+  }
+  function text3(p, str, color, size, dx, dy) {
+    var A = proj(p);
+    push(A.z + 0.002, function () {
+      X.save(); X.font = "600 " + (size || 12) + "px " + FONT; X.fillStyle = color;
+      X.textAlign = "center"; X.textBaseline = "middle";
+      X.fillText(str, A.x + (dx || 0), A.y + (dy || 0)); X.restore();
+    });
+  }
+  function grid(n, step, color) {
+    for (var i = -n; i <= n; i++) {
+      var a = i === 0 ? color : "rgba(12,13,12,.06)";
+      line3([i * step, 0, -n * step], [i * step, 0, n * step], a, 1);
+      line3([-n * step, 0, i * step], [n * step, 0, i * step], a, 1);
+    }
+  }
+  /* orbit */
+  (function () {
+    var down = false, lx = 0, ly = 0;
+    function pos(e) { var t = e.touches ? e.touches[0] : e; return [t.clientX, t.clientY]; }
+    function start(e) { down = true; var p = pos(e); lx = p[0]; ly = p[1]; }
+    function move(e) {
+      if (!down) return;
+      var p = pos(e);
+      cam.yaw += (p[0] - lx) * 0.008;
+      cam.pitch = Math.max(-0.35, Math.min(1.25, cam.pitch + (p[1] - ly) * 0.006));
+      lx = p[0]; ly = p[1];
+      if (e.cancelable) e.preventDefault();
+    }
+    function end() { down = false; }
+    C.addEventListener("mousedown", start); window.addEventListener("mousemove", move);
+    window.addEventListener("mouseup", end);
+    C.addEventListener("touchstart", start, { passive: true });
+    C.addEventListener("touchmove", move, { passive: false });
+    C.addEventListener("touchend", end);
+  })();
+
+  /* ---------- params ---------- */
+  window.__chartParams = window.__chartParams || {
+    title: "Matrix multiply is a cube of work",
+    A: [[1, 2, 0], [0, 1, 3], [2, 0, 1]],
+    B: [[3, 1, 0], [0, 2, 1], [1, 0, 4]],
+    focusRow: 1,
+    focusCol: 2,
+    accentColor: "#72A07D",
+    __schema: {
+      accentColor: { type: "color", label: "Accent color" },
+      focusRow: { type: "slider", label: "Traced row i", min: 0, max: 2, step: 1 },
+      focusCol: { type: "slider", label: "Traced column j", min: 0, max: 2, step: 1 }
+    }
+  };
+  var P = window.__chartParams;
+  var A = P.A, B = P.B, N = 3;
+  var FI = Math.max(0, Math.min(2, P.focusRow | 0)), FJ = Math.max(0, Math.min(2, P.focusCol | 0));
+  document.documentElement.style.setProperty("--accent", P.accentColor || "#72A07D");
+
+  var INK = "#0C0D0C", GRAY = "#9A9E9A", ACC = "#4E8560";
+  var OUT = [], i, j, k;
+  for (i = 0; i < N; i++) { OUT.push([]); for (j = 0; j < N; j++) {
+    var s = 0; for (k = 0; k < N; k++) s += A[i][k] * B[k][j]; OUT[i].push(s); } }
+
+  function grid3(m) {
+    var out = "", r, c;
+    for (r = 0; r < N; r++) { out += "[ ";
+      for (c = 0; c < N; c++) { var t = String(m[r][c]); out += (t.length < 2 ? " " + t : t) + " "; }
+      out += "]" + (r < N - 1 ? "\n" : ""); }
+    return out;
+  }
+  var TERMS = [];
+  for (k = 0; k < N; k++) TERMS.push(A[FI][k] + "*" + B[k][FJ]);
+
+  document.getElementById("eyebrow").textContent = "Algorithms";
+  document.getElementById("title").textContent = P.title;
+  document.getElementById("sub").textContent =
+    "C = A x B, n = 3. Tracing C[" + FI + "][" + FJ + "]. Drag to orbit.";
+  document.getElementById("readout").textContent =
+    "A\n" + grid3(A) + "\n\nB\n" + grid3(B) + "\n\nC = A x B\n" + grid3(OUT);
+
+  var STEPS = [
+    { h: "Three loops, one cube",
+      p: "Every multiply-add in the algorithm is labelled by a triple (i, j, k): output row, output column, and position along the shared inner dimension. Plot those triples and you get a solid n x n x n block of work.",
+      m: "for i in 0..n-1\n  for j in 0..n-1\n    for k in 0..n-1\n      C[i][j] += A[i][k]*B[k][j]" },
+    { h: "A supplies the rows",
+      p: "The left wall holds A. Row i of A runs along the k axis - it is indexed by the shared dimension, which is why the inner sizes have to match.",
+      m: "A[" + FI + "][k] = " + A[FI].join(", ") },
+    { h: "B supplies the columns",
+      p: "The back wall holds B. Column j of B also runs along k. Each cell of the cube pairs one entry of A with one entry of B directly above and behind it.",
+      m: "B[k][" + FJ + "] = " + [B[0][FJ], B[1][FJ], B[2][FJ]].join(", ") },
+    { h: "One output cell is one column of the cube",
+      p: "Fix i and j. What is left is a vertical fibre of n cells - the inner loop. Every cell in it contributes one product to the same output entry.",
+      m: "C[" + FI + "][" + FJ + "] = sum over k of\n  A[" + FI + "][k] * B[k][" + FJ + "]" },
+    { h: "Run the inner loop",
+      p: "Walk up the fibre one k at a time. The accumulator starts at zero and takes a product on each step; nothing is written to memory until the fibre is finished.",
+      m: "k=0: " + TERMS[0] + " = " + (A[FI][0] * B[0][FJ]) +
+         "\nk=1: " + TERMS[1] + " = " + (A[FI][1] * B[1][FJ]) +
+         "\nk=2: " + TERMS[2] + " = " + (A[FI][2] * B[2][FJ]) },
+    { h: "That fibre lands on the floor",
+      p: "The sum drops into C[" + FI + "][" + FJ + "] on the output face. One fibre, one number - the whole matrix product is just this repeated for every (i, j) square.",
+      m: TERMS.join(" + ") + " = " + OUT[FI][FJ] },
+    { h: "Fill the floor",
+      p: "Sweep every (i, j) and the output matrix appears one cell at a time. The order you sweep in does not change the answer, only how kindly it treats the cache.",
+      m: "C =\n" + grid3(OUT) },
+    { h: "Counting the cells is the complexity",
+      p: "The cube has n cells on each side, so the algorithm does exactly n^3 multiply-adds. Doubling n multiplies the work by eight - that is what O(n^3) means, drawn to scale.",
+      m: "cells = n * n * n = " + (N * N * N) + "\nwork  = O(n^3)" },
+    { h: "Why order matters anyway",
+      p: "Same cube, same count, different traversal. Looping i-k-j walks A and B along contiguous memory, so it can run several times faster than i-j-k on real hardware while computing the identical result.",
+      m: "i-j-k : strided reads of B\ni-k-j : sequential reads\nsame O(n^3), different constant" }
+  ];
+
+  /* geometry: i -> x, k -> up, j -> z ; cells centred on integers */
+  var G = 1.05;
+  function cpos(i, k, j) { return [(i - 1) * G, (k - 1) * G + 1.1, (j - 1) * G]; }
+  function boxAt(c, s, fill, edge, lw) {
+    var h = s / 2, x = c[0], y = c[1], z = c[2];
+    var p = [[x-h,y-h,z-h],[x+h,y-h,z-h],[x+h,y+h,z-h],[x-h,y+h,z-h],
+             [x-h,y-h,z+h],[x+h,y-h,z+h],[x+h,y+h,z+h],[x-h,y+h,z+h]];
+    var F = [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[1,2,6,5],[0,3,7,4]];
+    for (var f = 0; f < 6; f++)
+      poly3([p[F[f][0]],p[F[f][1]],p[F[f][2]],p[F[f][3]]], fill, edge, lw || 1);
+  }
+  function tile(c, sx, sz, fill, edge) {
+    var x = c[0], y = c[1], z = c[2];
+    poly3([[x-sx,y,z-sz],[x+sx,y,z-sz],[x+sx,y,z+sz],[x-sx,y,z+sz]], fill, edge, 1);
+  }
+
+  function draw(step, t, time) {
+    var i, j, k;
+    /* output floor plane */
+    for (i = 0; i < N; i++) for (j = 0; j < N; j++) {
+      var f = cpos(i, -1, j);
+      var lit = (step >= 5 && i === FI && j === FJ) ||
+                (step >= 6 && (step > 6 || (i * N + j) / (N * N) < t));
+      tile(f, G * 0.46, G * 0.46, lit ? "rgba(78,133,96,.16)" : "rgba(12,13,12,.035)",
+           "rgba(12,13,12,.22)");
+      if (lit) text3([f[0], f[1] + 0.02, f[2]], String(OUT[i][j]), ACC, 14);
+      else if (step >= 3 && i === FI && j === FJ) text3([f[0], f[1] + 0.02, f[2]], "?", GRAY, 13);
+    }
+    text3(cpos(1, -1, 2.9), "C = A x B", "rgba(12,13,12,.5)", 12);
+
+    /* A on the left wall (x = -2), rows i, along k */
+    if (step >= 1) for (i = 0; i < N; i++) for (k = 0; k < N; k++) {
+      var pa = [(-2.1) * G, (k - 1) * G + 1.1, (i - 1) * G];
+      var on = (step >= 1 && i === FI);
+      text3(pa, String(A[i][k]), on ? INK : "rgba(12,13,12,.25)", on ? 14 : 12);
+    }
+    if (step >= 1) text3([-2.1 * G, 2.9, 0], "A", "rgba(12,13,12,.5)", 12);
+
+    /* B on the back wall (z = -2), columns j, along k */
+    if (step >= 2) for (j = 0; j < N; j++) for (k = 0; k < N; k++) {
+      var pb = [(j - 1) * G, (k - 1) * G + 1.1, (-2.1) * G];
+      var onb = (j === FJ);
+      text3(pb, String(B[k][j]), onb ? INK : "rgba(12,13,12,.25)", onb ? 14 : 12);
+    }
+    if (step >= 2) text3([0, 2.9, -2.1 * G], "B", "rgba(12,13,12,.5)", 12);
+
+    /* the work cube */
+    var showAll = step === 0 ? Math.min(1, t * 1.2) : (step >= 6 ? 1 : 0.55);
+    for (i = 0; i < N; i++) for (j = 0; j < N; j++) for (k = 0; k < N; k++) {
+      var isFibre = (i === FI && j === FJ);
+      var kNow = step === 4 ? Math.floor(t * 2.999) : (step >= 5 ? N - 1 : -1);
+      var active = isFibre && step >= 4 && k <= kNow;
+      var visible = step >= 3 ? (isFibre || step >= 6 || step === 7) : true;
+      if (!visible) continue;
+      if (step === 0 && (i * 9 + j * 3 + k) / 27 > showAll) continue;
+      var fill = active ? "rgba(78,133,96,.30)"
+               : isFibre && step >= 3 ? "rgba(12,13,12,.10)"
+               : "rgba(12,13,12,.045)";
+      var edge = active ? ACC : (isFibre && step >= 3 ? "rgba(12,13,12,.45)" : "rgba(12,13,12,.16)");
+      boxAt(cpos(i, k, j), G * 0.74, fill, edge, active ? 1.5 : 1);
+      if (active || (isFibre && step === 3))
+        text3(cpos(i, k, j), A[i][k] + "x" + B[k][j], active ? ACC : GRAY, 12);
+    }
+
+    /* fibre guide lines */
+    if (step >= 3 && step <= 5) {
+      var top = cpos(FI, N - 0.4, FJ), bot = cpos(FI, -1, FJ);
+      line3(bot, top, "rgba(78,133,96,.55)", 1.4, [4, 4]);
+      line3([-2.1 * G, cpos(0, 0, 0)[1], (FI - 1) * G], cpos(FI, 0, FJ), "rgba(12,13,12,.28)", 1, [3, 3]);
+      line3([(FJ - 1) * G, cpos(0, 0, 0)[1], -2.1 * G], cpos(FI, 0, FJ), "rgba(12,13,12,.28)", 1, [3, 3]);
+    }
+    if (step === 8) {
+      var w = (time * 0.9) % 1, order = Math.floor(w * 27);
+      var oi = Math.floor(order / 9), ok = Math.floor(order / 3) % 3, oj = order % 3;
+      boxAt(cpos(oi, ok, oj), G * 0.8, "rgba(78,133,96,.35)", ACC, 1.6);
+    }
+    grid(0, 1, "rgba(12,13,12,.0)");
+  }
+  cam.dist = 11.5; cam.pitch = 0.42;
+
+
+  /* ---- step machine ---- */
+  var stepsEl = document.getElementById("steps");
+  var idx = 0, t0 = 0, anim = 0;
+  function renderSteps() {
+    var html = "";
+    for (var i = 0; i < STEPS.length; i++) {
+      var s = STEPS[i];
+      var cls = i === idx ? "step on" : (i < idx ? "step done" : "step");
+      html += '<div class="' + cls + '" data-i="' + i + '"><h2><span>' + (i < 9 ? "0" : "") + (i + 1) + '</span>' + s.h + "</h2><p>" + s.p + "</p>" +
+              (s.m ? '<div class="math">' + s.m + "</div>" : "") + "</div>";
+    }
+    stepsEl.innerHTML = html;
+    var on = stepsEl.querySelector(".step.on");
+    if (on && on.scrollIntoView) on.scrollIntoView({ block: "nearest" });
+    document.getElementById("count").textContent = (idx + 1) + " / " + STEPS.length;
+    document.getElementById("prev").disabled = idx === 0;
+    document.getElementById("next").textContent = idx === STEPS.length - 1 ? "Restart" : "Next";
+  }
+  function go(i) {
+    idx = Math.max(0, Math.min(STEPS.length - 1, i));
+    t0 = performance.now(); anim = 0; renderSteps();
+  }
+  stepsEl.addEventListener("click", function (e) {
+    var d = e.target.closest ? e.target.closest(".step") : null;
+    if (d) go(+d.getAttribute("data-i"));
+  });
+  function nextStep() { go(idx === STEPS.length - 1 ? 0 : idx + 1); }
+  function prevStep() { go(idx - 1); }
+  var nb = document.getElementById("next"), pb = document.getElementById("prev");
+  nb.addEventListener("click", nextStep);
+  nb.addEventListener("touchstart", function (e) { e.preventDefault(); nextStep(); }, { passive: false });
+  pb.addEventListener("click", prevStep);
+  pb.addEventListener("touchstart", function (e) { e.preventDefault(); prevStep(); }, { passive: false });
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") nextStep(); else if (e.key === "ArrowLeft") prevStep();
+  });
+
+  function ease(x) { return x < 0 ? 0 : x > 1 ? 1 : 1 - Math.pow(1 - x, 3); }
+  function frame(now) {
+    if (!t0) t0 = now;
+    anim = ease((now - t0) / 700);
+    resize();
+    X.clearRect(0, 0, W, H);
+    draw(idx, anim, now / 1000);
+    flush();
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener("resize", resize);
+  renderSteps();
+  requestAnimationFrame(frame);
+
+  </script>
+</body>
+</html>

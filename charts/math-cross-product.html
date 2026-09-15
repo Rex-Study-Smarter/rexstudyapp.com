@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Cross product, step by step</title>
+  <style>
+    :root { --accent:#72A07D; --ink:#0C0D0C; --ink-2:#1E211E; --gray:#6E736E;
+            --line:rgba(12,13,12,.12); --surface:#FAFAF9; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html, body { height:100%; }
+    body {
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+      background:#ffffff; color:var(--ink); -webkit-user-select:none; user-select:none;
+      overflow:hidden;
+    }
+    .wrap { height:100%; display:grid; grid-template-columns:1fr 350px; }
+    /* left: 3D */
+    .view { position:relative; background:#FCFCFB; }
+    canvas { width:100%; height:100%; display:block; touch-action:none; cursor:grab; }
+    canvas:active { cursor:grabbing; }
+    .hint { position:absolute; left:14px; bottom:12px; font:400 .68rem/1 var(--mono);
+            letter-spacing:.4px; color:var(--gray); }
+    .readout { position:absolute; right:14px; top:14px; font:500 .72rem/1.7 var(--mono);
+            color:var(--ink); background:#fff; border:1px solid var(--line);
+            border-radius:6px; padding:9px 12px; white-space:pre; text-align:right; }
+    /* right: steps */
+    .panel { border-left:1px solid var(--line); background:var(--surface); display:flex;
+             flex-direction:column; padding:22px 20px 16px; overflow:hidden; }
+    .eyebrow { font:500 .64rem/1 var(--mono); letter-spacing:1.7px; text-transform:uppercase;
+               color:var(--gray); align-self:flex-start; }
+    h1 { font-size:1.16rem; font-weight:700; margin:11px 0 5px; line-height:1.25; letter-spacing:-.01em; }
+    .sub { font:400 .78rem/1.65 var(--mono); color:var(--gray); }
+    .steps { margin-top:18px; flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+    .step { border-left:2px solid transparent; padding:9px 0 9px 14px; margin-bottom:2px; color:var(--gray); }
+    .step h2 { font-size:.82rem; font-weight:700; margin-bottom:4px; color:inherit; }
+    .step h2 span { font:500 .74rem var(--mono); color:var(--gray); margin-right:7px; }
+    .step p { font-size:.8rem; line-height:1.65; }
+    .step.done { color:#9A9E9A; }
+    .step.on { color:var(--ink-2); border-left-color:var(--accent); }
+    .step.on h2 { color:var(--ink); }
+    .math { margin-top:8px; font:500 .8rem/1.8 var(--mono); color:var(--ink);
+            background:#fff; border:1px solid var(--line); border-radius:6px;
+            padding:9px 11px; white-space:pre-wrap; word-break:break-word; }
+    .bar { display:flex; align-items:center; gap:8px; padding-top:14px;
+           border-top:1px solid var(--line); margin-top:12px; }
+    button { font:inherit; font-size:.8rem; font-weight:700; cursor:pointer; border:1px solid var(--ink);
+             border-radius:8px; padding:9px 16px; background:var(--ink); color:#fff; }
+    button.ghost { background:transparent; color:var(--ink); border-color:var(--line); }
+    button:disabled { opacity:.3; cursor:default; }
+    button:active { transform:scale(.97); }
+    .count { margin-left:auto; font:500 .72rem var(--mono); color:var(--gray); }
+    @media (max-width:760px) {
+      .wrap { grid-template-columns:1fr; grid-template-rows:46% 54%; }
+      .panel { border-left:none; border-top:1px solid var(--line); padding:16px 16px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="view">
+      <canvas id="stage"></canvas>
+      <div class="readout" id="readout"></div>
+      <div class="hint">Drag to orbit</div>
+    </div>
+    <div class="panel">
+      <span class="eyebrow" id="eyebrow">Exercise</span>
+      <h1 id="title"></h1>
+      <p class="sub" id="sub"></p>
+      <div class="steps" id="steps"></div>
+      <div class="bar">
+        <button class="ghost" id="prev" type="button">Back</button>
+        <button id="next" type="button">Next</button>
+        <span class="count" id="count"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  var FONT = '-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
+  /* ---- tiny 3D engine: canvas 2D, painter's algorithm, no dependencies ---- */
+  var C = document.getElementById("stage"), X = C.getContext("2d");
+  var cam = { yaw: -0.72, pitch: 0.48, dist: 9.5, f: 560 };
+  var W = 1, H = 1, DPR = 1, Q = [];
+
+  function resize() {
+    var r = C.getBoundingClientRect();
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    W = Math.max(1, r.width); H = Math.max(1, r.height);
+    C.width = Math.round(W * DPR); C.height = Math.round(H * DPR);
+    X.setTransform(DPR, 0, 0, DPR, 0, 0);
+    cam.f = Math.max(210, Math.min(W, H) * 1.3);
+  }
+  function proj(p) {
+    var cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
+    var cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+    var x = p[0] * cy + p[2] * sy;
+    var z = -p[0] * sy + p[2] * cy;
+    var y = p[1] * cp - z * sp;
+    var d3 = p[1] * sp + z * cp;
+    var d = cam.dist - d3; if (d < 0.25) d = 0.25;
+    var s = cam.f / d;
+    return { x: W / 2 + x * s, y: H * 0.60 - y * s, z: d3, s: s };
+  }
+  function push(z, fn) { Q.push({ z: z, fn: fn }); }
+  function flush() {
+    Q.sort(function (a, b) { return a.z - b.z; });
+    for (var i = 0; i < Q.length; i++) Q[i].fn();
+    Q.length = 0;
+  }
+  function line3(a, b, color, width, dash) {
+    var A = proj(a), B = proj(b);
+    push((A.z + B.z) / 2, function () {
+      X.save(); X.strokeStyle = color; X.lineWidth = width || 1.5;
+      X.lineCap = "round"; if (dash) X.setLineDash(dash);
+      X.beginPath(); X.moveTo(A.x, A.y); X.lineTo(B.x, B.y); X.stroke(); X.restore();
+    });
+  }
+  function arrow3(a, b, color, width, label) {
+    var A = proj(a), B = proj(b);
+    var dx = B.x - A.x, dy = B.y - A.y, L = Math.sqrt(dx * dx + dy * dy) || 1;
+    var ux = dx / L, uy = dy / L, hl = Math.min(16, L * 0.32), hw = hl * 0.46;
+    push((A.z + B.z) / 2 + 0.001, function () {
+      X.save(); X.strokeStyle = color; X.fillStyle = color;
+      X.lineWidth = width || 3; X.lineCap = "round";
+      X.beginPath(); X.moveTo(A.x, A.y); X.lineTo(B.x - ux * hl * 0.9, B.y - uy * hl * 0.9); X.stroke();
+      X.beginPath(); X.moveTo(B.x, B.y);
+      X.lineTo(B.x - ux * hl + -uy * hw, B.y - uy * hl + ux * hw);
+      X.lineTo(B.x - ux * hl - -uy * hw, B.y - uy * hl - ux * hw);
+      X.closePath(); X.fill();
+      if (label) {
+        X.font = "600 13px " + FONT; X.fillStyle = color;
+        X.textAlign = "center"; X.textBaseline = "middle";
+        X.fillText(label, B.x + ux * 16, B.y + uy * 16 - 8);
+      }
+      X.restore();
+    });
+  }
+  function poly3(pts, fill, stroke, lw) {
+    var P = [], z = 0, i;
+    for (i = 0; i < pts.length; i++) { P.push(proj(pts[i])); z += P[i].z; }
+    z /= pts.length || 1;
+    push(z, function () {
+      X.save(); X.beginPath(); X.moveTo(P[0].x, P[0].y);
+      for (var j = 1; j < P.length; j++) X.lineTo(P[j].x, P[j].y);
+      X.closePath();
+      if (fill) { X.fillStyle = fill; X.fill(); }
+      if (stroke) { X.strokeStyle = stroke; X.lineWidth = lw || 1.2; X.stroke(); }
+      X.restore();
+    });
+  }
+  function text3(p, str, color, size, dx, dy) {
+    var A = proj(p);
+    push(A.z + 0.002, function () {
+      X.save(); X.font = "600 " + (size || 12) + "px " + FONT; X.fillStyle = color;
+      X.textAlign = "center"; X.textBaseline = "middle";
+      X.fillText(str, A.x + (dx || 0), A.y + (dy || 0)); X.restore();
+    });
+  }
+  function grid(n, step, color) {
+    for (var i = -n; i <= n; i++) {
+      var a = i === 0 ? color : "rgba(12,13,12,.06)";
+      line3([i * step, 0, -n * step], [i * step, 0, n * step], a, 1);
+      line3([-n * step, 0, i * step], [n * step, 0, i * step], a, 1);
+    }
+  }
+  /* orbit */
+  (function () {
+    var down = false, lx = 0, ly = 0;
+    function pos(e) { var t = e.touches ? e.touches[0] : e; return [t.clientX, t.clientY]; }
+    function start(e) { down = true; var p = pos(e); lx = p[0]; ly = p[1]; }
+    function move(e) {
+      if (!down) return;
+      var p = pos(e);
+      cam.yaw += (p[0] - lx) * 0.008;
+      cam.pitch = Math.max(-0.35, Math.min(1.25, cam.pitch + (p[1] - ly) * 0.006));
+      lx = p[0]; ly = p[1];
+      if (e.cancelable) e.preventDefault();
+    }
+    function end() { down = false; }
+    C.addEventListener("mousedown", start); window.addEventListener("mousemove", move);
+    window.addEventListener("mouseup", end);
+    C.addEventListener("touchstart", start, { passive: true });
+    C.addEventListener("touchmove", move, { passive: false });
+    C.addEventListener("touchend", end);
+  })();
+
+  /* ---------- params ---------- */
+  window.__chartParams = window.__chartParams || {
+    title: "The cross product, built one component at a time",
+    a: [3, 0, 1],
+    b: [1, 3, 1],
+    accentColor: "#72A07D",
+    crossScale: 0.30,
+    __schema: {
+      accentColor: { type: "color", label: "Accent color" },
+      crossScale: { type: "slider", label: "Draw scale of a x b", min: 0.1, max: 1, step: 0.02 }
+    }
+  };
+  var P = window.__chartParams;
+  var A = (P.a || [3, 0, 1]).map(Number), B = (P.b || [1, 3, 1]).map(Number);
+  var K = Number(P.crossScale) || 0.30;
+  document.documentElement.style.setProperty("--accent", P.accentColor || "#72A07D");
+
+  var CR = [A[1] * B[2] - A[2] * B[1], A[2] * B[0] - A[0] * B[2], A[0] * B[1] - A[1] * B[0]];
+  var MAG = Math.sqrt(CR[0] * CR[0] + CR[1] * CR[1] + CR[2] * CR[2]);
+  function n(v) { return (Math.round(v * 100) / 100).toString(); }
+  function vec(v) { return "(" + n(v[0]) + ", " + n(v[1]) + ", " + n(v[2]) + ")"; }
+
+  /* math (x,y,z) with z up -> engine (x, up, z) */
+  function V(v) { return [v[0], v[2], v[1]]; }
+  function mul(v, s) { return [v[0] * s, v[1] * s, v[2] * s]; }
+  function add(u, v) { return [u[0] + v[0], u[1] + v[1], u[2] + v[2]]; }
+
+  var CA = "#0C0D0C", CB = "#8A8F8A", CC = "#4E8560", INK = "rgba(12,13,12,.45)";
+  var O = [0, 0, 0];
+
+  document.getElementById("title").textContent = P.title;
+  document.getElementById("sub").textContent =
+    "a = " + vec(A) + ",  b = " + vec(B) + ". Drag the left panel to look around.";
+  document.getElementById("eyebrow").textContent = "Vectors";
+  document.getElementById("readout").textContent =
+    "a     " + vec(A) + "\nb     " + vec(B) + "\na x b " + vec(CR) + "\n|axb| " + n(MAG);
+
+  var STEPS = [
+    { h: "Two vectors from one corner",
+      p: "Both vectors start at the origin. Nothing is perpendicular yet - these are just two arrows in space.",
+      m: "a = " + vec(A) + "\nb = " + vec(B) },
+    { h: "They span a parallelogram",
+      p: "Slide a copy of b along a, and a copy of a along b. The flat patch they close off is the thing the cross product measures.",
+      m: "corners: 0, a, a + b, b" },
+    { h: "Set up the determinant",
+      p: "The cross product is the formal determinant of a 3x3 array: unit vectors on top, a in the middle, b at the bottom. Expanding along the top row gives one component at a time.",
+      m: "| i   j   k  |\n| " + n(A[0]) + "   " + n(A[1]) + "   " + n(A[2]) + "  |\n| " + n(B[0]) + "   " + n(B[1]) + "   " + n(B[2]) + "  |" },
+    { h: "The i component",
+      p: "Cover the i column. What is left is a 2x2 determinant of the y and z entries. That number is how far the answer runs along x.",
+      m: "i: a2*b3 - a3*b2\n = " + n(A[1]) + "*" + n(B[2]) + " - " + n(A[2]) + "*" + n(B[1]) + " = " + n(CR[0]) },
+    { h: "The j component - mind the minus",
+      p: "Cover the j column and take the x and z entries. The middle term of a determinant expansion carries a minus sign; forgetting it is the single most common slip here.",
+      m: "j: -(a1*b3 - a3*b1)\n = -(" + n(A[0]) + "*" + n(B[2]) + " - " + n(A[2]) + "*" + n(B[0]) + ") = " + n(CR[1]) },
+    { h: "The k component",
+      p: "Cover the k column, take the x and y entries. This is the piece that lifts the answer off the plane you are looking at.",
+      m: "k: a1*b2 - a2*b1\n = " + n(A[0]) + "*" + n(B[1]) + " - " + n(A[1]) + "*" + n(B[0]) + " = " + n(CR[2]) },
+    { h: "Assemble the vector",
+      p: "The three components are the legs of a staircase; the arrow closing it is a x b. It is drawn shortened here so it fits on screen.",
+      m: "a x b = " + vec(CR) },
+    { h: "Check it is perpendicular",
+      p: "Dot the answer with each input. Both dot products are zero, so the arrow leaves the parallelogram at a right angle - that is the whole point of the construction.",
+      m: "a . (a x b) = " + n(A[0] * CR[0] + A[1] * CR[1] + A[2] * CR[2]) +
+         "\nb . (a x b) = " + n(B[0] * CR[0] + B[1] * CR[1] + B[2] * CR[2]) },
+    { h: "Its length is the area",
+      p: "The magnitude of the cross product equals the area of the parallelogram it stands on. Direction answers 'which way is perpendicular'; length answers 'how much surface'.",
+      m: "|a x b| = " + n(MAG) + "\narea of parallelogram = " + n(MAG) }
+  ];
+
+  function axes() {
+    grid(4, 1, "rgba(12,13,12,.20)");
+    line3([0, 0, 0], [4.4, 0, 0], "rgba(12,13,12,.28)", 1.4);
+    line3([0, 0, 0], [0, 0, 4.4], "rgba(12,13,12,.28)", 1.4);
+    line3([0, 0, 0], [0, 4.2, 0], "rgba(12,13,12,.28)", 1.4);
+    text3([4.7, 0, 0], "x", INK, 12);
+    text3([0, 0, 4.7], "y", INK, 12);
+    text3([0, 4.5, 0], "z", INK, 12);
+  }
+
+  function draw(i, t, time) {
+    axes();
+    var ga = i === 0 ? Math.min(1, t * 1.6) : 1;
+    var gb = i === 0 ? Math.max(0, Math.min(1, t * 1.6 - 0.5)) : 1;
+    arrow3(O, V(mul(A, ga)), CA, 3.2, ga > 0.9 ? "a" : "");
+    arrow3(O, V(mul(B, gb)), CB, 3.2, gb > 0.9 ? "b" : "");
+
+    if (i >= 1) {
+      var f = i === 1 ? t : 1;
+      var pulse = i === 8 ? 0.07 + 0.05 * Math.sin(time * 2.2) : 0.07;
+      poly3([O, V(A), V(add(mul(A, 1), mul(B, f))), V(mul(B, f))],
+            "rgba(12,13,12," + pulse + ")", "rgba(12,13,12,.35)", 1.4);
+      line3(V(A), V(add(A, mul(B, f))), CB, 1.6, [4, 4]);
+      line3(V(mul(B, f)), V(add(A, mul(B, f))), CA, 1.6, [4, 4]);
+    }
+
+    /* component staircase: x at step 3, y at 4, z at 5 */
+    if (i >= 3) {
+      var show = [i >= 3 ? (i === 3 ? t : 1) : 0,
+                  i >= 4 ? (i === 4 ? t : 1) : 0,
+                  i >= 5 ? (i === 5 ? t : 1) : 0];
+      var p0 = [0, 0, 0], seg = [];
+      for (var c = 0; c < 3; c++) {
+        var d = [0, 0, 0]; d[c] = CR[c] * K * show[c];
+        var p1 = add(p0, d);
+        if (show[c] > 0.01) seg.push([p0, p1, c]);
+        p0 = p1;
+      }
+      var cols = [CA, CB, CC];
+      for (var s = 0; s < seg.length; s++) {
+        var last = i < 6 && s === seg.length - 1;
+        line3(V(seg[s][0]), V(seg[s][1]), cols[seg[s][2]], last ? 3 : 2, last ? null : [5, 5]);
+        if (last) text3(mul(add(seg[s][0], seg[s][1]), 0.5),
+                        ["i", "j", "k"][seg[s][2]] + " = " + n(CR[seg[s][2]]), cols[seg[s][2]], 12, 0, -12);
+      }
+    }
+
+    if (i >= 6) {
+      var g = i === 6 ? t : 1;
+      arrow3(O, V(mul(CR, K * g)), CC, 3.4, g > 0.9 ? "a x b" : "");
+      if (i >= 7) {
+        var u = mul(CR, K * 0.16), va = mul(A, 0.16), vb = mul(B, 0.16);
+        line3(V(u), V(add(u, va)), "rgba(78,133,96,.85)", 1.6);
+        line3(V(va), V(add(u, va)), "rgba(78,133,96,.85)", 1.6);
+        line3(V(u), V(add(u, vb)), "rgba(78,133,96,.85)", 1.6);
+        line3(V(vb), V(add(u, vb)), "rgba(78,133,96,.85)", 1.6);
+      }
+    }
+  }
+
+
+  /* ---- step machine ---- */
+  var stepsEl = document.getElementById("steps");
+  var idx = 0, t0 = 0, anim = 0;
+  function renderSteps() {
+    var html = "";
+    for (var i = 0; i < STEPS.length; i++) {
+      var s = STEPS[i];
+      var cls = i === idx ? "step on" : (i < idx ? "step done" : "step");
+      html += '<div class="' + cls + '" data-i="' + i + '"><h2><span>' + (i < 9 ? "0" : "") + (i + 1) + '</span>' + s.h + "</h2><p>" + s.p + "</p>" +
+              (s.m ? '<div class="math">' + s.m + "</div>" : "") + "</div>";
+    }
+    stepsEl.innerHTML = html;
+    var on = stepsEl.querySelector(".step.on");
+    if (on && on.scrollIntoView) on.scrollIntoView({ block: "nearest" });
+    document.getElementById("count").textContent = (idx + 1) + " / " + STEPS.length;
+    document.getElementById("prev").disabled = idx === 0;
+    document.getElementById("next").textContent = idx === STEPS.length - 1 ? "Restart" : "Next";
+  }
+  function go(i) {
+    idx = Math.max(0, Math.min(STEPS.length - 1, i));
+    t0 = performance.now(); anim = 0; renderSteps();
+  }
+  stepsEl.addEventListener("click", function (e) {
+    var d = e.target.closest ? e.target.closest(".step") : null;
+    if (d) go(+d.getAttribute("data-i"));
+  });
+  function nextStep() { go(idx === STEPS.length - 1 ? 0 : idx + 1); }
+  function prevStep() { go(idx - 1); }
+  var nb = document.getElementById("next"), pb = document.getElementById("prev");
+  nb.addEventListener("click", nextStep);
+  nb.addEventListener("touchstart", function (e) { e.preventDefault(); nextStep(); }, { passive: false });
+  pb.addEventListener("click", prevStep);
+  pb.addEventListener("touchstart", function (e) { e.preventDefault(); prevStep(); }, { passive: false });
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") nextStep(); else if (e.key === "ArrowLeft") prevStep();
+  });
+
+  function ease(x) { return x < 0 ? 0 : x > 1 ? 1 : 1 - Math.pow(1 - x, 3); }
+  function frame(now) {
+    if (!t0) t0 = now;
+    anim = ease((now - t0) / 700);
+    resize();
+    X.clearRect(0, 0, W, H);
+    draw(idx, anim, now / 1000);
+    flush();
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener("resize", resize);
+  renderSteps();
+  requestAnimationFrame(frame);
+
+  </script>
+</body>
+</html>

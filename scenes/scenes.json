@@ -1,0 +1,51 @@
+[
+  {
+    "id": "hemoglobin",
+    "model": "hemoglobin_1gzx",
+    "title": "Haemoglobin",
+    "sub": "The protein that carries oxygen in your blood.",
+    "credit": "Structure 1GZX, RCSB Protein Data Bank (public domain).",
+    "labels": [
+      {
+        "y": 0.88,
+        "text": "Four protein chains"
+      },
+      {
+        "x": -0.92,
+        "y": -0.1,
+        "text": "Haem groups bind oxygen"
+      },
+      {
+        "y": -0.9,
+        "text": "About 270 million per red blood cell"
+      }
+    ],
+    "narration": "Haemoglobin. This is the protein that carries oxygen in your blood. It is built from four protein chains, folded around each other. Each chain holds a haem group, and that is where an oxygen molecule attaches. A single red blood cell carries about two hundred and seventy million of these.",
+    "name": "Hemoglobin",
+    "audio": "narration/hemoglobin.mp3"
+  },
+  {
+    "id": "brain",
+    "model": "real_cortical_brain",
+    "title": "The cortical brain",
+    "sub": "Reconstructed from real medical imaging.",
+    "credit": "Derived from open CT and segmentation datasets (public domain).",
+    "labels": [
+      {
+        "mesh": 0,
+        "text": "Left hemisphere"
+      },
+      {
+        "mesh": 1,
+        "text": "Right hemisphere"
+      },
+      {
+        "y": 0.95,
+        "text": "Folds increase surface area"
+      }
+    ],
+    "narration": "The cortical brain, reconstructed from real medical imaging. It is split into two halves, the left hemisphere and the right hemisphere. The surface is folded rather than smooth, and those folds let far more cortex fit inside the skull.",
+    "name": "The brain",
+    "audio": "narration/brain.mp3"
+  }
+]

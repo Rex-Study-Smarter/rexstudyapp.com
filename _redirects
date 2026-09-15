@@ -2,5 +2,12 @@
 # installed; this page is what everyone else sees, instead of a 404.
 /join/*  /join.html  200
 
+# The bio link for Instagram and TikTok. /get.html does the App Store handoff
+# itself, because those in-app browsers no longer pass a plain store link out.
+/get        /get/index.html  200
+/ios        /get/index.html  200
+/app        /get/index.html  200
+/download   /get/index.html  200
+
 # Everything else that does not exist.
 /*  /404.html  404

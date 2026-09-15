@@ -1,0 +1,24 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "JPV3HSPKVT.com.rexstudyapp.ios",
+          "JPV3HSPKVT.com.rexstudyapp"
+        ],
+        "components": [
+          {
+            "/": "/join/*",
+            "comment": "Board invite links open directly in Rex."
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "JPV3HSPKVT.com.rexstudyapp.ios",
+      "JPV3HSPKVT.com.rexstudyapp"
+    ]
+  }
+}

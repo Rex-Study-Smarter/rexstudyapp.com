@@ -56,5 +56,27 @@
         'Board invites open in the Rex app on iPhone or iPad. Open this same link on your device, and the board will be waiting.';
     }
   </script>
+
+<!-- App Store links, for browsers that will not hand one over.
+     Instagram and TikTok stopped escorting a plain apps.apple.com link out to
+     the App Store, so inside those the store page loads in their own webview
+     with nothing to tap. itms-apps is not a web page, so the webview cannot
+     render it and gives it to the system instead, which is the behaviour we
+     used to get for free. /get is the same trick as a standalone page for a
+     link in a bio. -->
+<script>
+(function () {
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPad|iPhone|iPod/.test(ua) ||
+    (/Macintosh/.test(ua) && typeof navigator.maxTouchPoints === 'number' && navigator.maxTouchPoints > 1);
+  if (!isIOS) return;
+  var links = document.querySelectorAll('a[href*="apps.apple.com"]');
+  Array.prototype.forEach.call(links, function (a) {
+    a.setAttribute('href', a.getAttribute('href').replace(/^https?:/, 'itms-apps:'));
+    a.removeAttribute('target');
+  });
+})();
+</script>
+
 </body>
 </html>

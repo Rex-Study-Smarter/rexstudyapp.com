@@ -3,6 +3,29 @@
 
 # Redirect rules in this file are evaluated before _redirects, so the invite
 # rule has to live here too or the catch-all below swallows /join/<token>.
+# The bio link. Instagram and TikTok stopped handing plain App Store links to the
+# store, so /get is a page that does the handoff itself. Short aliases so the URL
+# in a bio can be whichever reads best.
+[[redirects]]
+  from = "/get"
+  to = "/get/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/ios"
+  to = "/get/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/app"
+  to = "/get/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/download"
+  to = "/get/index.html"
+  status = 200
+
 [[redirects]]
   from = "/join/*"
   to = "/join.html"

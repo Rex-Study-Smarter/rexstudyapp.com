@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Get Rex on the App Store. Free to start, on iPhone, iPad and Mac." />
+  <meta name="theme-color" content="#FBFAF8" />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="icon" href="/Rex.png" />
+  <link rel="canonical" href="https://rexstudyapp.com/get/" />
+  <meta name="apple-itunes-app" content="app-id=6775703977" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Rex" />
+  <meta property="og:title" content="Get Rex" />
+  <meta property="og:description" content="The study app built for every student. Free to start, on iPhone, iPad and Mac." />
+  <meta property="og:url" content="https://rexstudyapp.com/get/" />
+  <meta property="og:image" content="https://www.rexstudyapp.com/RexMascot.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Get Rex" />
+  <meta name="twitter:description" content="The study app built for every student. Free to start, on iPhone, iPad and Mac." />
+  <meta name="twitter:image" content="https://www.rexstudyapp.com/RexMascot.png" />
+
+  <title>Get Rex</title>
+  <style>
+    @font-face { font-family:'GoudyHeavyface'; src:url('/GoudyHeavyface.otf') format('opentype'); font-weight:normal; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Lato'; src:url('/Lato-Regular.ttf') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Lato'; src:url('/Lato-Light.ttf') format('truetype'); font-weight:300; font-style:normal; font-display:swap; }
+
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+    :root {
+      --ink:#111;
+      --gray:#4B4B4B;
+      --gray-light:#767676;
+      --green:#72A07D;
+      --border:#E6E4E0;
+      --panel:#F4F2EE;
+    }
+
+    html { -webkit-text-size-adjust:100%; }
+    body {
+      font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:#FBFAF8; color:var(--ink);
+      min-height:100dvh;
+      display:flex; align-items:center; justify-content:center;
+      padding:max(24px,env(safe-area-inset-top)) 20px max(28px,env(safe-area-inset-bottom));
+      -webkit-font-smoothing:antialiased;
+    }
+
+    .card { width:100%; max-width:430px; text-align:center; }
+
+    .mascot { width:92px; height:auto; margin:0 auto 22px; display:block; }
+
+    h1 {
+      font-family:'GoudyHeavyface',Georgia,serif; font-weight:normal;
+      font-size:clamp(2rem,8vw,2.6rem); line-height:1.06; letter-spacing:-.01em;
+      margin-bottom:12px;
+    }
+    .lede { color:var(--gray); line-height:1.65; font-size:1rem; margin-bottom:26px; }
+    .lede strong { font-weight:400; color:var(--ink); }
+
+    .btn {
+      display:flex; align-items:center; justify-content:center; gap:9px;
+      width:100%; min-height:56px; padding:15px 22px;
+      border:1.5px solid var(--ink); border-radius:13px;
+      font-family:inherit; font-size:1.02rem; font-weight:400;
+      text-decoration:none; color:var(--ink); background:transparent;
+      cursor:pointer; -webkit-appearance:none;
+      transition:background .15s, color .15s, transform .12s;
+    }
+    .btn:active { transform:scale(.985); }
+    .btn-solid { background:var(--ink); color:#fff; }
+    .btn-solid:active { background:#2A2A2A; }
+    .btn + .btn { margin-top:10px; }
+    .btn svg { flex:0 0 auto; }
+
+    .steps {
+      margin-top:22px; padding:18px 20px;
+      background:var(--panel); border:1px solid var(--border); border-radius:14px;
+      text-align:left;
+    }
+    .steps h2 {
+      font-family:'Lato',sans-serif; font-size:.7rem; font-weight:400;
+      letter-spacing:.14em; text-transform:uppercase; color:var(--gray-light);
+      margin-bottom:12px;
+    }
+    .steps ol { margin:0; padding-left:1.15em; }
+    .steps li { font-size:.92rem; line-height:1.6; color:var(--gray); margin-bottom:7px; }
+    .steps li:last-child { margin-bottom:0; }
+    .steps li b { color:var(--ink); font-weight:400; }
+
+    .dots { display:inline-flex; gap:2.5px; vertical-align:middle; margin:0 1px; }
+    .dots i { width:3.5px; height:3.5px; border-radius:50%; background:var(--ink); display:block; }
+
+    .copy-row { margin-top:12px; }
+    .copy-row button {
+      width:100%; min-height:46px; padding:12px 16px;
+      background:#fff; border:1px solid var(--border-dark,#BFBCB6); border-radius:11px;
+      font-family:inherit; font-size:.9rem; color:var(--ink); cursor:pointer;
+    }
+    .copy-row button:active { background:var(--panel); }
+    .copied { color:var(--green) !important; border-color:var(--green) !important; }
+
+    .tiny { font-size:.8rem; color:var(--gray-light); line-height:1.6; margin-top:20px; }
+    .tiny a { color:var(--gray-light); text-decoration:underline; text-underline-offset:2px; }
+
+    .platforms {
+      display:flex; align-items:center; justify-content:center; gap:14px;
+      margin-top:18px; font-size:.82rem; color:var(--gray-light);
+    }
+    .platforms span { display:inline-flex; align-items:center; gap:5px; }
+
+    .sep { height:1px; background:var(--border); margin:24px 0 20px; border:0; }
+
+    [hidden] { display:none !important; }
+
+    @media (prefers-reduced-motion:reduce) {
+      * { transition-duration:.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <img class="mascot" src="/RexMascot.png" alt="Rex" />
+
+    <h1 id="headline">Get Rex.</h1>
+    <p class="lede" id="lede">
+      <strong>The study app built for every student.</strong><br />
+      Free to start. No credit card.
+    </p>
+
+    <a class="btn btn-solid" id="storeBtn" href="https://apps.apple.com/app/rex-study-smarter/id6775703977">
+      <svg width="19" height="22" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-36.8-2.8-77 21.3-91.7 21.3-15.5 0-51.1-20.3-79-20.3C61.1 141.6 12 184.2 12 270.9c0 25.6 4.7 52 14.1 79.3 12.6 35.9 49.2 122.6 87.4 121.4 20-.5 34.1-14.2 60.1-14.2 25.2 0 38.3 14.2 60.6 14.2 38.5-.6 71.6-79.4 83.6-115.4-51.5-24.3-49.1-71.1-49.1-87.5zM263.5 89.5c17.6-21.4 15.6-46.4 15-55.5-15.7.9-33.8 10.7-44.1 22.7-11.4 12.9-18.1 28.9-16.7 46.9 17 1.3 32.5-7.4 45.8-14.1z"/></svg>
+      <span>Download on the App Store</span>
+    </a>
+
+    <div id="inAppHelp" hidden>
+      <div class="steps">
+        <h2>If the App Store did not open</h2>
+        <ol>
+          <li>Tap the <b><span class="dots"><i></i><i></i><i></i></span></b> menu at the corner of this screen.</li>
+          <li>Choose <b>Open in browser</b> or <b>Open in Safari</b>.</li>
+          <li>Tap the download button again. It goes straight to the App Store.</li>
+        </ol>
+      </div>
+      <div class="copy-row">
+        <button type="button" id="copyBtn">Copy the link instead</button>
+      </div>
+    </div>
+
+    <div id="otherPlatform" hidden>
+      <hr class="sep" />
+      <p class="lede" style="margin-bottom:18px">
+        Rex runs on iPhone, iPad and Mac. Open this page on your phone, or scan it
+        from your Mac's App Store.
+      </p>
+      <a class="btn" href="/index.html">See what Rex does</a>
+    </div>
+
+    <div class="platforms">
+      <span>iPhone</span><span>iPad</span><span>Mac</span>
+    </div>
+
+    <p class="tiny">
+      Every tool is on the free plan. <a href="/index.html">What is Rex?</a> &middot;
+      <a href="/privacy.html">Privacy</a> &middot; <a href="/support.html">Support</a>
+    </p>
+  </main>
+
+  <script>
+  (function () {
+    var APP_ID = '6775703977';
+    var WEB_URL = 'https://apps.apple.com/app/rex-study-smarter/id' + APP_ID;
+    // The itms-apps scheme is not a web page, so an in-app browser cannot render
+    // it and hands it to the system instead, which is the whole trick: Instagram
+    // and TikTok no longer escort a plain App Store https link out to the store.
+    var APP_URL = 'itms-apps://apps.apple.com/app/rex-study-smarter/id' + APP_ID;
+
+    var ua = navigator.userAgent || '';
+    var isIOS = /iPad|iPhone|iPod/.test(ua) ||
+      // iPadOS reports itself as a Mac, so touch points are what separate them.
+      (/Macintosh/.test(ua) && typeof navigator.maxTouchPoints === 'number' && navigator.maxTouchPoints > 1);
+    var isMac = /Macintosh/.test(ua) && !isIOS;
+    // Instagram, Facebook, Messenger, TikTok, Snapchat, Twitter, LinkedIn, Pinterest.
+    var isInApp = /Instagram|FBAV|FBAN|FB_IAB|Messenger|TikTok|BytedanceWebview|musical_ly|Snapchat|Twitter|LinkedInApp|Pinterest|Line\//i.test(ua);
+
+    var storeBtn = document.getElementById('storeBtn');
+    var inAppHelp = document.getElementById('inAppHelp');
+    var otherPlatform = document.getElementById('otherPlatform');
+    var copyBtn = document.getElementById('copyBtn');
+
+    function openStore() {
+      // itms-apps is always registered on iOS, so there is nothing to fall back
+      // from. A timed hop to the https listing would be worse than nothing here:
+      // inside Instagram it lands on the App Store web page in the webview,
+      // which is the broken experience this page exists to avoid.
+      window.location.href = APP_URL;
+    }
+
+    if (isIOS) {
+      storeBtn.setAttribute('href', APP_URL);
+      storeBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        openStore();
+      });
+
+      if (isInApp) {
+        inAppHelp.hidden = false;
+        // One automatic attempt per visit. If the handoff worked they are already
+        // in the App Store; if it did not, the page is still here with the steps.
+        var tried = false;
+        try { tried = sessionStorage.getItem('rex-store-hop') === '1'; } catch (err) {}
+        if (!tried) {
+          try { sessionStorage.setItem('rex-store-hop', '1'); } catch (err) {}
+          setTimeout(function () { window.location.href = APP_URL; }, 350);
+        }
+      }
+    } else if (isMac) {
+      document.getElementById('lede').innerHTML =
+        '<strong>The study app built for every student.</strong><br />Free to start. Open it in the Mac App Store.';
+      storeBtn.setAttribute('href', 'macappstore://apps.apple.com/app/rex-study-smarter/id' + APP_ID);
+    } else {
+      otherPlatform.hidden = false;
+      document.getElementById('headline').textContent = 'Rex is an Apple app.';
+    }
+
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        var link = WEB_URL;
+        var done = function () {
+          copyBtn.textContent = 'Link copied. Paste it in Safari.';
+          copyBtn.className = 'copied';
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(link).then(done, function () { fallbackCopy(link, done); });
+        } else {
+          fallbackCopy(link, done);
+        }
+      });
+    }
+
+    function fallbackCopy(text, done) {
+      var el = document.createElement('textarea');
+      el.value = text;
+      el.setAttribute('readonly', '');
+      el.style.position = 'fixed';
+      el.style.opacity = '0';
+      document.body.appendChild(el);
+      el.select();
+      el.setSelectionRange(0, text.length);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (err) {}
+      document.body.removeChild(el);
+      if (ok) { done(); } else {
+        copyBtn.textContent = WEB_URL;
+      }
+    }
+  })();
+  </script>
+</body>
+</html>

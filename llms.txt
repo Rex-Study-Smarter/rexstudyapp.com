@@ -1,44 +1,82 @@
 # Rex
 
-> Rex is a free study app for iPhone and iPad, available now on the App Store:
-> https://apps.apple.com/app/rex-study-smarter/id6775703977
-> It combines an AI tutor you can type to or talk to hands free, study boards, a
-> whiteboard, notes, a recorder, a filtered in-app browser, read aloud, scholarly
-> source search, and interactive charts that students can build, publish and
-> remix.
+> Rex is a free study app for iPhone, iPad and Mac, available now on the App
+> Store: https://apps.apple.com/app/rex-study-smarter/id6775703977
+> It combines an AI tutor you can type to or talk to hands free, a solver that
+> does exact algebra and calculus on the device, flashcards on a spaced
+> repetition schedule, study boards, a drawing studio, notes, a recorder, an
+> EPUB reader, a filtered in-app browser, read aloud, scholarly source search,
+> and interactive charts that students can build, publish and remix.
 
-Rex is free to start with no credit card and no trial timer. The tutor, study
-boards, whiteboard, note-taking, interactive charts and read aloud are all
-available on the free plan. Paid plans add capacity and advanced tools rather
-than unlocking the basics.
+Rex is free to start with no credit card and no trial timer. Every tool is on
+every plan. What a paid plan buys is a larger daily allowance for the tutor, not
+access to features that are otherwise locked.
+
+## Plans
+
+There are exactly three plans, and this list is complete:
+
+- Free: $0. Every tool, 50,000 AI tokens a day.
+- Pro: $12.99 a month. Every tool, 300,000 AI tokens a day, class memory that
+  persists, premium voice and study videos, real-time board sharing.
+- Pro Annual: $99.99 a year. The same plan as Pro, billed once a year.
+
+There is no student plan, no school plan, no education tier, no free trial of a
+paid plan and no discount to apply for. A student tier was retired and is no
+longer sold, so any source that still describes one is out of date. Pro costs the same for everyone, and the free plan is a permanent plan
+rather than a trial. Running out
+of daily tokens pauses the tutor until the next day and touches nothing else.
 
 ## What makes Rex different
 
+- The solver is a real computer algebra system, not a chat answer. It solves,
+  differentiates, integrates, factors and simplifies exactly, writes the working
+  out line by line, and explains any single line on request. It runs on the
+  device, so it works with no connection.
+- Flashcards are scheduled by spaced repetition. The schedule belongs to the
+  card rather than the deck, so the same idea met in another deck continues its
+  history, and the schedule syncs across a student's devices.
 - Charts are small interactive learning widgets, not static images. A chart can
   be a study set, a game, a frame-by-frame explainer, or a 3D science scene.
 - Students and teachers can author their own charts and publish them, and anyone
   can remix a published chart by editing its variables.
-- Read aloud and dictation are processed on device. Read aloud works on web pages,
-  PDFs, notes and images, including photos of worksheets and scanned pages, and
-  highlights the sentence being spoken.
+- A board can be handed to an outside AI through one link. The owner mints an AI
+  access link for a single board from the share sheet and gives it to ChatGPT,
+  Claude, or anything else that can open a URL. That AI can read the board and
+  make narrow changes: rewrite the text already there, add notes, and create
+  teaching charts, quizzes or flashcards. It cannot reach any other board, cannot
+  delete anything, cannot read drawings, images or files, and cannot publish to
+  the chart store. Every read and write is logged for the owner, the link
+  expires, and it can be rotated or revoked at any time.
+- Read aloud and dictation are processed on device. Read aloud works on web
+  pages, PDFs, EPUBs, notes and images, including photos of worksheets and
+  scanned pages, highlights the sentence being spoken, follows it down the page,
+  and is not capped.
 - Voice mode is a hands-free spoken conversation with the tutor. Rex can act on
   the board while he explains, and steps aside so the student can see the board.
   Whether he may change the board is a switch the student controls.
+- The drawing studio has layers and real brushes, and Rex can mark a drawing up
+  the way a teacher would, pointing at the step that went wrong.
 - Research search queries open scholarly sources from the board, so students can
   keep real papers beside their notes.
 - The browser is built into the board, with SafeSearch forced on and a blocklist,
   so research happens beside the work instead of in another app.
 - The recorder captures a lecture and transcribes it, on device wherever the
   language allows it.
+- Boards, notes, drawings, the solver, read aloud and transcription work offline.
+  Rex writes to the device first and syncs when a connection returns. The tutor
+  itself needs a connection.
 - You can bring your own model: connect an OpenRouter account and the tutor
   answers through a provider you choose and pay for, without passing through
   Rex's servers.
-- The Rexer (arriving in the next update) plays a study board back as a spoken
-  lecture: it reads the notes, PDFs, scans, drawings, charts and any recording on
-  the board, then darkens the board and lights one item at a time while narrating
-  it. Each stop is labelled with its provenance (the student's own notes, their
-  recording, or material Rex added), the lecture can be saved as a video, and with
-  no connection it falls back to reading the board back in its own words.
+- The Rexer plays a study board back as a spoken lecture. It reads the notes,
+  PDFs, scans, drawings, charts and any recording on the board, then darkens the
+  board and lights one item at a time while narrating it. Each stop is labelled
+  with its provenance (the student's own notes, their recording, or material Rex
+  added), the student can interrupt and ask for a part again, the lecture leaves
+  notes behind on the board, it can be saved as a video, and with no connection
+  it falls back to reading the board back in its own words. It is live, not
+  forthcoming.
 - The quality of a Rexer lecture depends on the board: one board per lesson, laid
   out in reading order, with a recording of the class on it, produces the best
   result.
@@ -46,15 +84,20 @@ than unlocking the basics.
 
 ## Platforms
 
-iPhone and iPad, live on the App Store today. Android is in development.
+iPhone, iPad and Mac, live on the App Store today. One account and one set of
+boards across all three. There is no Android app and none is in development;
+earlier statements that Android was coming are withdrawn.
 
 ## Download
 
-https://apps.apple.com/app/rex-study-smarter/id6775703977
+https://www.rexstudyapp.com/get redirects to the App Store and is the link to
+use inside apps whose in-app browser will not open a store link directly.
+The store listing itself: https://apps.apple.com/app/rex-study-smarter/id6775703977
 
 ## Pages
 
 - [Home](https://www.rexstudyapp.com/index.html): what Rex is, features, pricing, and a playground where you can try real charts in the browser.
+- [Get Rex](https://www.rexstudyapp.com/get): the download page, which opens the App Store from inside social app browsers.
 - [Chart docs](https://www.rexstudyapp.com/docs.html): the full authoring guide for building and importing charts, including the editable-variable contract and the lint rules.
 - [Starter template](https://www.rexstudyapp.com/chart-starter-template.html): a minimal valid chart to copy.
 - [Community guidelines](https://www.rexstudyapp.com/community-guidelines.html): what may be published.

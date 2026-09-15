@@ -35,12 +35,39 @@
 <body>
   <div class="box">
     <img src="/RexMascot.png" alt="" />
-    <h1>That page got away.</h1>
-    <p>The link may be old, or the page may have moved. Nothing you did wrong.</p>
-    <div class="actions">
+    <h1 id="title">That page got away.</h1>
+    <p id="body">The link may be old, or the page may have moved. Nothing you did wrong.</p>
+    <div class="actions" id="actions">
       <a class="solid" href="/index.html">Back to Rex</a>
       <a href="/docs.html">Chart docs</a>
     </div>
+    <p id="footnote" style="margin-top:26px;font-size:.82rem;color:#767676;" hidden></p>
   </div>
+  <script>
+  /* Board invites are /join/<token>, which is not a file, so the host serves
+     this page for them. On a device with Rex installed iOS never gets here: the
+     Universal Link hands the token straight to the app. Everyone else should be
+     told what the link is rather than that it is broken. */
+  (function () {
+    if (!/^\/join\/./.test(location.pathname)) return;
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || '') ||
+      (/Macintosh/.test(navigator.userAgent || '') && navigator.maxTouchPoints > 1);
+    document.title = 'Join a board on Rex';
+    document.getElementById('title').textContent = 'You have been invited to a board.';
+    document.getElementById('body').textContent = isIOS
+      ? 'Install Rex, then tap the invite link again and the board opens straight in the app.'
+      : 'Board invites open in the Rex app on iPhone, iPad or Mac. Open this same link on your device and the board will be waiting.';
+    document.getElementById('actions').innerHTML =
+      '<a class="solid" href="https://apps.apple.com/app/rex-study-smarter/id6775703977">Get Rex on the App Store</a>' +
+      '<a href="/index.html">What is Rex?</a>';
+    if (isIOS) {
+      var a = document.querySelector('#actions a.solid');
+      a.setAttribute('href', a.getAttribute('href').replace(/^https?:/, 'itms-apps:'));
+    }
+    var fn = document.getElementById('footnote');
+    fn.textContent = 'Invite links are single-use keys to one board. Do not post one anywhere public.';
+    fn.hidden = false;
+  })();
+  </script>
 </body>
 </html>

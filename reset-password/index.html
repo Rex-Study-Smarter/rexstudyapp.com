@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <meta name="referrer" content="no-referrer" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js; connect-src https://umtkjhtwuvhhyekmjnhz.supabase.co; style-src 'unsafe-inline'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="../Rex.png" />
+  <title>Reset your password · Rex</title>
+  <style>
+    @font-face { font-family: "Sorts Mill Goudy"; src: url("../SortsMillGoudy-Regular.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "Lato"; src: url("../Lato-Regular.ttf") format("truetype"); font-display: swap; }
+    :root { --bg: #ffffff; --ink: #111111; --muted: #6b6b6b; --field: #f3f3f3; --hair: rgba(0,0,0,0.1); --bad: #b5493a; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #000000; --ink: #f2f2f2; --muted: #9a9a9a; --field: #1c1c1c; --hair: rgba(255,255,255,0.14); --bad: #ee928b; }
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Lato", -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--ink);
+           min-height: 100vh; display: flex; justify-content: center; padding: 64px 20px 48px; }
+    main { width: 100%; max-width: 420px; }
+    .logo { width: 44px; height: 44px; margin-bottom: 28px; }
+    h1 { font-family: "Sorts Mill Goudy", Georgia, serif; font-weight: 400; font-size: 36px; line-height: 1.15; margin-bottom: 10px; }
+    p { font-size: 16px; line-height: 1.55; color: var(--muted); margin-bottom: 24px; }
+    label { display: block; font-size: 14px; font-weight: 700; margin: 0 0 8px; }
+    input { width: 100%; height: 52px; border: none; border-radius: 14px; background: var(--field); color: var(--ink);
+            font: inherit; font-size: 17px; padding: 0 16px; margin-bottom: 18px; outline: none; }
+    input:focus { box-shadow: 0 0 0 2px var(--ink); }
+    button, .button { display: flex; align-items: center; justify-content: center; width: 100%; height: 52px; border: none;
+             border-radius: 14px; background: var(--ink); color: var(--bg); font: inherit; font-size: 16px; font-weight: 700;
+             cursor: pointer; text-decoration: none; margin-top: 6px; }
+    button[disabled] { opacity: 0.5; cursor: default; }
+    .secondary { background: transparent; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; height: 44px; }
+    .error { color: var(--bad); font-size: 14px; min-height: 20px; margin: -6px 0 12px; }
+    .hint { font-size: 13px; color: var(--muted); margin: -10px 0 18px; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+<main>
+  <img class="logo" src="../Rex.png" alt="Rex" />
+
+  <!-- Working out whether the link is good -->
+  <section id="checking">
+    <h1>One moment</h1>
+    <p>Checking your reset link.</p>
+  </section>
+
+  <!-- Choose a new password -->
+  <section id="form" hidden>
+    <h1>Choose a new password</h1>
+    <p id="for-email">Pick something at least 8 characters long.</p>
+    <form id="reset">
+      <label for="pw">New password</label>
+      <input id="pw" type="password" autocomplete="new-password" minlength="8" required />
+      <label for="pw2">Type it again</label>
+      <input id="pw2" type="password" autocomplete="new-password" minlength="8" required />
+      <div class="error" id="form-error" role="alert"></div>
+      <button id="save" type="submit">Save password</button>
+    </form>
+  </section>
+
+  <!-- Done -->
+  <section id="done" hidden>
+    <h1>Password changed</h1>
+    <p>You can sign in to Rex with your new password now, on any of your devices.</p>
+    <a class="button" href="com.rex.studyapp://">Open Rex</a>
+    <a class="button secondary" href="https://apps.apple.com/app/rex-study-smarter/id6775703977">Get Rex on the App Store</a>
+  </section>
+
+  <!-- Bad or expired link: ask for a fresh one -->
+  <section id="expired" hidden>
+    <h1>This link has expired</h1>
+    <p id="expired-why">Reset links work once and only for an hour. Enter your email and we'll send you a new one.</p>
+    <form id="again">
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email" required />
+      <div class="error" id="again-error" role="alert"></div>
+      <button id="send" type="submit">Send a new link</button>
+    </form>
+  </section>
+
+  <section id="sent" hidden>
+    <h1>Check your email</h1>
+    <p>If there's a Rex account for that address, a new reset link is on its way. It can take a minute, and it sometimes lands in spam.</p>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js" integrity="sha384-sLWJsCmP+Z4Qn+HgF7Hi64Djta4fZMu0fcgi3uUL3GFV/ubx2G86LPOuMf7+ZIyX" crossorigin="anonymous"></script>
+<script src="reset.js"></script>
+</body>
+</html>

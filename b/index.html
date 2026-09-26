@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- A public board is public to whoever holds the link, not to search engines. -->
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" href="/Rex.png" />
+  <title>A board on Rex</title>
+  <meta name="description" content="A study board shared from Rex. View it in any browser." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="A study board shared on Rex" />
+  <meta property="og:description" content="Notes, charts and flashcards. Open it in any browser, no app needed." />
+  <meta property="og:image" content="https://rexstudyapp.com/Rex.png" />
+  <meta name="twitter:card" content="summary" />
+  <style>
+    @font-face { font-family:'Sorts Mill Goudy'; src:url('/SortsMillGoudy-Regular.ttf') format('truetype'); font-display:swap; }
+    @font-face { font-family:'Lato'; src:url('/Lato-Regular.ttf') format('truetype'); font-weight:400; font-display:swap; }
+    :root {
+      --ink:#1C1C1E; --ink-2:#3A3A38; --muted:#6B6B68; --faint:#8A8A86;
+      --line:#E6E6E3; --line-2:#DADAD6; --paper:#FFFFFF; --ground:#F6F6F4;
+      --green:#72A07D; --green-ink:#4F7A5B; --wrong:#B3261E;
+      --serif:'Sorts Mill Goudy',Georgia,serif;
+      --sans:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+    *,*::before,*::after { box-sizing:border-box; }
+    html,body { margin:0; height:100%; }
+    body { font-family:var(--sans); color:var(--ink); background:var(--paper); -webkit-font-smoothing:antialiased; }
+    a { color:var(--ink); }
+    button { font:inherit; color:inherit; cursor:pointer; }
+    [hidden] { display:none !important; }
+
+    /* ── Top bar ─────────────────────────────────────────── */
+    .bar { height:64px; padding:0 24px; display:flex; align-items:center; gap:20px; border-bottom:1px solid #ECECEA; background:var(--paper); position:relative; z-index:3; }
+    .bar .logo { height:26px; width:auto; display:block; }
+    .bar .rule { width:1px; height:28px; background:#E4E4E1; }
+    .bar .who { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+    .bar h1 { margin:0; font:400 22px/1.1 var(--serif); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .bar .meta { font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .viewonly { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--muted); }
+    .btn { height:40px; padding:0 16px; border-radius:10px; border:1px solid var(--line-2); background:var(--paper); font-weight:700; font-size:14px; display:inline-flex; align-items:center; gap:8px; text-decoration:none; white-space:nowrap; }
+    .btn.ink { background:var(--ink); color:#fff; border-color:var(--ink); }
+    .btn.ink:hover { background:#2A2A2A; }
+    .btn:not(.ink):hover { border-color:var(--ink); }
+
+    /* ── Canvas (desktop) ────────────────────────────────── */
+    .stage { position:absolute; top:64px; left:0; right:0; bottom:0; overflow:auto; background-color:var(--ground);
+      background-image:radial-gradient(#D9D9D6 1px,transparent 1px); background-size:22px 22px; }
+    .sizer { position:relative; }
+    .plane { position:absolute; left:0; top:0; transform-origin:0 0; }
+    .plane > .tile { position:absolute; overflow:auto; }
+
+    .zoom { position:fixed; left:24px; bottom:24px; height:44px; padding:0 4px; background:var(--paper); border:1px solid var(--line); border-radius:12px; display:flex; align-items:center; gap:2px; z-index:3; }
+    .zoom button { height:36px; min-width:40px; padding:0 10px; border:0; background:transparent; font-weight:700; font-size:14px; border-radius:8px; }
+    .zoom button:hover { background:#F1F1EF; }
+    .zoom .pct { width:52px; text-align:center; font-size:13px; font-weight:700; }
+    .zoom .sep { width:1px; height:22px; background:#E4E4E1; }
+
+    .promo { position:fixed; right:24px; bottom:24px; width:380px; padding:18px 18px 18px 20px; background:var(--paper); border:1px solid var(--line); border-radius:16px; box-shadow:0 8px 28px rgba(0,0,0,.08); display:flex; align-items:center; gap:16px; z-index:3; }
+    .promo .t { font-size:15px; font-weight:900; }
+    .promo .s { font-size:13px; line-height:1.45; color:var(--muted); margin-top:4px; }
+    .promo .x { position:absolute; top:6px; right:6px; width:28px; height:28px; border:0; background:transparent; color:var(--faint); border-radius:8px; font-size:16px; line-height:1; }
+
+    /* ── Tiles (shared by both layouts) ──────────────────── */
+    .tile { background:var(--paper); border:1px solid var(--line); border-radius:16px; box-shadow:0 1px 2px rgba(0,0,0,.04); padding:20px 22px; display:flex; flex-direction:column; gap:10px; }
+    .tile.bare { background:transparent; border:0; box-shadow:none; padding:4px 2px; }
+    .tile.sticky { background:#FFF8D6; border-color:#EFE3A6; }
+    .tile.media { padding:0; overflow:hidden; }
+    .kicker { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); display:flex; justify-content:space-between; gap:8px; }
+    .tile h2 { margin:0; font:400 22px/1.2 var(--serif); }
+    .tile .body { font-size:14px; line-height:1.55; color:var(--ink-2); white-space:pre-wrap; overflow-wrap:anywhere; }
+    .tile .body p { margin:0 0 .7em; white-space:pre-wrap; }
+    .tile .body ul { margin:0 0 .7em; padding-left:1.2em; }
+    .tile .body h3 { margin:.2em 0 .4em; font:400 18px/1.25 var(--serif); color:var(--ink); }
+    .tile .body code { font:13px ui-monospace,Menlo,monospace; background:#F1F1EF; border-radius:4px; padding:0 3px; }
+    .tile .caption { font-size:12px; color:var(--muted); }
+    .tile.text .body { font-size:16px; color:var(--ink); }
+    .tile.text.bold .body { font:400 22px/1.25 var(--serif); }
+    .tile img.pic { width:100%; height:auto; display:block; border-radius:10px; background:#EDEDEA; }
+    .tile.media img.pic { border-radius:0; }
+    .tile .pad { padding:12px 16px; }
+
+    .chart-prev { position:relative; flex:1; min-height:120px; border-radius:10px; background:#F1F1EF; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+    .chart-prev img { width:100%; height:100%; object-fit:cover; display:block; }
+    .chart-prev .glyph { color:var(--faint); }
+
+    .link { text-decoration:none; display:flex; flex-direction:column; gap:6px; }
+    .link .host { font-size:12px; color:var(--muted); }
+    .link .ttl { font:400 19px/1.25 var(--serif); color:var(--ink); }
+    .link:hover .ttl { text-decoration:underline; }
+    .tile .link { flex:1; }
+    .link .globe { flex:1; min-height:48px; display:flex; align-items:center; justify-content:center; color:var(--faint); background:#F4F4F2; border-radius:10px; }
+    .link .open { font-size:13px; font-weight:700; color:var(--ink); margin-top:2px; }
+    .tile pre.code { margin:0; padding:12px; background:#F4F4F2; border-radius:10px; font:12.5px/1.5 ui-monospace,Menlo,monospace; overflow:auto; white-space:pre; }
+
+    .fc-face { flex:1; min-height:110px; display:flex; align-items:center; justify-content:center; text-align:center; font:400 21px/1.3 var(--serif); padding:0 8px; overflow-wrap:anywhere; }
+    .fc-face.back { font:400 16px/1.5 var(--sans); color:var(--ink-2); }
+    .row { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    .ghost { height:36px; padding:0 12px; border:0; background:transparent; font-weight:700; font-size:13px; border-radius:8px; }
+    .ghost:hover { background:#F1F1EF; }
+    .ghost:disabled { color:#B9B9B5; cursor:default; background:transparent; }
+    .outline { height:36px; padding:0 14px; border-radius:10px; border:1px solid var(--line-2); background:var(--paper); font-weight:700; font-size:13px; }
+
+    .q { font:400 19px/1.3 var(--serif); }
+    .opts { display:flex; flex-direction:column; gap:8px; }
+    .opt { text-align:left; padding:10px 12px; border-radius:10px; border:1px solid var(--line-2); background:var(--paper); font-size:14px; line-height:1.4; }
+    .opt:hover:not(:disabled) { border-color:var(--ink); }
+    .opt:disabled { cursor:default; }
+    .opt.right { border-color:var(--green-ink); box-shadow:inset 0 0 0 1px var(--green-ink); }
+    .opt.wrong { border-color:var(--wrong); box-shadow:inset 0 0 0 1px var(--wrong); }
+    .verdict { font-size:13px; font-weight:700; }
+    .verdict.right { color:var(--green-ink); }
+    .verdict.wrong { color:var(--wrong); }
+    .explain { font-size:13px; line-height:1.5; color:var(--ink-2); }
+
+    /* ── Stack (phones, and Scroll/Pages boards) ─────────── */
+    body.stacked .bar { height:56px; padding:0 16px; }
+    body.stacked .bar .logo { height:22px; }
+    body.stacked .bar .rule, body.stacked .bar .who, body.stacked .viewonly, body.stacked .bar .get { display:none; }
+    body.stacked .copy { margin-left:auto; width:44px; height:44px; padding:0; border:0; justify-content:center; }
+    body.stacked .copy .lbl { display:none; }
+    .head { padding:20px 16px 12px; background:var(--paper); }
+    .head h1 { margin:0; font:400 30px/1.1 var(--serif); overflow-wrap:anywhere; }
+    .head .meta { font-size:13px; color:var(--muted); margin-top:6px; }
+    .list { background:var(--ground); padding:16px 16px 150px; display:flex; flex-direction:column; gap:12px; min-height:calc(100vh - 56px); }
+    .list > .tile { max-width:640px; width:100%; margin:0 auto; }
+    .dock { position:fixed; left:0; right:0; bottom:0; padding:14px 16px calc(16px + env(safe-area-inset-bottom)); background:var(--paper); border-top:1px solid #ECECEA; box-shadow:0 -8px 24px rgba(0,0,0,.06); display:flex; flex-direction:column; gap:10px; z-index:3; }
+    .dock .btn { height:50px; justify-content:center; font-size:16px; font-weight:900; border-radius:12px; }
+    .dock .note { text-align:center; font-size:13px; color:var(--muted); }
+
+    /* ── Loading / link off ─────────────────────────────── */
+    .center { min-height:100vh; display:flex; flex-direction:column; padding:0 28px 40px; max-width:480px; margin:0 auto; }
+    .center header { height:56px; display:flex; align-items:center; }
+    .center header img { height:22px; }
+    .center .mid { flex:1; display:flex; flex-direction:column; justify-content:center; gap:16px; }
+    .center h1 { margin:0; font:400 32px/1.12 var(--serif); }
+    .center p { margin:0; font-size:15px; line-height:1.55; color:#55554F; }
+    .center .acts { display:flex; flex-direction:column; gap:12px; }
+    .center .acts .btn { height:50px; justify-content:center; font-size:16px; font-weight:900; border-radius:12px; }
+    .center .acts a.plain { height:44px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; }
+    .spinner { width:28px; height:28px; border-radius:50%; border:2.5px solid #E4E4E1; border-top-color:var(--ink); animation:spin .9s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .toast { position:fixed; left:50%; top:76px; transform:translateX(-50%); background:var(--ink); color:#fff; font-size:13px; font-weight:700; padding:9px 14px; border-radius:10px; z-index:5; }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation:none; } }
+  </style>
+</head>
+<body>
+  <!-- Loading -->
+  <div class="center" id="loading">
+    <header><img src="/b/rex-wordmark.png" alt="Rex" /></header>
+    <div class="mid" style="align-items:center"><div class="spinner" role="status" aria-label="Loading board"></div></div>
+  </div>
+
+  <!-- Link off / not found -->
+  <div class="center" id="off" hidden>
+    <header><img src="/b/rex-wordmark.png" alt="Rex" /></header>
+    <div class="mid">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+      <h1 id="offTitle">This link is turned off</h1>
+      <p id="offText">The owner stopped sharing this board, or made a new link. Ask them to send it again.</p>
+    </div>
+    <div class="acts">
+      <a class="btn ink" href="/get/">Get Rex free</a>
+      <a class="plain" href="/">Go to rexstudyapp.com</a>
+    </div>
+  </div>
+
+  <!-- The board -->
+  <div id="board" hidden>
+    <div class="bar">
+      <a href="/" aria-label="Rex home"><img class="logo" src="/b/rex-wordmark.png" alt="Rex" /></a>
+      <div class="rule"></div>
+      <div class="who"><h1 id="title"></h1><div class="meta" id="meta"></div></div>
+      <div class="viewonly">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        View only
+      </div>
+      <button class="btn copy" type="button" id="copy" aria-label="Copy link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+        <span class="lbl">Copy link</span>
+      </button>
+      <a class="btn ink get" href="/get/">Get Rex free</a>
+    </div>
+
+    <div id="canvasView" hidden>
+      <div class="stage" id="stage"><div class="sizer" id="sizer"><div class="plane" id="plane"></div></div></div>
+      <div class="zoom">
+        <button type="button" id="zoomOut" aria-label="Zoom out">&minus;</button>
+        <div class="pct" id="pct">100%</div>
+        <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
+        <div class="sep"></div>
+        <button type="button" id="fit">Fit</button>
+      </div>
+      <aside class="promo" id="promo">
+        <button class="x" type="button" id="promoClose" aria-label="Close">&times;</button>
+        <div style="flex:1">
+          <div class="t">Make your own boards</div>
+          <div class="s">Rex is a study board with an AI tutor that teaches right on it.</div>
+        </div>
+        <a class="btn ink" href="/get/">Get Rex free</a>
+      </aside>
+    </div>
+
+    <div id="stackView" hidden>
+      <div class="head"><h1 id="stitle"></h1><div class="meta" id="smeta"></div></div>
+      <div class="list" id="list"></div>
+      <div class="dock">
+        <a class="btn ink" href="/get/">Get Rex free</a>
+        <div class="note">Rex is a study board with an AI tutor that teaches right on it.</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  'use strict';
+  const ENDPOINT = 'https://umtkjhtwuvhhyekmjnhz.supabase.co/functions/v1/board-view';
+  const $ = (id) => document.getElementById(id);
+
+  // Everything from the board is untrusted text. It only ever reaches the page
+  // through textContent or through el()'s explicit, attribute-safe builders.
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null && text !== '') n.textContent = text;
+    return n;
+  }
+
+  // Tiny, safe markdown: headings, bullets, **bold**, *italic*, `code`.
+  // Builds nodes; never assigns innerHTML.
+  function inline(parent, text) {
+    const re = /(\*\*[^*]+\*\*|`[^`]+`|\*[^*\s][^*]*\*)/g;
+    let last = 0, m;
+    while ((m = re.exec(text))) {
+      if (m.index > last) parent.append(text.slice(last, m.index));
+      const t = m[0];
+      if (t.startsWith('**')) parent.append(el('strong', null, t.slice(2, -2)));
+      else if (t.startsWith('`')) parent.append(el('code', null, t.slice(1, -1)));
+      else parent.append(el('em', null, t.slice(1, -1)));
+      last = m.index + t.length;
+    }
+    if (last < text.length) parent.append(text.slice(last));
+  }
+  function markdown(text) {
+    const box = el('div', 'body');
+    box.style.whiteSpace = 'normal';
+    let list = null, para = [];
+    const flush = () => {
+      if (para.length) { const p = el('p'); inline(p, para.join('\n')); box.append(p); para = []; }
+    };
+    for (const raw of String(text).split('\n')) {
+      const line = raw.replace(/\s+$/, '');
+      const h = /^#{1,6}\s+(.*)$/.exec(line);
+      const b = /^\s*(?:[-*•]|\d+[.)])\s+(.*)$/.exec(line);
+      if (h) { flush(); list = null; const n = el('h3'); inline(n, h[1]); box.append(n); }
+      else if (b) { flush(); if (!list) { list = el('ul'); box.append(list); } const li = el('li'); inline(li, b[1]); list.append(li); }
+      else if (!line.trim()) { flush(); list = null; }
+      else { list = null; para.push(line); }
+    }
+    flush();
+    return box;
+  }
+
+  const KIND_LABEL = { note: 'Note', card: 'Note', chart: 'Interactive chart', quiz: 'Quiz', flashcards: 'Flashcards', drawing: 'Drawing', link: 'Web page' };
+
+  function tile(item) {
+    const t = el('section', 'tile');
+    switch (item.kind) {
+      case 'text': {
+        t.className = 'tile bare text' + (item.bold ? ' bold' : '');
+        t.append(el('div', 'body', item.text));
+        break;
+      }
+      case 'sticky': {
+        t.classList.add('sticky');
+        t.append(el('div', 'body', item.text));
+        break;
+      }
+      case 'note': {
+        t.append(el('div', 'kicker', 'Note'));
+        if (item.title) t.append(el('h2', null, item.title));
+        if (item.text) t.append(el('div', 'body', item.text));
+        if (item.image) { const i = el('img', 'pic'); i.src = item.image; i.alt = ''; i.loading = 'lazy'; t.append(i); }
+        break;
+      }
+      case 'card': {
+        if (item.imageUrl) { const i = el('img', 'pic'); i.src = item.imageUrl; i.alt = item.title || ''; i.loading = 'lazy'; i.referrerPolicy = 'no-referrer'; t.append(i); }
+        if (item.title) t.append(el('h2', null, item.title));
+        if (item.text) t.append(markdown(item.text));
+        if (item.code) t.append(el('pre', 'code', item.code));
+        if (item.caption) t.append(el('div', 'caption', item.caption));
+        break;
+      }
+      case 'drawing': {
+        t.classList.add('media');
+        const i = el('img', 'pic'); i.src = item.image; i.alt = 'Drawing'; i.loading = 'lazy';
+        t.append(i);
+        break;
+      }
+      case 'link': {
+        let host = '';
+        try { host = new URL(item.url).hostname.replace(/^www\./, ''); } catch { return null; }
+        const a = el('a', 'link');
+        a.href = item.url; a.target = '_blank'; a.rel = 'noopener noreferrer nofollow';
+        const globe = el('div', 'globe');
+        globe.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>';
+        const open = el('div', 'open', 'Open page \u2197');
+        a.append(el('div', 'kicker', 'Web page'), globe, el('div', 'ttl', item.title || host), el('div', 'host', host), open);
+        t.append(a);
+        break;
+      }
+      case 'chart': {
+        t.append(el('div', 'kicker', 'Interactive chart'));
+        t.append(el('h2', null, item.title));
+        const box = el('div', 'chart-prev');
+        if (item.preview) {
+          const i = el('img'); i.src = item.preview; i.alt = ''; i.loading = 'lazy'; i.referrerPolicy = 'no-referrer';
+          i.onerror = () => i.remove();
+          box.append(i);
+        } else {
+          box.innerHTML = '<svg class="glyph" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>';
+        }
+        t.append(box, el('div', 'caption', 'Play it in the Rex app.'));
+        break;
+      }
+      case 'flashcards': return flashcards(item);
+      case 'quiz': return quiz(item);
+      default: return null;
+    }
+    return t;
+  }
+
+  function flashcards(item) {
+    const cards = (item.cards || []).filter((c) => c.front || c.back);
+    if (!cards.length) return null;
+    const t = el('section', 'tile');
+    const count = el('span');
+    const k = el('div', 'kicker'); k.append(el('span', null, item.title || 'Flashcards'), count);
+    const face = el('div', 'fc-face');
+    const prev = el('button', 'ghost', 'Previous'); prev.type = 'button';
+    const flip = el('button', 'outline', 'Flip card'); flip.type = 'button';
+    const next = el('button', 'ghost', 'Next'); next.type = 'button';
+    const row = el('div', 'row'); row.append(prev, flip, next);
+    let i = 0, back = false;
+    const draw = () => {
+      const c = cards[i];
+      face.textContent = back ? (c.back || '') : (c.front || '');
+      face.className = 'fc-face' + (back ? ' back' : '');
+      count.textContent = `${i + 1} of ${cards.length}`;
+      prev.disabled = i === 0; next.disabled = i === cards.length - 1;
+      flip.textContent = back ? 'Show front' : 'Flip card';
+    };
+    flip.onclick = () => { back = !back; draw(); };
+    prev.onclick = () => { if (i > 0) { i--; back = false; draw(); } };
+    next.onclick = () => { if (i < cards.length - 1) { i++; back = false; draw(); } };
+    t.append(k, face, row);
+    draw();
+    return t;
+  }
+
+  function quiz(item) {
+    const qs = (item.questions || []).filter((q) => q.question && q.options && q.options.length >= 2);
+    if (!qs.length) return null;
+    const t = el('section', 'tile');
+    const count = el('span');
+    const k = el('div', 'kicker'); k.append(el('span', null, item.title || 'Quiz'), count);
+    const body = el('div'); body.style.display = 'flex'; body.style.flexDirection = 'column'; body.style.gap = '10px';
+    const prev = el('button', 'ghost', 'Previous'); prev.type = 'button';
+    const next = el('button', 'ghost', 'Next'); next.type = 'button';
+    const row = el('div', 'row'); row.append(prev, next);
+    const picked = new Map();
+    let i = 0;
+    const draw = () => {
+      const q = qs[i];
+      body.replaceChildren();
+      count.textContent = `${i + 1} of ${qs.length}`;
+      body.append(el('div', 'q', q.question));
+      const opts = el('div', 'opts');
+      const choice = picked.get(i);
+      q.options.forEach((o, n) => {
+        const b = el('button', 'opt', o); b.type = 'button';
+        if (choice != null) {
+          b.disabled = true;
+          if (Number.isInteger(q.answer) && n === q.answer) b.classList.add('right');
+          else if (n === choice) b.classList.add('wrong');
+        }
+        b.onclick = () => { picked.set(i, n); draw(); };
+        opts.append(b);
+      });
+      body.append(opts);
+      if (choice != null && Number.isInteger(q.answer)) {
+        const ok = choice === q.answer;
+        body.append(el('div', 'verdict ' + (ok ? 'right' : 'wrong'), ok ? 'Correct' : 'Not quite'));
+        if (q.explanation) body.append(el('div', 'explain', q.explanation));
+      }
+      prev.disabled = i === 0; next.disabled = i === qs.length - 1;
+    };
+    prev.onclick = () => { if (i > 0) { i--; draw(); } };
+    next.onclick = () => { if (i < qs.length - 1) { i++; draw(); } };
+    t.append(k, body, row);
+    draw();
+    return t;
+  }
+
+  // ── Canvas layout ─────────────────────────────────────
+  let scale = 1, bounds = null;
+  const PAD = 80;
+  function layoutCanvas(items) {
+    const plane = $('plane');
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const it of items) {
+      minX = Math.min(minX, it.x); minY = Math.min(minY, it.y);
+      maxX = Math.max(maxX, it.x + it.w); maxY = Math.max(maxY, it.y + it.h);
+    }
+    bounds = { x: minX - PAD, y: minY - PAD, w: maxX - minX + PAD * 2, h: maxY - minY + PAD * 2 };
+    plane.style.width = bounds.w + 'px'; plane.style.height = bounds.h + 'px';
+    for (const it of items) {
+      const n = tile(it);
+      if (!n) continue;
+      n.style.left = (it.x - bounds.x) + 'px';
+      n.style.top = (it.y - bounds.y) + 'px';
+      n.style.width = Math.max(it.w, 60) + 'px';
+      n.style.height = Math.max(it.h, 40) + 'px';
+      plane.append(n);
+    }
+    // Open at width-fit (never zoomed in), top of the board: people read a
+    // board from the top, and fitting a tall board whole makes it unreadable.
+    const stage = $('stage');
+    setScale(Math.min(1, (stage.clientWidth - 48) / bounds.w), 0, 0);
+  }
+  function setScale(s, cx, cy) {
+    const stage = $('stage');
+    s = Math.max(0.1, Math.min(2.5, s));
+    // Keep the point under (cx, cy) in place.
+    const px = (stage.scrollLeft + cx) / scale, py = (stage.scrollTop + cy) / scale;
+    scale = s;
+    $('plane').style.transform = `scale(${s})`;
+    $('sizer').style.width = Math.max(bounds.w * s, stage.clientWidth) + 'px';
+    $('sizer').style.height = bounds.h * s + 'px';
+    const left = Math.max(0, (stage.clientWidth - bounds.w * s) / 2);
+    $('plane').style.left = left + 'px';
+    stage.scrollLeft = px * s - cx;
+    stage.scrollTop = py * s - cy;
+    $('pct').textContent = Math.round(s * 100) + '%';
+  }
+  function wireCanvas() {
+    const stage = $('stage');
+    const mid = () => [stage.clientWidth / 2, stage.clientHeight / 2];
+    $('zoomIn').onclick = () => setScale(scale * 1.25, ...mid());
+    $('zoomOut').onclick = () => setScale(scale / 1.25, ...mid());
+    $('fit').onclick = () => {
+      const s = Math.min((stage.clientWidth - 48) / bounds.w, (stage.clientHeight - 48) / bounds.h, 1);
+      setScale(s, 0, 0); stage.scrollTop = 0; stage.scrollLeft = 0;
+    };
+    // Trackpad pinch arrives as ctrl+wheel.
+    stage.addEventListener('wheel', (e) => {
+      if (!e.ctrlKey) return;
+      e.preventDefault();
+      const r = stage.getBoundingClientRect();
+      setScale(scale * Math.exp(-e.deltaY * 0.01), e.clientX - r.left, e.clientY - r.top);
+    }, { passive: false });
+    $('promoClose').onclick = () => { $('promo').hidden = true; };
+  }
+
+  function layoutStack(items) {
+    const list = $('list');
+    for (const it of items) { const n = tile(it); if (n) list.append(n); }
+    if (!list.children.length) list.append(el('p', 'caption', 'Nothing on this board can be shown on the web yet.'));
+  }
+
+  function showOff(title, text) {
+    $('loading').hidden = true; $('board').hidden = true; $('off').hidden = false;
+    if (title) $('offTitle').textContent = title;
+    if (text) $('offText').textContent = text;
+  }
+
+  function relDate(iso) {
+    const d = new Date(iso); if (isNaN(d)) return '';
+    const days = Math.floor((Date.now() - d) / 86400000);
+    if (days <= 0) return 'Updated today';
+    if (days === 1) return 'Updated yesterday';
+    if (days < 30) return `Updated ${days} days ago`;
+    return 'Updated ' + d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  async function main() {
+    const k = new URLSearchParams(location.search).get('k') || '';
+    if (!/^[0-9a-f]{32}$/.test(k)) return showOff();
+    let data;
+    try {
+      const r = await fetch(`${ENDPOINT}?k=${encodeURIComponent(k)}`, { cache: 'no-store', credentials: 'omit' });
+      if (r.status === 404) return showOff();
+      if (!r.ok) throw new Error(String(r.status));
+      data = await r.json();
+    } catch {
+      return showOff('Could not load this board', 'Something went wrong on our side. Try again in a minute.');
+    }
+
+    document.title = `${data.title} · Rex`;
+    const items = (data.items || []).filter((i) => [i.x, i.y, i.w, i.h].every(Number.isFinite));
+    const bits = [data.owner ? `Shared by ${data.owner}` : 'Shared on Rex', relDate(data.updatedAt)].filter(Boolean);
+    $('title').textContent = $('stitle').textContent = data.title;
+    $('meta').textContent = bits.join(' · ');
+    $('smeta').textContent = [bits[0], `${items.length} item${items.length === 1 ? '' : 's'}`, 'View only'].join(' · ');
+
+    $('loading').hidden = true; $('board').hidden = false;
+    const stacked = data.layout === 'stack' || window.matchMedia('(max-width: 760px)').matches || !items.length;
+    document.body.classList.toggle('stacked', stacked);
+    if (stacked) { $('stackView').hidden = false; layoutStack(items); }
+    else { $('canvasView').hidden = false; wireCanvas(); layoutCanvas(items); }
+
+    $('copy').onclick = async () => {
+      try { await navigator.clipboard.writeText(location.href); } catch { return; }
+      const t = el('div', 'toast', 'Link copied'); document.body.append(t);
+      setTimeout(() => t.remove(), 1600);
+    };
+  }
+  main();
+})();
+</script>
+</body>
+</html>

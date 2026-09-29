@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.rexstudyapp.com/</loc><lastmod>2026-09-15</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://www.rexstudyapp.com/docs.html</loc><lastmod>2026-08-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.rexstudyapp.com/chart-starter-template.html</loc><lastmod>2026-08-24</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://www.rexstudyapp.com/support.html</loc><lastmod>2026-09-07</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://www.rexstudyapp.com/community-guidelines.html</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://www.rexstudyapp.com/licenses.html</loc><lastmod>2026-08-24</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://www.rexstudyapp.com/attributions.html</loc><lastmod>2026-08-24</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://www.rexstudyapp.com/privacy.html</loc><lastmod>2026-09-07</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://www.rexstudyapp.com/terms.html</loc><lastmod>2026-09-07</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://www.rexstudyapp.com/user-agreement.html</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://www.rexstudyapp.com/dmca.html</loc><lastmod>2026-08-24</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://rexstudyapp.com/</loc><lastmod>2026-09-29</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://rexstudyapp.com/get/</loc><lastmod>2026-09-29</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://rexstudyapp.com/charts/math-matrix-determinant.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rexstudyapp.com/charts/math-cross-product.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rexstudyapp.com/charts/cs-matrix-multiply-cube.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rexstudyapp.com/charts/russian-case-compass.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://rexstudyapp.com/docs.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://rexstudyapp.com/support.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://rexstudyapp.com/community-guidelines.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://rexstudyapp.com/licenses.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://rexstudyapp.com/attributions.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://rexstudyapp.com/privacy.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://rexstudyapp.com/terms.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://rexstudyapp.com/user-agreement.html</loc><lastmod>2026-09-29</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://rexstudyapp.com/dmca.html</loc><lastmod>2026-09-29</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>

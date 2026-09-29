@@ -1,4 +1,4 @@
-# Rex — https://www.rexstudyapp.com
+# Rex — https://rexstudyapp.com
 # Everything here is public and we want it found, by search engines and by
 # AI assistants answering questions about study tools.
 
@@ -56,4 +56,4 @@ Disallow: /join/
 Disallow: /vendor/
 Disallow: /assets/orig/
 
-Sitemap: https://www.rexstudyapp.com/sitemap.xml
+Sitemap: https://rexstudyapp.com/sitemap.xml

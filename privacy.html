@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Privacy Policy — Rex</title>
+  <title>Rex Privacy Policy</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -113,7 +113,7 @@
 
 <h3>3.1 Information You Provide Directly</h3>
 <ul>
-  <li><strong>Account registration:</strong> when you create an account with email and password, we collect your email address and password. Your password is never stored in plain text — it is hashed using industry-standard methods via Supabase Auth.</li>
+  <li><strong>Account registration:</strong> when you create an account with email and password, we collect your email address and password. Your password is never stored in plain text, it is hashed using industry-standard methods via Supabase Auth.</li>
   <li><strong>Sign in with Apple:</strong> if you sign in with Apple, we receive a unique identifier and the email address you choose to share (which may be a private Apple relay address). We do not receive your Apple password.</li>
   <li><strong>Sign in with Google:</strong> if you sign in with Google, we receive your name, email address, and Google account identifier as authorized by you through Google. We do not receive your Google password.</li>
   <li><strong>Guest mode:</strong> you may use parts of Rex as a guest without creating an account. Guest content is stored on your device and is associated with a temporary identifier rather than a personal account.</li>
@@ -121,7 +121,7 @@
   <li><strong>User-generated content:</strong> study boards, whiteboard drawings, typed notes, chart configurations, imported files, scanned documents, and any other content you create, import, or save within the App.</li>
   <li><strong>Chat messages:</strong> text you enter in the Rex tutor chat, including questions and follow-up messages.</li>
   <li><strong>Voice dictation:</strong> audio captured while you dictate into the tutor, a note, or a board. Dictation is forced to Apple's <em>on-device</em> speech recognition, so the audio is transcribed locally on your device, is never uploaded to Rex, and is discarded as soon as the text is produced.</li>
-  <li><strong>Voice recordings (voice memos):</strong> if you use the recorder to capture a lecture or a study session, the recording is a file you are deliberately saving. The audio file and its transcript are stored on your device. When you are signed in, the <em>transcript</em> and its details sync to your account so a recording is not lost with the device. The <em>audio file itself stays on your device unless you choose to upload it</em> &mdash; per recording, off by default. Either way, a recording is private to you; nobody else can see it. Transcription of a recording runs on-device wherever the language you are recording supports it; for languages that iOS cannot transcribe locally, iOS falls back to Apple's speech recognition service, which means that audio is sent to Apple under <a href="https://www.apple.com/legal/privacy/" target="_blank">Apple's privacy policy</a>. You can delete a recording at any time, and deleting it removes both the audio and the transcript.</li>
+  <li><strong>Voice recordings (voice memos):</strong> if you use the recorder to capture a lecture or a study session, the recording is a file you are deliberately saving. The audio file and its transcript are stored on your device. When you are signed in, the <em>transcript</em> and its details sync to your account so a recording is not lost with the device. The <em>audio file itself stays on your device unless you choose to upload it</em>, per recording, off by default. Either way, a recording is private to you; nobody else can see it. Transcription of a recording runs on-device wherever the language you are recording supports it; for languages that iOS cannot transcribe locally, iOS falls back to Apple's speech recognition service, which means that audio is sent to Apple under <a href="https://www.apple.com/legal/privacy/" target="_blank">Apple's privacy policy</a>. You can delete a recording at any time, and deleting it removes both the audio and the transcript.</li>
   <li><strong>Live voice mode:</strong> in voice mode your speech is transcribed on-device and the resulting <em>text</em> is what travels to the tutor. Rex does not send your raw microphone audio to its servers.</li>
   <li><strong>Support communications:</strong> messages you send to us for help or feedback.</li>
 </ul>
@@ -164,8 +164,8 @@
   <tr><td>Account creation form</td><td>Email, password</td></tr>
   <tr><td>Sign in with Apple / Google</td><td>Identifier, email (and name for Google)</td></tr>
   <tr><td>App interactions</td><td>Board content, notes, chat messages, imported files</td></tr>
-  <tr><td>Microphone &mdash; dictation (with permission)</td><td>Voice audio, transcribed on-device to text, then discarded</td></tr>
-  <tr><td>Microphone &mdash; saved recordings (with permission)</td><td>The transcript syncs to your account; the audio stays on your device unless you upload it</td></tr>
+  <tr><td>Microphone: dictation (with permission)</td><td>Voice audio, transcribed on-device to text, then discarded</td></tr>
+  <tr><td>Microphone: saved recordings (with permission)</td><td>The transcript syncs to your account; the audio stays on your device unless you upload it</td></tr>
   <tr><td>In-app browser</td><td>Nothing is sent to Rex. Pages, history and cookies stay on your device (Section 9)</td></tr>
   <tr><td>Your own model provider (optional)</td><td>Nothing is sent to Rex. Requests go from your device to OpenRouter (Section 10)</td></tr>
   <tr><td>Analytics SDK (PostHog)</td><td>Feature usage, sign-in &amp; subscription events</td></tr>
@@ -200,7 +200,7 @@
 </ul>
 
 <h3>6.2 Analytics (PostHog)</h3>
-<p>We use <a href="https://posthog.com" target="_blank">PostHog</a> to understand how Rex is used so we can improve it. PostHog collects product-analytics events — for example, when you sign in, open the paywall, start or complete a purchase, create a board, or when an error occurs. When you are signed in, these events are associated with your account identifier and, where available, your email address. We use PostHog only for product analytics, not for advertising. Analytics data is processed on PostHog's US-based infrastructure (us.i.posthog.com).</p>
+<p>We use <a href="https://posthog.com" target="_blank">PostHog</a> to understand how Rex is used so we can improve it. PostHog collects product-analytics events, for example, when you sign in, open the paywall, start or complete a purchase, create a board, or when an error occurs. When you are signed in, these events are associated with your account identifier and, where available, your email address. We use PostHog only for product analytics, not for advertising. Analytics data is processed on PostHog's US-based infrastructure (us.i.posthog.com).</p>
 
 <h2 id="sharing">7. Information Sharing and Disclosure</h2>
 <p>We do not sell, rent, or trade your personal information to third parties for their own marketing or commercial purposes. We may share information only in the following limited circumstances:</p>
@@ -227,15 +227,15 @@
   <tr><td>Sentry</td><td>Crash and error reporting</td><td><a href="https://sentry.io/privacy/" target="_blank">sentry.io/privacy</a></td></tr>
   <tr><td>OpenRouter <em>(only if you connect it)</em></td><td>Optional: routes tutor requests to a model provider of your choosing, using your own OpenRouter account. See Section 10.</td><td><a href="https://openrouter.ai/privacy" target="_blank">openrouter.ai/privacy</a></td></tr>
 </table>
-<p><strong>Where these are located.</strong> Supabase, PostHog, RevenueCat, Sentry, Netlify and our own backend process data in the United States. Google processes Gemini requests on its global infrastructure. <strong>DeepSeek is based in the People's Republic of China, and tutor messages sent to it are processed there.</strong> We say so plainly because it is the kind of thing you are entitled to weigh before you type something into a tutor. If you would rather your messages did not go to that provider, you can connect your own model provider instead (Section 10) &mdash; and either way, please do not put sensitive personal information into tutor chat.</p>
+<p><strong>Where these are located.</strong> Supabase, PostHog, RevenueCat, Sentry, Netlify and our own backend process data in the United States. Google processes Gemini requests on its global infrastructure. <strong>DeepSeek is based in the People's Republic of China, and tutor messages sent to it are processed there.</strong> We say so plainly because it is the kind of thing you are entitled to weigh before you type something into a tutor. If you would rather your messages did not go to that provider, you can connect your own model provider instead (Section 10), and either way, please do not put sensitive personal information into tutor chat.</p>
 <p>We are not responsible for the privacy practices of these third parties. We encourage you to review their policies.</p>
 
 <h2 id="browser">9. The In-App Browser and Web Search</h2>
 <p>Rex includes a browser you can put on a board, so that looking something up does not mean leaving your work. It is a real web browser view, and how it handles your data matters:</p>
 <ul>
   <li><strong>Browsing stays on your device.</strong> Pages you visit, the addresses you type, your history, cookies, and site logins are held by the browser view on your device. Rex does not upload your browsing history to our servers and does not build a profile of the sites you visit.</li>
-  <li><strong>The sites themselves are third parties.</strong> Anything you do on a website inside Rex &mdash; searching, signing in, filling in a form, downloading a file &mdash; is between you and that site, under their privacy policy, exactly as it would be in Safari. This Policy does not cover them.</li>
-  <li><strong>Search is filtered.</strong> Rex forces the search engine's own family filter (SafeSearch) on for every search made through the widget, and it blocks a list of adult and unsafe hosts before the page loads. Filtering is a safeguard, not a guarantee &mdash; no filter catches everything.</li>
+  <li><strong>The sites themselves are third parties.</strong> Anything you do on a website inside Rex, searching, signing in, filling in a form, downloading a file, is between you and that site, under their privacy policy, exactly as it would be in Safari. This Policy does not cover them.</li>
+  <li><strong>Search is filtered.</strong> Rex forces the search engine's own family filter (SafeSearch) on for every search made through the widget, and it blocks a list of adult and unsafe hosts before the page loads. Filtering is a safeguard, not a guarantee, no filter catches everything.</li>
   <li><strong>Tracker and ad blocking.</strong> Rex can block known ad and tracker hosts inside the browser view. This is a setting you control. It reduces third-party tracking; it does not eliminate it.</li>
   <li><strong>Downloads</strong> you start in the browser are saved to your device. Rex does not inspect or upload them.</li>
   <li><strong>Read aloud.</strong> If you ask Rex to read a page out loud, the page text is extracted on your device and spoken by the on-device voice. The page is not sent to our servers to be read.</li>
@@ -284,7 +284,7 @@
   <li>Encrypted data transmission (HTTPS/TLS) between the App and our servers.</li>
   <li>Encrypted storage at rest via Supabase's managed infrastructure.</li>
   <li>Row-level security (RLS) policies so that each user can only access their own data.</li>
-  <li>Hashed password storage — we never store plaintext passwords.</li>
+  <li>Hashed password storage: we never store plaintext passwords.</li>
   <li>Access controls limiting which personnel can access production data.</li>
 </ul>
 <p>No security system is impenetrable. We cannot guarantee absolute security of your information. In the event of a data breach that affects your personal information in a material way, we will notify you as required by applicable law.</p>
@@ -305,7 +305,7 @@
   <li><strong>Right to Delete:</strong> you may request that we delete the personal information we have collected from you, subject to certain legal exceptions.</li>
   <li><strong>Right to Correct:</strong> you may request that we correct inaccurate personal information we hold about you.</li>
   <li><strong>Right to Data Portability:</strong> you may request a copy of your personal information in a portable and, to the extent technically feasible, readily usable format.</li>
-  <li><strong>Right to Opt-Out of Sale or Sharing:</strong> <strong>we do not sell your personal information, and we do not share it for cross-context behavioral advertising.</strong> Because we do not sell or share, there is nothing to opt out of — but you retain this right.</li>
+  <li><strong>Right to Opt-Out of Sale or Sharing:</strong> <strong>we do not sell your personal information, and we do not share it for cross-context behavioral advertising.</strong> Because we do not sell or share, there is nothing to opt out of, but you retain this right.</li>
   <li><strong>Right to Limit Use of Sensitive Personal Information:</strong> we do not use or disclose sensitive personal information for any purpose other than providing the App, as permitted by the CPRA.</li>
   <li><strong>Right to Non-Discrimination:</strong> we will not deny you service, charge you a different price, or provide a different quality of service because you exercised your privacy rights.</li>
 </ul>
@@ -318,7 +318,7 @@
 
 <h3>16.1 Legal Bases for Processing</h3>
 <ul>
-  <li><strong>Performance of a contract:</strong> to provide the App you signed up for — authenticating your account, saving and syncing your boards, and delivering tutor responses.</li>
+  <li><strong>Performance of a contract:</strong> to provide the App you signed up for: authenticating your account, saving and syncing your boards, and delivering tutor responses.</li>
   <li><strong>Legitimate interests:</strong> to secure the App, prevent fraud and abuse, and understand and improve how Rex is used (analytics), where these interests are not overridden by your rights.</li>
   <li><strong>Legal obligation:</strong> to comply with applicable laws, tax requirements, and lawful requests.</li>
   <li><strong>Consent:</strong> for optional processing such as marketing communications or any device permission you grant; you may withdraw consent at any time.</li>

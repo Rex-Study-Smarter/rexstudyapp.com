@@ -1,4 +1,4 @@
-# Rex — https://rexstudyapp.com
+# Rex. https://rexstudyapp.com
 # Everything here is public and we want it found, by search engines and by
 # AI assistants answering questions about study tools.
 

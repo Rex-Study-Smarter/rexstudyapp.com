@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rex, built with GLM and Laya — on-device moderation</title>
+  <meta name="description" content="How Rex got built with GLM driving a real browser — and why its moderation is a 421M-parameter classifier that never touches a network." />
+  <link rel="canonical" href="https://rexstudyapp.com/blog/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Rex" />
+  <meta property="og:title" content="Rex, built with GLM and Laya" />
+  <meta property="og:description" content="How Rex got built with GLM driving a real browser — and why its moderation is a 421M-parameter classifier that never touches a network." />
+  <meta property="og:url" content="https://rexstudyapp.com/blog/" />
+  <meta property="og:image" content="https://rexstudyapp.com/RexMascot.png" />
+  <link rel="icon" href="/Rex.png" />
+  <style>
+    @font-face { font-family:'GoudyHeavyface'; src:url('/GoudyHeavyface.otf') format('opentype'); font-weight:normal; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Lato'; src:url('/Lato-Regular.ttf') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:'Lato'; src:url('/Lato-Light.ttf') format('truetype'); font-weight:300; font-style:normal; font-display:swap; }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      font-family:'Lato',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:#FBFAF8; color:#111; -webkit-font-smoothing:antialiased;
+      line-height:1.75; font-size:1.02rem;
+    }
+    header.site { padding:26px 32px 0; }
+    header.site a { font-family:'GoudyHeavyface',Georgia,serif; font-size:1.5rem; color:#111; text-decoration:none; }
+    main { max-width:680px; margin:0 auto; padding:48px 28px 80px; }
+    h1 {
+      font-family:'GoudyHeavyface',Georgia,serif; font-weight:normal;
+      font-size:clamp(1.9rem,5vw,2.7rem); line-height:1.15; margin-bottom:18px;
+    }
+    .sub { font-weight:300; color:#4B4B4B; font-size:1.08rem; margin-bottom:44px; }
+    h2 {
+      font-family:'GoudyHeavyface',Georgia,serif; font-weight:normal;
+      font-size:1.45rem; margin:44px 0 14px; color:#2e5c3d;
+    }
+    p { margin-bottom:18px; }
+    ul { margin:0 0 18px 22px; }
+    li { margin-bottom:8px; }
+    a { color:#2e5c3d; }
+    code {
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      font-size:.85em; background:#efede8; border-radius:5px; padding:2px 7px;
+    }
+    .cta {
+      margin-top:52px; padding:24px; border:1.5px solid #111; border-radius:14px;
+      display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+    }
+    .cta p { margin:0; font-weight:700; }
+    .cta a.btn {
+      display:inline-block; background:#111; color:#fff; text-decoration:none;
+      border-radius:10px; padding:12px 22px; font-size:.94rem;
+    }
+    .cta a.btn:hover { background:#2A2A2A; }
+    footer.site { max-width:680px; margin:0 auto; padding:0 28px 60px; font-size:.85rem; color:#767676; }
+  </style>
+</head>
+<body>
+  <header class="site"><a href="/">Rex</a></header>
+  <main>
+    <h1>I built an AI-tutored whiteboard, and kept the safety layer on my own machine</h1>
+    <p class="sub">How Rex got built with GLM driving a real browser — and why its moderation is a 421M-parameter classifier that never touches a network.</p>
+
+    <h2>What Rex is</h2>
+    <p>Rex is an AI-tutored digital whiteboard for iOS and macOS. Students draw, import files, and drop interactive widgets onto an infinite board: graphing charts, 3D science scenes you can walk through (every system of the human body, all the way down to skin cross-sections), language-learning scenes, notes, timers, and a built-in browser. An AI tutor walks through the material with them — out loud. A recent build added podcast mode: Rex and a co-host discuss your notes as a two-host conversation, played over the lecture's own visuals.</p>
+    <p>It ships as one app, solo-developed, and it's on the App Store now.</p>
+
+    <h2>Building it with GLM and a real browser</h2>
+    <p>I paired with GLM (via ZCode) through the whole project, and the part that changed how I work wasn't code generation — it was browser automation.</p>
+    <p>Rex has its own browser widget, which means the hardest bugs live <em>inside a web view</em>: downloads that silently fail because the link opens a new tab, YouTube playback fighting the app for controls, ads that break the player. These are exactly the bugs that are miserable to reproduce by hand. So the agent drove a real browser against the app and fixed them where they lived:</p>
+    <ul>
+      <li>downloads now work when the target link opens a new tab</li>
+      <li>YouTube ad-skipping got smoothed out (fewer jarring skips, better seeking)</li>
+      <li>Chrome-style picture-in-picture, instead of a half-custom hack</li>
+      <li>research-connection tiles get named after the page they loaded</li>
+    </ul>
+    <p>The git history reads like a log of agent-driven browser sessions. One commit is "Add Laya"; several others are just the browser behaving like a native citizen. Agentic tooling didn't just write the code — it operated the product.</p>
+
+    <h2>The moderation problem, and why I didn't buy my way out of it</h2>
+    <p>Every app with an AI feature has a moderation problem. The default answer is a content-moderation API: pay per call, require network, and send your users' text — students' notes, in my case — to a third party for screening.</p>
+    <p>I didn't want that, for three reasons: cost that scales with usage, a network dependency in the critical path of an offline-capable app, and shipping user text off the device to have it judged.</p>
+    <p>So I built <strong>Laya</strong>. It's a 421M-parameter ModernBERT classifier that runs entirely on the machine. Four modes:</p>
+    <ul>
+      <li><code>guard</code> — screen a prompt before acting on it (jailbreaks, injection, leaked secrets, harm)</li>
+      <li><code>scan</code> — screen untrusted content before reading it (planted instructions, hidden HTML, encoded payloads)</li>
+      <li><code>moderate</code> — screen text before it goes public (toxicity, harassment, spam)</li>
+      <li><code>ask</code> — custom yes/no or category questions over many texts</li>
+    </ul>
+    <p>No API key, no network, no cost per call. Nothing you pass it leaves the machine. Cold start is about 15 seconds; after that, roughly a second per call on a warm server shared by every agent on the machine.</p>
+
+    <h2>"Measured, not assumed"</h2>
+    <p>The sentence I hold myself to with Laya is that the catches are measured, not assumed. Eval sets live with the tool and get rerun after every change. The numbers from its last published eval run:</p>
+    <ul>
+      <li><strong>guard:</strong> every malicious prompt in the labelled set caught, with 0 false positives</li>
+      <li><strong>moderate:</strong> every harmful post caught, 0 benign posts flagged</li>
+      <li><strong>scan:</strong> all hidden-injection attacks caught, 0 benign documents blocked</li>
+    </ul>
+    <p>The scan attacks are the fun ones, because they're the ones a regex-only approach misses: injection instructions hidden after the first 1,500 characters of a page, zero-width characters, Cyrillic look-alike letters, leetspeak, spaced-out letters, base64 and hex payloads, HTML comments and <code>display:none</code> elements, and override attempts written in Russian, Chinese, Spanish, French, German, Portuguese, and Japanese.</p>
+    <p>Under the model there are regex backstops for things it has no business needing to "understand": leaked API keys (OpenAI, Anthropic, AWS, GitHub, Stripe, Supabase, and more), JWTs, private keys. Those get caught by pattern, whatever the classifier thinks.</p>
+    <p>And it <strong>fails closed</strong>: if an item can't be classified, the answer is "review", never "allow".</p>
+
+    <h2>Honest limits</h2>
+    <p>Laya is a gate, not a guarantee. A novel attack worded like ordinary prose can pass through as "review". So the rule in Rex's pipeline is that no irreversible action (sending, deleting, paying, publishing) ever runs on untrusted content's own authority, whatever the classifier says — the gate buys a human (or the app) a chance to look, it doesn't buy autonomy.</p>
+    <p>The same honesty applies to Rex itself: application-level test coverage (persistence, undo, parsing) doesn't exist yet. The only XCTest suite is a CRDT harness simulating board sync and conflict resolution. I'd rather write that here than imply otherwise.</p>
+
+    <h2>What's next</h2>
+    <ul>
+      <li>Open-sourcing Laya with its eval sets, so the numbers above are checkable</li>
+      <li>More 3D scenes and language content through the authoring pipelines</li>
+      <li>Podcast mode refinements</li>
+    </ul>
+    <p>If you're building AI features and the moderation line item is growing, that's the problem Laya solves: screen locally, fail closed, measure everything.</p>
+    <p><strong>Rex is on the App Store.</strong> <a href="https://apps.apple.com/app/rex-study-smarter/id6775703977">Rex: Study Smarter</a></p>
+  </main>
+  <footer class="site">Rex — the study app built for every student. <a href="/">rexstudyapp.com</a></footer>
+</body>
+</html>

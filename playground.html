@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rex: chart playground</title>
+<meta name="description" content="Try real Rex charts in your browser, or load your own chart file and check it against the same lint the app runs.">
+<link rel="icon" href="/assets/rex-logo.png">
+<link rel="stylesheet" href="/assets/board.css">
+<style>
+:root {
+      --black:#000;
+      --ink:#111;
+      --gray:#4B4B4B;
+      --gray-light:#767676;
+      --green:#72A07D;
+      --green-deep:#4A7256;
+      --border:#E6E4E0;
+      --border-dark:#BFBCB6;
+      --panel:#F4F2EE;
+      --page:#FBFAF8;
+      --maxw:1120px;
+    }
+/* PLAYGROUND */
+    .play{background:var(--panel); border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
+.play-grid{display:grid; grid-template-columns:340px minmax(0,1fr); gap:48px; align-items:start;}
+.phone{width:100%; max-width:340px; background:#000; border-radius:42px; padding:11px;
+      margin:0 auto;}
+.phone-screen{position:relative; width:100%; aspect-ratio:9/16.6; background:#fff;
+      border-radius:32px; overflow:hidden;}
+.phone-screen iframe{width:100%; height:100%; border:0; display:block; background:#fff;}
+.panel{background:#fff; border:1px solid var(--border); border-radius:14px; padding:26px 26px 28px;}
+.panel + .panel{margin-top:16px;}
+.panel h4{font-family:'Lato',sans-serif; font-size:.74rem; letter-spacing:1.8px;
+      text-transform:uppercase; color:var(--gray-light); margin-bottom:16px;}
+.chart-pick{display:flex; flex-wrap:wrap; gap:8px;}
+.chart-pick button{font-family:'Lato',sans-serif; font-size:.88rem; cursor:pointer;
+      background:#fff; border:1.5px solid var(--border-dark); color:var(--ink);
+      padding:9px 18px; border-radius:8px; transition:background .15s, color .15s, border-color .15s;}
+.chart-pick button:hover{border-color:var(--black);}
+.chart-pick button.on{background:var(--black); border-color:var(--black); color:#fff;}
+.field{margin-bottom:16px;}
+.field:last-child{margin-bottom:0;}
+.field label{display:flex; justify-content:space-between; align-items:baseline; font-size:.84rem; color:var(--ink); margin-bottom:7px;}
+.field label span{color:var(--gray-light); font-size:.8rem;}
+.field input[type=text], .field select, .field textarea{width:100%; font-family:'Lato',sans-serif; font-size:.9rem; color:var(--ink);
+      background:#fff; border:1px solid var(--border-dark); border-radius:8px; padding:9px 11px;}
+.field textarea{resize:vertical; min-height:96px; line-height:1.6;}
+.field input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:2px; border-radius:0;
+      background:var(--border-dark); outline:none; cursor:pointer;}
+.field input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; appearance:none; width:16px; height:16px; border-radius:50%;
+      background:var(--black); cursor:pointer;}
+.field input[type=range]::-moz-range-thumb{width:16px; height:16px; border:none; border-radius:50%; background:var(--black); cursor:pointer;}
+.field input[type=color]{width:44px; height:30px; padding:0; border:1px solid var(--border-dark); background:#fff; cursor:pointer;}
+.play-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;}
+.mini{font-family:'Lato',sans-serif; font-size:.85rem; cursor:pointer; text-decoration:none;
+      background:#fff; border:1.5px solid var(--border-dark); color:var(--ink);
+      padding:10px 18px; border-radius:8px; display:inline-flex; align-items:center; gap:8px;
+      transition:border-color .15s, background .15s, color .15s;}
+.mini:hover{border-color:var(--black);}
+.mini-solid{background:var(--black); border-color:var(--black); color:#fff;}
+.mini-solid:hover{background:#2A2A2A;}
+.lint{margin-top:16px; font-size:.85rem; line-height:1.7;}
+.lint p{margin-bottom:5px; color:var(--gray);}
+.lint .err{color:#B00020;}
+.lint .warn{color:#8A6100;}
+.lint .ok{color:var(--green-deep);}
+.play-note{font-size:.83rem; color:var(--gray-light); margin-top:16px; line-height:1.7;}
+.play-grid{grid-template-columns:1fr; gap:30px;}
+@media (max-width:980px) {
+      .play-grid { grid-template-columns:1fr; gap:30px; }}
+.sheet .section, .sheet .wrap { padding: 0; margin: 0; max-width: none; background: none !important; }
+.sheet .section-label { font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; color: #4f8a5d; }
+.sheet .section-title { font: 900 clamp(28px, 4vw, 40px)/1.05 ui-rounded, 'SF Pro Rounded', Nunito, sans-serif; letter-spacing: -.02em; }
+.sheet .section-title::after { display: none; }
+.sheet .panel { border-radius: 16px; box-shadow: 0 1px 2px rgba(28,28,30,.08), 0 10px 26px rgba(28,28,30,.10); border: 0; }
+.sheet .mini { border-radius: 12px; }
+.sheet .mini-solid { background: #1c1c1e; color: #fff; }
+.sheet { max-width: 1080px; }
+</style>
+</head>
+<body>
+<div class="rex-topbar">
+<a href="/" aria-label="Rex home" style="padding: 4px"><img src="/assets/rex-logo.png" alt="Rex"></a>
+<nav><a class="hide-sm" href="/features.html">Features</a><a class="hide-sm" href="/#info">Pricing</a><a href="/support.html">Support</a><a class="cta" href="https://apps.apple.com/app/rex-study-smarter/id6775703977">Get the app</a></nav>
+</div>
+<main class="sheet">
+<section class="section play" id="playground">
+  <div class="wrap">
+    <p class="section-label">Playground</p>
+    <h2 class="section-title">Try one right now.</h2>
+    <p class="section-sub">A chart can be a 3D scene you turn, a language drill or a study set. These are real charts from Rex. They run here the way they run in the app. Try them, then load a file of your own to test it before you ever publish.</p>
+
+    <div class="play-grid">
+      <div>
+        <div class="phone">
+          <div class="phone-screen">
+            <iframe id="stage" title="Chart preview" sandbox="allow-scripts"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel">
+          <h4>Pick a chart</h4>
+          <div class="chart-pick" id="picker"></div>
+          <div class="play-actions">
+            <label class="mini mini-solid" for="upload">Load your own HTML</label>
+            <input type="file" id="upload" accept=".html,text/html" hidden />
+            <a class="mini" href="/chart-starter-template.html" download>Starter template</a>
+          </div>
+          <div class="lint" id="lint"></div>
+          <p class="play-note">
+            Load your own file. Check it against the same lint the app runs on import. Try its variables before you publish.
+            Nothing is uploaded. It stays in your browser.
+            Writing one with an AI assistant? Hand it the <a href="/docs.html">chart guide</a>. It spells out the rules and the
+            variable contract it has to follow.
+          </p>
+        </div>
+
+        <div class="panel" id="editorPanel" hidden>
+          <h4>Your chart's variables</h4>
+          <p class="play-note" style="margin:-6px 0 18px">
+            These are the variables in your file. Change one and the preview runs again.
+            which is what happens when someone remixes your chart in the app.
+          </p>
+          <div id="params"></div>
+          <div class="play-actions">
+            <button class="mini" type="button" id="reset">Reset to your file's values</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="board-foot">
+<div style="max-width: 1120px; margin: 0 auto; padding: 32px 16px 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 28px; border-top: 1px solid #e5e5ea">
+<div><img src="/assets/rex-logo.png" alt="Rex" style="height: 30px; width: auto; mix-blend-mode: multiply"><p style="margin: 12px 0 16px; color: #636366; font-size: 15px; line-height: 1.5">The study app built for every student.</p><a class="store" href="https://apps.apple.com/app/rex-study-smarter/id6775703977" style="display: inline-block; background: #1c1c1e; color: #ffffff; padding: 12px 16px; border-radius: 12px; font-weight: 600; text-decoration: none">Download on the App Store</a></div>
+<div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">PRODUCT</p><p style="margin: 0 0 9px"><a href="/features.html" style="text-decoration: none">Features</a></p><p style="margin: 0 0 9px"><a href="/features.html#rexer" style="text-decoration: none">Rexer</a></p><p style="margin: 0 0 9px"><a href="/playground.html" style="text-decoration: none">Charts</a></p><p style="margin: 0 0 9px"><a href="/#info" style="text-decoration: none">Pricing</a></p></div>
+<div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">MAKE CHARTS</p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/docs.html" style="text-decoration: none">Chart docs</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/chart-starter-template.html" style="text-decoration: none">Starter template</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/community-guidelines.html" style="text-decoration: none">Community guidelines</a></p></div>
+<div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">HELP</p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/support.html" style="text-decoration: none">Support</a></p><p style="margin: 0 0 9px"><a href="mailto:rexstudyapp@gmail.com" style="text-decoration: none">rexstudyapp@gmail.com</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/dmca.html" style="text-decoration: none">Copyright and DMCA</a></p></div>
+<div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">LEGAL</p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/privacy.html" style="text-decoration: none">Privacy policy</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/terms.html" style="text-decoration: none">Terms of service</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/user-agreement.html" style="text-decoration: none">User agreement</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/licenses.html" style="text-decoration: none">Asset licences</a></p></div>
+</div>
+<p id="credits" style="max-width: 1120px; margin: 0 auto; padding: 0 16px 32px; font-size: 13px; color: #8e8e93">© 2026 Rex Study · <a href="https://rexstudyapp.com/attributions.html" style="color: #8e8e93">All credits</a> · <a href="mailto:rexstudyapp@gmail.com" style="color: #8e8e93">rexstudyapp@gmail.com</a></p>
+</footer>
+<script type="application/json" id="scene-defs">[
+  {
+    "id": "hemoglobin",
+    "model": "hemoglobin_1gzx",
+    "title": "Haemoglobin",
+    "sub": "The protein that carries oxygen in your blood.",
+    "credit": "Structure 1GZX, RCSB Protein Data Bank (public domain).",
+    "labels": [
+      {
+        "y": 0.88,
+        "text": "Four protein chains"
+      },
+      {
+        "x": -0.92,
+        "y": -0.1,
+        "text": "Haem groups bind oxygen"
+      },
+      {
+        "y": -0.9,
+        "text": "About 270 million per red blood cell"
+      }
+    ],
+    "narration": "Haemoglobin. This is the protein that carries oxygen in your blood. It is built from four protein chains, folded around each other. Each chain holds a haem group, and that is where an oxygen molecule attaches. A single red blood cell carries about two hundred and seventy million of these.",
+    "name": "Hemoglobin",
+    "audio": "narration/hemoglobin.mp3"
+  },
+  {
+    "id": "brain",
+    "model": "real_cortical_brain",
+    "title": "The cortical brain",
+    "sub": "Reconstructed from real medical imaging.",
+    "credit": "Derived from open CT and segmentation datasets (public domain).",
+    "labels": [
+      {
+        "mesh": 0,
+        "text": "Left hemisphere"
+      },
+      {
+        "mesh": 1,
+        "text": "Right hemisphere"
+      },
+      {
+        "y": 0.95,
+        "text": "Folds increase surface area"
+      }
+    ],
+    "narration": "The cortical brain, reconstructed from real medical imaging. It is split into two halves, the left hemisphere and the right hemisphere. The surface is folded rather than smooth, and those folds let far more cortex fit inside the skull.",
+    "name": "The brain",
+    "audio": "narration/brain.mp3"
+  }
+]
+</script>
+<div id="chart-sources" hidden>
+<script type="text/plain" data-chart="Flashcards" data-file="./charts/flashcards.html"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Flashcards</title>
+<style>
+  :root { --accent:#72A07D; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:#fff;color:#111;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:14px;padding:20px;-webkit-user-select:none;user-select:none;
+  }
+  h1{font-size:1.15rem;color:var(--accent);text-align:center}
+  .card{
+    width:100%;max-width:420px;background:rgba(114,160,125,.10);
+    border:1px solid rgba(114,160,125,.35);border-radius:16px;padding:22px 20px;text-align:center;
+  }
+  .q{font-size:1.02rem;font-weight:600;min-height:3.2em;display:flex;align-items:center;justify-content:center}
+  .a{margin-top:10px;font-size:1.05rem;font-weight:700;color:var(--accent);min-height:1.5em}
+  .count{font-size:.78rem;color:#666;margin-top:10px}
+  .controls{display:flex;gap:10px;margin-top:16px;justify-content:center}
+  button{font:inherit;font-weight:700;cursor:pointer;border:none;border-radius:10px;padding:10px 18px;background:var(--accent);color:#fff}
+  button.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+  button:active{transform:scale(.97)}
+</style>
+</head>
+<body>
+  <h1 id="title">Flashcards</h1>
+  <div class="card">
+    <div class="q" id="question"></div>
+    <div class="a" id="answer"></div>
+    <div class="count" id="count"></div>
+    <div class="controls">
+      <button class="ghost" id="reveal" type="button">Reveal</button>
+      <button id="next" type="button">Next</button>
+    </div>
+  </div>
+<script>
+  window.__chartParams = window.__chartParams || {
+    title: "Cell Biology",
+    accentColor: "#72A07D",
+    shuffle: false,
+    questions: [
+      { q: "Which organelle produces most of the cell's ATP?", a: "The mitochondrion" },
+      { q: "What molecule carries genetic instructions?", a: "DNA" },
+      { q: "Which structure controls what enters and leaves the cell?", a: "The cell membrane" },
+      { q: "Where does protein synthesis take place?", a: "The ribosome" },
+      { q: "What is the jelly-like fluid filling the cell?", a: "Cytoplasm" }
+    ],
+    __schema: {
+      accentColor: { type: "color", label: "Accent color" },
+      shuffle: { type: "toggle", label: "Shuffle order" }
+    }
+  };
+
+  var p = window.__chartParams;
+  var qs = Array.isArray(p.questions) ? p.questions.slice() : [];
+  if (p.shuffle) { qs.sort(function () { return Math.random() - 0.5; }); }
+  var i = 0;
+
+  document.documentElement.style.setProperty("--accent", p.accentColor || "#72A07D");
+  document.getElementById("title").textContent = p.title || "Flashcards";
+
+  function show() {
+    var q = qs[i] || { q: "Add questions in the params editor", a: "" };
+    document.getElementById("question").textContent = q.q;
+    document.getElementById("answer").textContent = "";
+    document.getElementById("count").textContent = qs.length ? (i + 1) + " of " + qs.length : "";
+  }
+  function reveal() { if (qs[i]) document.getElementById("answer").textContent = qs[i].a; }
+  function next() { if (qs.length) { i = (i + 1) % qs.length; show(); } }
+
+  var r = document.getElementById("reveal"), n = document.getElementById("next");
+  r.addEventListener("click", reveal);
+  r.addEventListener("touchstart", function (e) { e.preventDefault(); reveal(); }, { passive: false });
+  n.addEventListener("click", next);
+  n.addEventListener("touchstart", function (e) { e.preventDefault(); next(); }, { passive: false });
+  show();
+<\/script>
+
+<!-- App Store links, for browsers that will not hand one over.
+     Instagram and TikTok stopped escorting a plain apps.apple.com link out to
+     the App Store, so inside those the store page loads in their own webview
+     with nothing to tap. itms-apps is not a web page, so the webview cannot
+     render it and gives it to the system instead, which is the behaviour we
+     used to get for free. /get is the same trick as a standalone page for a
+     link in a bio. -->
+<script>
+(function () {
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPad|iPhone|iPod/.test(ua) ||
+    (/Macintosh/.test(ua) && typeof navigator.maxTouchPoints === 'number' && navigator.maxTouchPoints > 1);
+  if (!isIOS) return;
+  var links = document.querySelectorAll('a[href*="apps.apple.com"]');
+  Array.prototype.forEach.call(links, function (a) {
+    a.setAttribute('href', a.getAttribute('href').replace(/^https?:/, 'itms-apps:'));
+    a.removeAttribute('target');
+  });
+})();
+</script>
+<script type="text/plain" data-chart="Russian Cases" data-file="./charts/russian-case-compass.html"><!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Russian Case Compass</title><style>:root{--f:#2e5c3d;--g:#4a7c59;--s:#72a07d;--t:#e8f5e9;--bg:#f3f6f4;--ink:#173426;--red:#c75b5b}*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden}body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink);display:grid;place-items:center;padding:12px}.card{width:min(700px,100%);height:min(590px,calc(100dvh - 24px));padding:27px;border:1px solid #ceddd1;border-radius:23px;background:#fff;position:relative;display:grid;grid-template-rows:auto 1fr auto;gap:16px}.i{position:absolute;right:20px;top:20px;border:1px solid var(--s);background:#fff;color:var(--f);border-radius:50%;width:34px;height:34px;font:bold 18px Georgia}.ey{font-size:10px;letter-spacing:.19em;text-transform:uppercase;color:var(--g);font-weight:800}.title{font:500 clamp(28px,5vw,42px)/1 Georgia,serif;color:var(--f);margin:7px 40px 6px 0}.sub{font-size:13px;color:#617168;margin:0}.status{font-size:12px;color:var(--g);font-weight:700}.prompt{display:grid;place-items:center;text-align:center;background:linear-gradient(135deg,#fff,#f0f8f2);border:1px solid #d4e1d6;border-radius:18px;padding:22px}.sentence{font:500 clamp(22px,4vw,34px)/1.25 Georgia,serif}.hint{margin-top:14px;font-size:13px;color:#617168}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.choices button,.next{min-height:50px;border:1px solid #bcd0c0;border-radius:12px;background:#fff;color:var(--ink);font-weight:700;cursor:pointer}.choices button:hover{background:var(--t)}.choices button.bad{border-color:var(--red);color:var(--red)}.choices button.good,.next{background:var(--f);border-color:var(--f);color:#fff}.next{display:none;width:100%}.modal{display:none;position:absolute;inset:0;background:#17342655;place-items:center;padding:18px}.modal.open{display:grid}.sheet{background:#fff;border-radius:17px;padding:22px;max-width:410px;position:relative}.x{position:absolute;right:12px;top:12px;border:0;border-radius:50%;width:30px;height:30px}.sheet h2{font:500 25px Georgia;color:var(--f);margin:0 30px 14px 0}.sheet h3{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--g);margin:12px 0 3px}.sheet p{font-size:13px;line-height:1.4;margin:0;color:#617168}@media(max-width:480px){.card{padding:17px}.choices{grid-template-columns:1fr}.prompt{padding:14px}.sentence{font-size:23px}}</style></head><body><main class="card"><button class="i" id="info">i</button><header><div class="ey">Russian</div><h1 class="title">Case compass</h1><p class="sub">Choose the case demanded by each Russian sentence.</p></header><section class="prompt"><div class="status" id="status"></div><div class="sentence" id="q"></div><div class="hint" id="hint">Which word controls the blank?</div></section><section><div class="choices" id="choices"></div><button class="next" id="next">Next sentence</button></section><div class="modal" id="modal"><div class="sheet"><button class="x" id="close">×</button><h2>Orientation</h2><h3>What this teaches</h3><p>How Russian verbs and prepositions select noun cases.</p><h3>Why it’s useful</h3><p>Case recognition is the backbone of reading and producing natural Russian sentences.</p><h3>How to use it</h3><p>Find the controlling verb or preposition before choosing a case.</p></div></div></main><script>const B=[['Я вижу ___ .','acc','вижу takes a direct object'],['Я помогаю ___ .','dat','помогать is followed by dative'],['У меня нет ___ .','gen','нет requires genitive'],['Я думаю о ___ .','prep','о takes prepositional'],['Она идёт в ___ .','acc','movement toward a place'],['Она живёт в ___ .','prep','fixed location'],['Он интересуется ___ .','ins','интересоваться takes instrumental'],['Мы говорим с ___ .','ins','с means with here'],['Книга лежит на ___ .','prep','fixed position on a surface'],['Я кладу книгу на ___ .','acc','movement onto a surface'],['Я боюсь ___ .','gen','бояться takes genitive'],['Учитель звонит ___ .','dat','звонить кому?'],['Я жду ___ .','gen','ждать commonly takes genitive'],['Они гордятся ___ .','ins','гордиться takes instrumental'],['Мы идём к ___ .','dat','к takes dative'],['Это подарок от ___ .','gen','от takes genitive'],['Я читаю о ___ .','prep','о takes prepositional'],['Она любит ___ .','acc','любить takes a direct object'],['Я доволен ___ .','ins','доволен takes instrumental'],['Мы помним ___ .','acc','помнить takes a direct object']];const names={acc:'Accusative',dat:'Dative',gen:'Genitive',prep:'Prepositional',ins:'Instrumental'};let i=-1,done=false,score=0;const $=x=>document.getElementById(x);function show(){i=(i+1)%B.length;done=false;let a=B[i];$('q').textContent=a[0];$('status').textContent=`Sentence ${i+1} of ${B.length} · ${score} correct`;$('hint').textContent='Which word controls the blank?';$('next').style.display='none';$('choices').innerHTML='';Object.entries(names).forEach(([k,v])=>{let b=document.createElement('button');b.textContent=v;b.onclick=()=>{if(done)return;if(k===a[1]){done=true;score++;b.className='good';$('hint').textContent='Correct! '+a[2]+'.';$('next').style.display='block'}else{b.className='bad';$('hint').textContent='Try again: '+a[2]+'.'}};$('choices').append(b)})}$('next').onclick=show;$('info').onclick=()=>$('modal').classList.add('open');$('close').onclick=()=>$('modal').classList.remove('open');$('modal').onclick=e=>{if(e.target===$('modal'))$('modal').classList.remove('open')};show()<\/script></body></html>
+</script>
+</div>
+<script>
+(function () {
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPad|iPhone|iPod/.test(ua) ||
+    (/Macintosh/.test(ua) && typeof navigator.maxTouchPoints === 'number' && navigator.maxTouchPoints > 1);
+  if (!isIOS) return;
+  var links = document.querySelectorAll('a[href*="apps.apple.com"]');
+  Array.prototype.forEach.call(links, function (a) {
+    a.setAttribute('href', a.getAttribute('href').replace(/^https?:/, 'itms-apps:'));
+    a.removeAttribute('target');
+  });
+})();
+</script>
+<script>
+(function () {
+
+  /* A chart's __chartParams is plain data: parse it as data (strings, numbers, true/false/null, arrays, objects,
+     bare keys, comments, trailing commas) and never run it. Anything else (a function call, a variable) is refused. */
+  function parseLiteral(src) {
+    var i = 0;
+    function ws() {
+      for (;;) {
+        while (i < src.length && /\s/.test(src[i])) i++;
+        if (src[i] === '/' && src[i + 1] === '/') { while (i < src.length && src[i] !== '\n') i++; continue; }
+        if (src[i] === '/' && src[i + 1] === '*') { var k = src.indexOf('*/', i + 2); i = k < 0 ? src.length : k + 2; continue; }
+        return;
+      }
+    }
+    function fail() { throw new Error('not plain data at ' + i); }
+    function str() {
+      var q = src[i++], out = '';
+      while (i < src.length && src[i] !== q) {
+        var c = src[i++];
+        if (c === '\\') {
+          var n = src[i++];
+          if (n === 'n') out += '\n'; else if (n === 't') out += '\t'; else if (n === 'r') out += '\r';
+          else if (n === 'u') { out += String.fromCharCode(parseInt(src.substr(i, 4), 16)); i += 4; }
+          else out += n;
+        } else out += c;
+      }
+      if (src[i] !== q) fail();
+      i++; return out;
+    }
+    function key() {
+      ws();
+      if (src[i] === '"' || src[i] === "'") return str();
+      var m = /^[A-Za-z_$][\w$]*/.exec(src.slice(i)); if (!m) fail();
+      i += m[0].length; return m[0];
+    }
+    function value() {
+      ws();
+      var c = src[i];
+      if (c === '{') {
+        i++; var o = {};
+        for (;;) { ws(); if (src[i] === '}') { i++; return o; }
+          var k = key(); ws(); if (src[i++] !== ':') fail();
+          var v = value(); if (k !== '__proto__') o[k] = v;
+          ws(); if (src[i] === ',') { i++; continue; } if (src[i] === '}') { i++; return o; } fail(); }
+      }
+      if (c === '[') {
+        i++; var a = [];
+        for (;;) { ws(); if (src[i] === ']') { i++; return a; }
+          a.push(value()); ws(); if (src[i] === ',') { i++; continue; } if (src[i] === ']') { i++; return a; } fail(); }
+      }
+      if (c === '"' || c === "'") return str();
+      var m = /^-?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/.exec(src.slice(i));
+      if (m) { i += m[0].length; return Number(m[0]); }
+      if (src.startsWith('true', i)) { i += 4; return true; }
+      if (src.startsWith('false', i)) { i += 5; return false; }
+      if (src.startsWith('null', i)) { i += 4; return null; }
+      fail();
+    }
+    var v = value(); ws(); if (i < src.length) fail();
+    return v;
+  }
+
+  /* ── CHART SIMULATOR ───────────────────────────────
+     Loads a real chart file, extracts its window.__chartParams,
+     builds an editor from it, and re-runs the chart with the
+     edited params injected the same way the app does. */
+
+  var SOURCES = {};
+  Array.prototype.forEach.call(
+    document.querySelectorAll('#chart-sources script[data-chart]'),
+    function (el) {
+      SOURCES[el.getAttribute('data-chart')] =
+        el.textContent.replace(/<\\\/script/g, '<\/script');
+    }
+  );
+
+  function sceneURL(o) {
+    return 'scenes/viewer.html?model=' + o.model +
+           '&title=' + encodeURIComponent(o.title) +
+           '&sub=' + encodeURIComponent(o.sub) +
+           '&credit=' + encodeURIComponent(o.credit) +
+           '&labels=' + encodeURIComponent(JSON.stringify(o.labels || [])) +
+           (o.audio ? '&audio=' + encodeURIComponent(o.audio) : '');
+  }
+
+  /* Scene definitions come from scenes/scenes.json, inlined at build time,
+     so the page, the labels and the narration audio all share one source. */
+  var SCENE_DEFS = [];
+  try { SCENE_DEFS = JSON.parse(document.getElementById('scene-defs').textContent); }
+  catch (e) { SCENE_DEFS = []; }
+
+  var CHARTS = SCENE_DEFS.map(function (s) {
+    return { name: s.name || s.title, kind: 'scene', url: sceneURL(s) };
+  }).concat([
+    { name: 'Russian cases', kind: 'chart', src: 'Russian Cases' },
+    { name: 'Flashcards',    kind: 'chart', src: 'Flashcards' }
+  ]);
+
+  var stage    = document.getElementById('stage');
+  var picker   = document.getElementById('picker');
+  var paramsEl = document.getElementById('params');
+  var lintEl   = document.getElementById('lint');
+  var editorPanel = document.getElementById('editorPanel');
+
+  var source = '';      /* raw chart HTML */
+  var defaults = null;  /* params as authored */
+  var current = null;   /* params as edited */
+
+  /* Pull the __chartParams object out of a chart file without executing it.
+     Anchors on a real assignment, so mentions inside comments are skipped. */
+  function extractParams(html) {
+    var re = /window\.__chartParams\s*=/g, m;
+    while ((m = re.exec(html)) !== null) {
+      var found = parseObjectAt(html, html.indexOf('{', m.index + m[0].length));
+      if (found) return found;
+    }
+    return null;
+  }
+
+  function parseObjectAt(html, start) {
+    if (start < 0) return null;
+    var depth = 0, inStr = null, esc = false;
+    for (var k = start; k < html.length; k++) {
+      var ch = html[k];
+      if (esc) { esc = false; continue; }
+      if (ch === '\\') { esc = true; continue; }
+      if (inStr) { if (ch === inStr) inStr = null; continue; }
+      if (ch === '"' || ch === "'") { inStr = ch; continue; }
+      if (ch === '{') depth++;
+      else if (ch === '}') {
+        depth--;
+        if (depth === 0) {
+          try { return parseLiteral(html.slice(start, k + 1)); }
+          catch (e) { return null; }
+        }
+      }
+    }
+    return null;
+  }
+
+  /* Run the chart with params injected ahead of its own script. */
+  function render() {
+    if (!source) return;
+    /* visitor-supplied HTML stays in an opaque origin: scripts only */
+    stage.setAttribute('sandbox', 'allow-scripts');
+    stage.removeAttribute('src');
+    var inject = '<script>window.__chartParams=' + JSON.stringify(current) + ';<\/script>';
+    var out = /<head[^>]*>/i.test(source)
+      ? source.replace(/<head[^>]*>/i, function (m) { return m + inject; })
+      : inject + source;
+    stage.srcdoc = out;
+  }
+
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+  function field(label, node) {
+    var w = document.createElement('div');
+    w.className = 'field';
+    var l = document.createElement('label');
+    l.textContent = label;
+    w.appendChild(l);
+    w.appendChild(node);
+    return { wrap: w, label: l };
+  }
+
+  /* Build the editor from the params object, honouring __schema. */
+  function buildEditor() {
+    paramsEl.innerHTML = '';
+    if (!current) {
+      paramsEl.innerHTML = '<p class="play-note" style="margin:0">This chart has no editable variables, so it cannot be remixed.</p>';
+      return;
+    }
+    var schema = current.__schema || {};
+
+    Object.keys(current).forEach(function (key) {
+      if (key.indexOf('__') === 0) return;
+      var val = current[key];
+      var spec = schema[key] || {};
+      var label = spec.label || key;
+      var node, f;
+
+      if (key === 'questions' && Array.isArray(val)) {
+        node = document.createElement('textarea');
+        node.value = val.map(function (q) { return q.q + ' | ' + q.a; }).join('\n');
+        f = field(label + ' (one card per line, as question | answer)', node);
+        node.addEventListener('input', function () {
+          current[key] = node.value.split('\n').filter(function (l) { return l.trim(); })
+            .map(function (line) {
+              var parts = line.split('|');
+              return { q: (parts[0] || '').trim(), a: (parts[1] || '').trim() };
+            });
+          render();
+        });
+
+      } else if (Array.isArray(val)) {
+        node = document.createElement('textarea');
+        node.value = val.join('\n');
+        f = field(label + ' (one per line)', node);
+        node.addEventListener('input', function () {
+          var lines = node.value.split('\n').filter(function (l) { return l.trim(); });
+          current[key] = lines.map(function (l) {
+            var n = parseFloat(l);
+            return (String(n) === l.trim()) ? n : l;
+          });
+          render();
+        });
+
+      } else if (spec.type === 'select' && Array.isArray(spec.options)) {
+        node = document.createElement('select');
+        spec.options.forEach(function (o) {
+          var op = document.createElement('option');
+          op.value = o; op.textContent = o;
+          if (o === val) op.selected = true;
+          node.appendChild(op);
+        });
+        f = field(label, node);
+        node.addEventListener('change', function () { current[key] = node.value; render(); });
+
+      } else if (spec.type === 'slider' || (typeof val === 'number' && spec.type !== 'number')) {
+        node = document.createElement('input');
+        node.type = 'range';
+        node.min = spec.min != null ? spec.min : 0;
+        node.max = spec.max != null ? spec.max : Math.max(10, val * 2);
+        node.step = spec.step != null ? spec.step : 1;
+        node.value = val;
+        f = field(label, node);
+        var out = document.createElement('span');
+        out.textContent = val;
+        f.label.appendChild(out);
+        node.addEventListener('input', function () {
+          current[key] = parseFloat(node.value);
+          out.textContent = node.value;
+          render();
+        });
+
+      } else if (typeof val === 'boolean') {
+        node = document.createElement('label');
+        node.className = 'switch';
+        var cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.checked = val;
+        node.appendChild(cb);
+        node.appendChild(document.createTextNode(val ? 'On' : 'Off'));
+        f = field(label, node);
+        cb.addEventListener('change', function () {
+          current[key] = cb.checked;
+          node.lastChild.nodeValue = cb.checked ? 'On' : 'Off';
+          render();
+        });
+
+      } else if (typeof val === 'string' && /^#[0-9a-f]{6}$/i.test(val)) {
+        node = document.createElement('input');
+        node.type = 'color'; node.value = val;
+        f = field(label, node);
+        node.addEventListener('input', function () { current[key] = node.value; render(); });
+
+      } else {
+        node = document.createElement('input');
+        node.type = 'text'; node.value = val;
+        f = field(label, node);
+        node.addEventListener('input', function () { current[key] = node.value; render(); });
+      }
+
+      paramsEl.appendChild(f.wrap);
+    });
+  }
+
+  /* The same rules the docs describe, run on a loaded file. */
+  function lint(html) {
+    var errors = [], warnings = [];
+    var ext = (html.match(/(?:src|href)\s*=\s*["']https?:\/\/[^"']+/gi) || [])
+      .filter(function (u) { return !/www\.w3\.org\/(2000\/svg|1999\/xlink|1999\/xhtml)/.test(u); })
+      .map(function (u) { return (u.match(/https?:\/\/[^"']+/) || [u])[0]; });
+    if (ext.length) {
+      errors.push('External URL found, so the chart is not self-contained: ' +
+        ext.slice(0, 3).join(', ') + (ext.length > 3 ? ' and ' + (ext.length - 3) + ' more' : ''));
+    }
+    if (/prefers-color-scheme\s*:\s*dark/i.test(html)) errors.push('Dark theme branch found. Charts are light theme only.');
+    /* Real emoji only. An earlier version used a broad codepoint range, which
+       wrongly flagged arrows, check marks, superscripts and CJK text. */
+    var emoji = null;
+    try { emoji = new RegExp('\\p{Emoji_Presentation}|\\p{Extended_Pictographic}\\uFE0F', 'u'); }
+    catch (e) { emoji = /[\uD83C-\uDBFF][\uDC00-\uDFFF]|\uFE0F/; }
+    if (emoji.test(html)) errors.push('Emoji found. Use inline SVG or text instead.');
+    if (!/name\s*=\s*["']viewport/i.test(html)) warnings.push('No viewport meta tag.');
+    if (html.indexOf('window.__chartParams') < 0) warnings.push('No window.__chartParams. The chart will still publish, but nobody can remix or edit it.');
+    if (html.length > 300 * 1024) warnings.push('File is larger than 300 KB.');
+
+    /* text nodes only: the messages quote URLs taken from the visitor's file */
+    lintEl.textContent = '';
+    function note(cls, text) { var p = document.createElement('p'); p.className = cls; p.textContent = text; lintEl.appendChild(p); }
+    errors.forEach(function (e) { note('err', 'Error: ' + e); });
+    warnings.forEach(function (w) { note('warn', 'Warning: ' + w); });
+    if (!errors.length && !warnings.length) note('ok', 'Passes the lint. This chart would publish.');
+  }
+
+  /* editable === the visitor imported this file, so it is theirs to change.
+     The preset charts play as authored and expose no editor. */
+  function load(html, editable) {
+    source = html;
+    defaults = extractParams(html);
+    current = defaults ? clone(defaults) : null;
+    if (editable) {
+      editorPanel.hidden = false;
+      buildEditor();
+      lint(html);
+    } else {
+      editorPanel.hidden = true;
+      paramsEl.innerHTML = '';
+      lintEl.textContent = '';
+    }
+    render();
+  }
+
+  function select(idx) {
+    Array.prototype.forEach.call(picker.children, function (b, i) {
+      b.classList.toggle('on', i === idx);
+    });
+    var item = CHARTS[idx];
+    editorPanel.hidden = true;
+    paramsEl.innerHTML = '';
+    lintEl.textContent = '';
+    if (item.kind === 'scene') {
+      /* our own page, same origin, so it may load the model and modules */
+      stage.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+      stage.removeAttribute('srcdoc');
+      stage.src = item.url;
+    } else {
+      source = SOURCES[item.src] || '';
+      defaults = extractParams(source);
+      current = defaults ? clone(defaults) : null;
+      stage.removeAttribute('src');
+      render();
+    }
+  }
+
+  CHARTS.forEach(function (c, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = c.name;
+    b.addEventListener('click', function () { select(i); });
+    picker.appendChild(b);
+  });
+
+  document.getElementById('reset').addEventListener('click', function () {
+    if (!defaults) return;
+    current = clone(defaults);
+    buildEditor();
+    render();
+  });
+
+  document.getElementById('upload').addEventListener('change', function (e) {
+    var file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.size > 1024 * 1024) {
+      lintEl.textContent = ''; var big = document.createElement('p'); big.className = 'err'; big.textContent = 'Error: file is larger than 1 MB.'; lintEl.appendChild(big);
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function () {
+      Array.prototype.forEach.call(picker.children, function (b) { b.classList.remove('on'); });
+      load(String(reader.result), true);
+    };
+    reader.readAsText(file);
+  });
+
+  /* Nothing in the playground loads until it is actually on screen. Saves
+     roughly 3 MB for every visitor who never scrolls this far. */
+  var started = false;
+  function startPlayground() {
+    if (started) return;
+    started = true;
+    select(0);
+  }
+  var section = document.getElementById('playground');
+  if ('IntersectionObserver' in window && section) {
+    var pio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { startPlayground(); pio.disconnect(); }
+      });
+    }, { rootMargin: '300px 0px' });
+    pio.observe(section);
+  } else {
+    startPlayground();
+  }
+  /* a direct link to #playground should not have to wait for a scroll event */
+  if (location.hash === '#playground') startPlayground();
+  document.querySelectorAll('a[href="#playground"]').forEach(function (a) {
+    a.addEventListener('click', startPlayground);
+  });
+})();
+</script>
+</body>
+</html>

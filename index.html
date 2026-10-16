@@ -52,7 +52,7 @@ a{color:#1c1c1e}a:hover{color:#2f6b3f}
 .board-foot a[href*="apps.apple.com"]{color:#ffffff !important}
 header a{white-space:nowrap}
 .vp>header{padding:6px 6px 6px 12px;border-radius:18px;background:rgba(247,246,241,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:5}
-@media (max-width:480px){header a[href="#info"]{display:none}}
+@media (max-width:560px){header a.nav-sm{display:none}}
 [hidden]{display:none !important}
 .walk{position:absolute;left:18px;bottom:18px;display:flex;align-items:center;gap:10px;min-height:56px;padding:0 24px;border:0;border-radius:16px;background:#1c1c1e;color:#fff;font:700 18px -apple-system,system-ui,sans-serif;cursor:pointer;box-shadow:0 12px 30px rgba(28,28,30,.3);transition:transform .2s}
 .walk:hover{transform:scale(1.04)}
@@ -82,7 +82,7 @@ header a{white-space:nowrap}
 <section class="st" data-stop="4" style="position: absolute; left: 1440px; top: 960px; width: 560px; text-align: center">
 <p class="hand" style="margin: 0; font: 900 64px/1 ui-rounded, 'SF Pro Rounded', Nunito, sans-serif; letter-spacing: -.03em">That's one class.</p>
 <p class="hand h2" style="margin: 10px 0 24px; font: 400 34px/1 'Gochi Hand', cursive; color: #4f8a5d">now make yours</p>
-<a class="tile" href="https://apps.apple.com/app/rex-study-smarter/id6775703977" style="--z: 30px; display: inline-flex; align-items: center; gap: 12px; background: #1c1c1e; color: #ffffff; padding: 16px 24px; border-radius: 16px; font-weight: 700; font-size: 20px; text-decoration: none; box-shadow: 0 16px 34px rgba(28,28,30,.25)"><img src="assets/rex-logo.png" alt="" style="height: 22px; width: auto; filter: brightness(0) invert(1)">Get Rex free</a>
+<a class="tile" href="https://apps.apple.com/app/rex-study-smarter/id6775703977" style="--z: 30px; display: inline-flex; align-items: center; gap: 12px; background: #1c1c1e; color: #ffffff; padding: 16px 24px; border-radius: 16px; font-weight: 700; font-size: 20px; text-decoration: none; box-shadow: 0 16px 34px rgba(28,28,30,.25)">Get Rex free</a>
 </section>
 
 <section class="st" data-stop="0" style="position: absolute; left: 260px; top: 300px; width: 840px">
@@ -168,10 +168,12 @@ header a{white-space:nowrap}
 
 <header style="position: absolute; left: 16px; right: 16px; top: 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px">
 <img src="assets/rex-logo.png" alt="Rex" style="height: 34px; width: auto; mix-blend-mode: multiply">
-<div style="display: flex; align-items: center; gap: 6px">
+<div style="display: flex; align-items: center; gap: 2px">
+<a class="nav-sm" href="/features.html" style="padding: 11px 12px; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; color: #1c1c1e">Features</a>
 <a href="#info" style="padding: 11px 12px; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; color: #1c1c1e">Pricing</a>
-<a href="#contact" style="padding: 11px 12px; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; color: #1c1c1e">Contact</a>
-<a href="https://apps.apple.com/us/app/rex-study-smarter/id6775703977" style="background: #1c1c1e; color: #ffffff; padding: 11px 16px; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none">Get the app</a>
+<a class="nav-sm" href="/docs.html" style="padding: 11px 12px; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; color: #1c1c1e">Docs</a>
+<a href="/support.html" style="padding: 11px 12px; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; color: #1c1c1e">Support</a>
+<a href="https://apps.apple.com/us/app/rex-study-smarter/id6775703977" style="background: #1c1c1e; color: #ffffff; padding: 11px 16px; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; margin-left: 4px">Get the app</a>
 </div>
 </header>
 
@@ -225,7 +227,7 @@ header a{white-space:nowrap}
 <footer id="contact" class="board-foot">
 <div style="max-width: 1120px; margin: 0 auto; padding: 32px 16px 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 28px; border-top: 1px solid #e5e5ea">
 <div><img src="assets/rex-logo.png" alt="Rex" style="height: 30px; width: auto; mix-blend-mode: multiply"><p style="margin: 12px 0 16px; color: #636366; font-size: 15px; line-height: 1.5">The study app built for every student.</p><a href="https://apps.apple.com/app/rex-study-smarter/id6775703977" style="display: inline-block; background: #1c1c1e; color: #ffffff; padding: 12px 16px; border-radius: 12px; font-weight: 600; text-decoration: none">Download on the App Store</a></div>
-<div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">PRODUCT</p><p style="margin: 0 0 9px"><a href="/features.html" style="text-decoration: none">Features</a></p><p style="margin: 0 0 9px"><a href="/features.html#rexer" style="text-decoration: none">Rexer</a></p><p style="margin: 0 0 9px"><a href="/playground.html" style="text-decoration: none">Charts</a></p><p style="margin: 0 0 9px"><a href="#info" style="text-decoration: none">Pricing</a></p></div>
+<div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">PRODUCT</p><p style="margin: 0 0 9px"><a href="/features.html" style="text-decoration: none">Features</a></p><p style="margin: 0 0 9px"><a href="/#info" style="text-decoration: none">Pricing</a></p><p style="margin: 0 0 9px"><a href="https://apps.apple.com/app/rex-study-smarter/id6775703977" style="text-decoration: none">Download</a></p></div>
 <div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">MAKE CHARTS</p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/docs.html" style="text-decoration: none">Chart docs</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/chart-starter-template.html" style="text-decoration: none">Starter template</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/community-guidelines.html" style="text-decoration: none">Community guidelines</a></p></div>
 <div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">HELP</p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/support.html" style="text-decoration: none">Support</a></p><p style="margin: 0 0 9px"><a href="mailto:rexstudyapp@gmail.com" style="text-decoration: none">rexstudyapp@gmail.com</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/dmca.html" style="text-decoration: none">Copyright and DMCA</a></p></div>
 <div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">LEGAL</p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/privacy.html" style="text-decoration: none">Privacy policy</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/terms.html" style="text-decoration: none">Terms of service</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/user-agreement.html" style="text-decoration: none">User agreement</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/licenses.html" style="text-decoration: none">Asset licences</a></p></div>

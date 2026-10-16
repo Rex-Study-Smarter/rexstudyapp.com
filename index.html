@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gochi+Hand&amp;family=Nunito:wght@700;800;900&amp;display=swap">
 <style>
 body{margin:0;background:#f6f5f0}
-a{color:#2f6b3f}a:hover{color:#1c1c1e}
+a{color:#1c1c1e}a:hover{color:#2f6b3f}
 @keyframes write{from{clip-path:inset(-10% 100% -10% 0)}to{clip-path:inset(-10% 0 -10% 0)}}
 @keyframes draw{from{stroke-dashoffset:1600}to{stroke-dashoffset:0}}
 @keyframes pin{0%{opacity:0;transform:translateY(-36px) rotate(var(--r,0deg)) scale(1.06)}65%{opacity:1;transform:translateY(3px) rotate(var(--r,0deg))}100%{opacity:1;transform:rotate(var(--r,0deg))}}
@@ -44,6 +44,12 @@ a{color:#2f6b3f}a:hover{color:#1c1c1e}
 
 .tile:hover{transform:translateZ(calc(var(--z,26px) + 30px)) rotate(var(--r,0deg))}
 @keyframes pin{0%{opacity:0;transform:translateZ(180px) translateY(-30px) rotate(var(--r,0deg))}65%{opacity:1;transform:translateZ(20px) rotate(var(--r,0deg))}100%{opacity:1;transform:translateZ(var(--z,26px)) rotate(var(--r,0deg))}}
+
+/* footer sits on the board: same warm off-white and dots, ink links (white + green links read as a different site) */
+.board-foot{border-top:2px solid #1c1c1e;background-color:#f6f5f0;background-image:radial-gradient(#dcdad2 1.1px,transparent 1.1px);background-size:26px 26px}
+.board-foot a{color:#1c1c1e !important;text-decoration:none;font-weight:500}
+.board-foot a:hover{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;text-decoration-color:#72a07d}
+.board-foot a[href*="apps.apple.com"]{color:#ffffff !important}
 header a{white-space:nowrap}
 .vp>header{padding:6px 6px 6px 12px;border-radius:18px;background:rgba(247,246,241,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:5}
 @media (max-width:480px){header a[href="#info"]{display:none}}
@@ -216,10 +222,10 @@ header a{white-space:nowrap}
 <div><p style="margin: 0 0 6px; font-weight: 700">Does the voice need the internet?</p><p style="margin: 0; color: #3a3a3c; line-height: 1.5">No. Rex's voice runs on your device.</p></div>
 </div>
 </div>
-<footer id="contact" style="border-top: 1px solid #e5e5ea; background: #ffffff">
+<footer id="contact" class="board-foot">
 <div style="max-width: 1120px; margin: 0 auto; padding: 32px 16px 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 28px; border-top: 1px solid #e5e5ea">
 <div><img src="assets/rex-logo.png" alt="Rex" style="height: 30px; width: auto; mix-blend-mode: multiply"><p style="margin: 12px 0 16px; color: #636366; font-size: 15px; line-height: 1.5">The study app built for every student.</p><a href="https://apps.apple.com/app/rex-study-smarter/id6775703977" style="display: inline-block; background: #1c1c1e; color: #ffffff; padding: 12px 16px; border-radius: 12px; font-weight: 600; text-decoration: none">Download on the App Store</a></div>
-<div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">PRODUCT</p><p style="margin: 0 0 9px"><a href="/classic.html#features" style="text-decoration: none">Features</a></p><p style="margin: 0 0 9px"><a href="/classic.html#rexer" style="text-decoration: none">Rexer</a></p><p style="margin: 0 0 9px"><a href="/classic.html#playground" style="text-decoration: none">Charts</a></p><p style="margin: 0 0 9px"><a href="#info" style="text-decoration: none">Pricing</a></p></div>
+<div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">PRODUCT</p><p style="margin: 0 0 9px"><a href="/features.html" style="text-decoration: none">Features</a></p><p style="margin: 0 0 9px"><a href="/features.html#rexer" style="text-decoration: none">Rexer</a></p><p style="margin: 0 0 9px"><a href="/classic.html#playground" style="text-decoration: none">Charts</a></p><p style="margin: 0 0 9px"><a href="#info" style="text-decoration: none">Pricing</a></p></div>
 <div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">MAKE CHARTS</p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/docs.html" style="text-decoration: none">Chart docs</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/chart-starter-template.html" style="text-decoration: none">Starter template</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/community-guidelines.html" style="text-decoration: none">Community guidelines</a></p></div>
 <div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">HELP</p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/support.html" style="text-decoration: none">Support</a></p><p style="margin: 0 0 9px"><a href="mailto:rexstudyapp@gmail.com" style="text-decoration: none">rexstudyapp@gmail.com</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/dmca.html" style="text-decoration: none">Copyright and DMCA</a></p></div>
 <div><p style="margin: 0 0 12px; font: 600 12px ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: .08em; color: #8e8e93">LEGAL</p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/privacy.html" style="text-decoration: none">Privacy policy</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/terms.html" style="text-decoration: none">Terms of service</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/user-agreement.html" style="text-decoration: none">User agreement</a></p><p style="margin: 0 0 9px"><a href="https://rexstudyapp.com/licenses.html" style="text-decoration: none">Asset licences</a></p></div>

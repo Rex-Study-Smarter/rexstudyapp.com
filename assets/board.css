@@ -1,0 +1,74 @@
+/* Rex site pages in the whiteboard look of the homepage: each page is a clean sheet pinned on the dotted board, with
+   the homepage's top bar and footer. Loaded after a page's own <style>, so it wins where they disagree.
+   restyle_pages.py wraps a page's content in <main class="sheet"> and adds the bar and footer. */
+:root { --board: #f6f5f0; --ink: #1c1c1e; --ink-2: #3a3a3c; --dim: #8e8e93; --green: #72a07d; --green-ink: #4f8a5d; --sticky: #ffe27a; }
+
+html { background: var(--board); }
+body {
+  max-width: none !important; margin: 0 !important; padding: 0 !important;
+  background-color: var(--board) !important; background-image: radial-gradient(#dcdad2 1.1px, transparent 1.1px) !important;
+  background-size: 26px 26px !important; color: var(--ink) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', sans-serif !important;
+}
+
+/* the sheet */
+.sheet {
+  max-width: 860px; margin: 104px auto 64px; padding: 48px clamp(20px, 5vw, 60px) 56px;
+  background: #ffffff; border-radius: 22px; box-shadow: 0 1px 2px rgba(28, 28, 30, .06), 0 18px 48px rgba(28, 28, 30, .10);
+  position: relative;
+}
+.sheet::before {                                   /* a pin at the top of the sheet */
+  content: ''; position: absolute; top: -9px; left: 50%; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 3px 6px rgba(0, 0, 0, .25);
+}
+@media (max-width: 640px) { .sheet { margin: 84px 12px 40px; border-radius: 18px; } }
+
+/* type */
+.sheet h1, .sheet h2, .sheet h3 { font-family: ui-rounded, 'SF Pro Rounded', Nunito, system-ui, sans-serif !important; color: var(--ink) !important; letter-spacing: -.02em; }
+.sheet h1 { font-weight: 900 !important; font-size: clamp(30px, 4.5vw, 44px) !important; line-height: 1.05 !important; }
+.sheet h2 {
+  font-weight: 800 !important; font-size: 1.35rem !important; border: 0 !important; padding-left: 0 !important;
+  margin-top: 44px !important;
+}
+.sheet h2::after { content: ''; display: block; width: 64px; height: 6px; margin-top: 8px; border-radius: 4px; background: var(--green); opacity: .85; transform: rotate(-1.5deg); }
+.sheet p, .sheet li, .sheet td { color: var(--ink-2) !important; }
+.sheet a { color: var(--ink) !important; text-decoration: underline !important; text-decoration-color: var(--green) !important; text-decoration-thickness: 2px !important; text-underline-offset: 3px; }
+.sheet a:hover { color: var(--green-ink) !important; }
+
+/* the page's own header (logo + title) */
+.sheet > header, .sheet header:first-of-type { border-bottom: 0 !important; margin-bottom: 28px !important; padding-bottom: 0 !important; }
+.sheet header img { border-radius: 14px; }
+
+/* callouts read as notes stuck on the board */
+.sheet .highlight, .sheet .note, .sheet .callout {
+  background: #fff8d6 !important; border: 0 !important; border-radius: 6px !important; padding: 16px 18px !important;
+  box-shadow: 0 6px 14px rgba(28, 28, 30, .08); transform: rotate(-.25deg);
+}
+.sheet .warning { background: #fff1e4 !important; border: 0 !important; border-radius: 6px !important; box-shadow: 0 6px 14px rgba(28, 28, 30, .08); }
+.sheet table th { border-bottom: 2px solid var(--ink) !important; }
+.sheet code, .sheet pre { background: #f2f1ec !important; border-radius: 8px; }
+.sheet > footer { display: none !important; }        /* the board footer replaces the old grey one */
+
+/* top bar, same as the homepage */
+.rex-topbar {
+  position: fixed; left: 16px; right: 16px; top: 14px; z-index: 20; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 6px 6px 6px 12px; border-radius: 18px; background: rgba(247, 246, 241, .82);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 1px 2px rgba(28, 28, 30, .06);
+}
+.rex-topbar img { height: 32px; width: auto; mix-blend-mode: multiply; display: block; }
+.rex-topbar nav { display: flex; align-items: center; gap: 4px; }
+.rex-topbar a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15px; padding: 10px 12px; border-radius: 12px; white-space: nowrap; }
+.rex-topbar a:hover { background: rgba(28, 28, 30, .06); }
+.rex-topbar a.cta { background: var(--ink); color: #fff; padding: 11px 16px; }
+@media (max-width: 520px) { .rex-topbar a.hide-sm { display: none; } }
+
+/* footer, same as the homepage */
+.board-foot { margin: 0 !important; padding: 0 !important; border-top: 2px solid var(--ink) !important; background: var(--board) !important; color: var(--ink) !important; font-size: 15px !important; }
+.board-foot a { color: var(--ink) !important; text-decoration: none; font-weight: 500; }
+.board-foot a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--green); }
+.board-foot a.store { color: #fff !important; }
+
+/* pages with their own old menu bar (docs): the top bar replaces it */
+.sheet > nav.nav, .sheet nav.nav { display: none !important; }
+/* buttons keep their own colours: the ink link rule is for words in running text */
+.sheet a.nav-cta, .sheet a.dl-btn, .sheet a[class*="btn"], .sheet a.cta, .sheet a.button { color: #ffffff !important; text-decoration: none !important; }
